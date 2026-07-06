@@ -1,0 +1,40 @@
+<app-lab-demo-layout 
+  experimentSlug="magnetic-button" 
+  codeName="magnetic-button.component.ts"
+  [sourceCode]="sourceCode"
+  [varsTargetRef]="majorBtnRef"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)"
+  (onDrawDebug)="drawDebug($event)">
+  
+  <div scene class="js-lab-magnetic" style="width: 100%; height: 100%; position: absolute; inset: 0;">
+    <div class="magnetic">
+      <button appButton
+        class="magnetic__item magnetic__item--minor js-magnetic-item"
+        type="button"
+        #minorBtn1
+      >
+        <span class="magnetic__label">PULL</span>
+      </button>
+
+      <button appButton [primary]="true"
+        class="magnetic__item magnetic__item--major js-magnetic-item"
+        type="button"
+        #majorBtn
+        data-debug-vars="--mx --my"
+      >
+        <span class="magnetic__label">HOVER ME</span>
+      </button>
+
+      <button appButton
+        class="magnetic__item magnetic__item--minor js-magnetic-item"
+        type="button"
+        #minorBtn2
+      >
+        <span class="magnetic__label">ME TOO</span>
+      </button>
+    </div>
+
+    <p class="magnetic__hint">// move cursor around the buttons</p>
+  </div>
+</app-lab-demo-layout>

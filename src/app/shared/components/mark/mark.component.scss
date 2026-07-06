@@ -1,0 +1,8 @@
+:host {
+  color: var(--accent-amber);
+}
+
+:host-context(.button) {
+  color: var(--accent-soft);
+  margin: 0 4px;
+}

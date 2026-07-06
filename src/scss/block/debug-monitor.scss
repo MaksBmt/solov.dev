@@ -1,0 +1,43 @@
+.debug-monitor {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.debug-monitor__heading {
+  color: var(--text-secondary);
+  font-family: monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 0 0 8px;
+}
+
+.debug-monitor__list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.debug-monitor__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  font-family: monospace;
+  font-size: 0.72rem;
+  list-style: none;
+}
+
+.debug-monitor__label {
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.debug-monitor__value {
+  color: var(--accent-amber);
+  text-align: right;
+}

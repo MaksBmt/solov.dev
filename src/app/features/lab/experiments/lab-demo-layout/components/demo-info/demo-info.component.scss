@@ -1,0 +1,25 @@
+:host {
+  display: block;
+}
+
+.demo-info__title {
+  color: var(--text-ivory);
+  font-size: 1.6rem;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+::ng-deep .demo-info__difficulty {
+  margin-bottom: 14px;
+}
+
+.demo-info__description {
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  line-height: 1.65;
+  margin-bottom: 16px;
+}
+
+::ng-deep .demo-info .tech-tags {
+  margin-bottom: 0;
+}

@@ -1,0 +1,13 @@
+.controls {
+  display: flex;
+  gap: 20px;
+  font-size: 1.1rem;
+}
+
+.controls__item {
+  color: var(--text-secondary);
+}
+
+.controls__item--active {
+  color: var(--accent-soft);
+}

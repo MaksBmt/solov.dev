@@ -1,0 +1,23 @@
+<app-lab-demo-layout 
+  experimentSlug="spotlight" 
+  codeName="spotlight.component.ts"
+  [sourceCode]="sourceCode"
+  [isImmersive]="true"
+  [varsTargetRef]="spotlightRef"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)"
+  (onDrawDebug)="drawDebug($event)">
+  
+  <div scene class="js-lab-spotlight-scene" style="width: 100%; height: 100%; position: absolute; inset: 0;">
+    <div class="spotlight js-spotlight" data-debug-vars="--sx --sy --sr" #spotlight>
+      <div class="spotlight__layer spotlight__layer--dim" aria-hidden="true">
+        <app-spotlight-content></app-spotlight-content>
+      </div>
+      <div class="spotlight__layer spotlight__layer--lit">
+        <app-spotlight-content></app-spotlight-content>
+      </div>
+    </div>
+
+    <p class="spotlight__hint">// shine the light on the darkness</p>
+  </div>
+</app-lab-demo-layout>

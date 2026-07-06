@@ -1,0 +1,42 @@
+@use "../../../../scss/variable.scss" as *;
+
+:host {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  &.layout--fullscreen {
+    height: 100vh;
+    justify-content: space-between;
+    padding: 40px 24px;
+
+    @media (min-width: $tablet) {
+      padding: 50px 60px;
+    }
+  }
+
+  &.layout--page {
+    min-height: 100vh;
+    gap: clamp(40px, 8vh, 72px);
+    padding: 40px 24px 64px;
+
+    @media (min-width: $tablet) {
+      padding: 50px 60px 80px;
+    }
+  }
+}
+
+.layout__main {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.layout__footer {
+  width: 100%;
+  flex-shrink: 0;
+}

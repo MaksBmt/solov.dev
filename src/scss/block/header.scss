@@ -1,0 +1,86 @@
+@use "../variable.scss" as *;
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.header--primary {
+  position: relative;
+}
+
+.header__drawer {
+  --drawer-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --drawer-duration: 0.4s;
+
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 16px;
+  padding: 24px;
+  min-width: 200px;
+  z-index: 100;
+  border-radius: 12px;
+  background:
+    linear-gradient(160deg, rgba(245, 158, 11, 0.06) 0%, transparent 40%),
+    rgba(22, 24, 30, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.5),
+    0 0 24px rgba(245, 158, 11, 0.12);
+  transform-origin: top right;
+  opacity: 0;
+  transform: perspective(800px) rotateY(-12deg) scale(0.88);
+  clip-path: circle(0% at 100% 0%);
+  transition:
+    opacity var(--drawer-duration) var(--drawer-ease),
+    transform var(--drawer-duration) var(--drawer-ease),
+    clip-path var(--drawer-duration) var(--drawer-ease);
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, var(--accent-soft) 0%, transparent 50%, var(--accent-amber) 100%);
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    pointer-events: none;
+  }
+
+  &.header__drawer--open {
+    opacity: 1;
+    transform: none;
+    clip-path: circle(150% at 100% 0%);
+  }
+
+  &[hidden] {
+    display: none;
+  }
+
+  @media (min-width: $tablet) {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    --drawer-duration: 0.01ms;
+
+    transform: none;
+    clip-path: none;
+    transition: opacity 0.15s ease;
+
+    &.header__drawer--open {
+      clip-path: none;
+    }
+  }
+}

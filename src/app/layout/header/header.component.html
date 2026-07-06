@@ -1,0 +1,18 @@
+<header class="header header--primary js-header" #headerRoot>
+  <app-brand></app-brand>
+
+  <button #toggleBtn class="toggle js-toggle" type="button" 
+          [attr.aria-expanded]="isOpen" 
+          [attr.aria-label]="isOpen ? 'Закрыть меню' : 'Открыть меню'"
+          (click)="toggleMenu($event)">
+    <span class="toggle__line"></span>
+    <span class="toggle__line"></span>
+    <span class="toggle__line"></span>
+  </button>
+
+  <app-navigation type="horizontal" ariaLabel="Главное меню"></app-navigation>
+
+  <div #drawer class="header__drawer" [hidden]="isHidden" [class.header__drawer--open]="isOpen">
+    <app-navigation type="drawer" ariaLabel="Мобильное меню"></app-navigation>
+  </div>
+</header>

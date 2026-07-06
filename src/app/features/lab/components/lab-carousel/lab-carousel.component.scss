@@ -1,0 +1,102 @@
+@use "../../../../../scss/variable.scss" as *;
+
+// Обёртка карусели (Embla): viewport, навигация, прогресс.
+// Список карточек — отдельный блок lab-gallery (ul).
+.lab-carousel {
+  position: relative;
+  perspective: 1200px;
+}
+
+.lab-carousel__viewport {
+  overflow: hidden;
+}
+
+.lab-carousel__nav {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  margin-top: -20px;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-radius: 50%;
+  background: rgba(10, 11, 14, 0.85);
+  color: var(--accent-amber);
+  font-family: monospace;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease,
+    box-shadow 0.3s ease;
+
+  &:hover:not(:disabled),
+  &:focus-visible:not(:disabled) {
+    border-color: var(--accent-amber);
+    background: rgba(245, 158, 11, 0.12);
+    box-shadow: 0 0 16px rgba(245, 158, 11, 0.25);
+  }
+
+  &:disabled {
+    opacity: 0.25;
+    cursor: default;
+  }
+}
+
+.lab-carousel__nav--prev {
+  left: -6px;
+
+  @media (min-width: $tablet) {
+    left: -18px;
+  }
+}
+
+.lab-carousel__nav--next {
+  right: -6px;
+
+  @media (min-width: $tablet) {
+    right: -18px;
+  }
+}
+
+.lab-carousel__progress {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 4px;
+}
+
+.lab-carousel__progress-bar {
+  flex: 1;
+  height: 2px;
+  border-radius: 2px;
+  background: rgba(134, 134, 139, 0.25);
+  overflow: hidden;
+
+  &::after {
+    content: "";
+    display: block;
+    height: 100%;
+    width: var(--progress, 0%);
+    background: linear-gradient(90deg, var(--accent-amber), var(--accent-soft));
+    border-radius: 2px;
+    transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
+  }
+}
+
+.lab-carousel__counter {
+  flex-shrink: 0;
+  color: var(--text-secondary);
+  font-family: monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  min-width: 48px;
+  text-align: right;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lab-carousel__progress-bar::after {
+    transition: none;
+  }
+}

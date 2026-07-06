@@ -1,0 +1,40 @@
+.debug-monitor {
+  margin-bottom: 24px;
+}
+
+.debug-monitor__heading {
+  margin: 0 0 12px;
+  color: var(--text-secondary);
+  font-family: monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.debug-monitor__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 8px;
+}
+
+.debug-monitor__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: rgba(244, 244, 245, 0.03);
+  border-radius: 6px;
+  font-family: monospace;
+  font-size: 0.85rem;
+}
+
+.debug-monitor__label {
+  color: var(--text-secondary);
+}
+
+.debug-monitor__value {
+  color: var(--accent-amber);
+  font-weight: 500;
+}

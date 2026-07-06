@@ -1,0 +1,8 @@
+@for (experiment of experiments; track experiment.slug; let i = $index) {
+  <li class="lab-gallery__item" 
+      [class.lab-gallery__item--active]="activeIndex === i"
+      [class.lab-gallery__item--prev]="i < activeIndex"
+      [class.lab-gallery__item--next]="i > activeIndex">
+    <app-experiment-card [experiment]="experiment"></app-experiment-card>
+  </li>
+}

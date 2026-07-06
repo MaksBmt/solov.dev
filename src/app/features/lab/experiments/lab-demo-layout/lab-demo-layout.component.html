@@ -1,0 +1,62 @@
+<app-layout [page]="true">
+  <div header>
+    <app-header></app-header>
+  </div>
+
+  <div main>
+    <section class="lab-demo" [class.lab-demo--debug]="showDebug" [attr.data-experiment]="experimentSlug">
+      <header appLabTopbar>
+        <app-breadcrumbs [items]="[{ label: 'Home', url: '/' }, { label: 'THE.LAB', url: '/lab' }, { label: experiment?.title }]"></app-breadcrumbs>
+        <h1 class="lab-demo__title">{{ experiment?.title }}</h1>
+        <label appLabSwitch label="Show Debug" [(checked)]="showDebug" (checkedChange)="toggleDebug()"></label>
+      </header>
+
+      <div appDemoLayout>
+        <div appDemoScene [isImmersive]="isImmersive" [showDebug]="showDebug">
+          <ng-content select="[scene]"></ng-content>
+        </div>
+
+        <aside class="lab-demo__panel">
+          <div appDemoInfo 
+               [title]="experiment?.title" 
+               [difficulty]="experiment?.difficulty || 0"
+               [description]="experiment?.description"
+               [techTags]="experiment?.tech || []"></div>
+
+          <app-lab-passport [passport]="experiment?.passport"></app-lab-passport>
+
+          <ul appLabActions>
+            <li class="lab-actions__item">
+              <button appButton class="lab-actions__button" type="button" title="Returns demo to initial state" (click)="resetScene()">
+                <span appMark>[</span>RESET SCENE<span appMark>]</span>
+              </button>
+            </li>
+            <li class="lab-actions__item">
+              <button appButton class="lab-actions__button" type="button" [attr.aria-expanded]="showCode" (click)="toggleCode()">
+                <span appMark>[</span>VIEW CODE<span appMark>]</span>
+              </button>
+            </li>
+          </ul>
+        </aside>
+      </div>
+
+      <app-code-view 
+        [hidden]="!showCode"
+        [codeName]="codeName"
+        [sourceCode]="sourceCode"
+        [codeLines]="codeLines">
+      </app-code-view>
+      
+      <app-lab-debug-panel
+        [showDebug]="showDebug"
+        [debugMonitor]="experiment?.debugMonitor"
+        [monitorValues]="monitorValues"
+        [debugControls]="experiment?.debugControls"
+        [controlValues]="controlValues"
+        [debugLegend]="experiment?.debugLegend"
+        (onOpenCode)="openCode()"
+        (onControlChange)="onControlChange($event.control, $event.event)">
+      </app-lab-debug-panel>
+    </section>
+  </div>
+</app-layout>

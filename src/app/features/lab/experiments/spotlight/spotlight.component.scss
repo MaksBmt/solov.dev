@@ -1,0 +1,70 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.spotlight {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background-color: var(--bg-primary, #0e0f13);
+  color: var(--text-primary, #f4f4f5);
+}
+
+.spotlight__layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.spotlight__layer--dim {
+  opacity: 0.15;
+  filter: grayscale(100%) blur(1px);
+}
+
+.spotlight__layer--lit {
+  clip-path: circle(var(--sr, 0) at var(--sx, 50%) var(--sy, 50%));
+}
+
+.spotlight__hint {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--text-secondary);
+  font-family: monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  opacity: 0.6;
+}
+
+/* Spotlight Content classes */
+::ng-deep {
+  .spotlight__content {
+    font-family: monospace;
+    font-size: 1.1rem;
+    line-height: 1.8;
+  }
+
+  .spotlight__caption {
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+  }
+
+  .spotlight__line {
+    margin: 0;
+  }
+
+  .spotlight__line--indent {
+    padding-left: 24px;
+  }
+
+  .spotlight__accent {
+    color: var(--accent-amber);
+  }
+}

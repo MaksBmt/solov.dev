@@ -1,0 +1,24 @@
+.difficulty {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.difficulty__stars {
+  color: var(--accent-amber);
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+}
+
+.difficulty__level {
+  color: var(--text-secondary);
+  font-family: monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+// На панели демо чуть крупнее
+.demo-info__difficulty .difficulty__stars {
+  font-size: 0.9rem;
+}

@@ -1,0 +1,10 @@
+<nav class="breadcrumbs" aria-label="Навигация по сайту">
+  <ol class="breadcrumbs__list">
+    @for (item of items; track $index; let last = $last) {
+      <li class="breadcrumbs__item" [class.breadcrumbs__item--current]="last" [attr.aria-current]="last ? 'page' : null">
+        <a *ngIf="item.url && !last" class="breadcrumbs__link" [routerLink]="item.url">{{ item.label }}</a>
+        <ng-container *ngIf="!item.url || last">{{ item.label }}</ng-container>
+      </li>
+    }
+  </ol>
+</nav>

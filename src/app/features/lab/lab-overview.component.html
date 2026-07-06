@@ -1,0 +1,67 @@
+<app-layout [page]="true">
+  <div header>
+    <app-header></app-header>
+  </div>
+
+  <div main>
+    <section class="lab js-lab-overview">
+      <app-breadcrumbs [items]="[{ label: 'Home', url: '/' }, { label: 'THE.LAB' }]"></app-breadcrumbs>
+
+      <header class="lab__intro">
+        <p class="lab__eyebrow"><span appMark>[</span>THE.LAB<span appMark>]</span></p>
+        <h1 appTitle>Инженерия <span appHighlight>за пикселями</span>.</h1>
+        <p class="lab__lead">
+          Лаборатория интерактивных экспериментов: визуальные эффекты, собранные
+          на чистом CSS и JavaScript — без единой библиотеки. Каждый эксперимент —
+          это живое демо, его исходный код и инженерная «изнанка».
+        </p>
+
+        <ul class="lab__usage">
+          <li class="lab__usage-item">
+            <span class="lab__usage-key">★★★☆☆</span>
+            <span class="lab__usage-text">Бейдж сложности — уровень задачи виден за секунду</span>
+          </li>
+          <li class="lab__usage-item">
+            <span class="lab__usage-key">[ SHOW DEBUG ]</span>
+            <span class="lab__usage-text">Редактируемые параметры, монитор координат и FPS — подробности в View Code</span>
+          </li>
+          <li class="lab__usage-item">
+            <span class="lab__usage-key">[ VIEW CODE ]</span>
+            <span class="lab__usage-text">Полный исходник эффекта — значения констант синхронизируются с Debug</span>
+          </li>
+          <li class="lab__usage-item">
+            <span class="lab__usage-key">NO LIBRARIES</span>
+            <span class="lab__usage-text">Технический паспорт: что использовано и чего здесь нет</span>
+          </li>
+        </ul>
+      </header>
+
+      <ul appLabCatalog class="js-lab-catalog">
+        @for (category of readyCategories; track category.slug; let i = $index) {
+          <li class="lab-catalog__item">
+            <app-lab-category 
+              [id]="'lab-' + category.slug"
+              [index]="formatIndex(i)"
+              [title]="category.title"
+              [count]="getReadyCount(category.slug) + ' / ' + getTotalCount(category.slug)"
+              [description]="category.description">
+              <app-lab-carousel [experiments]="getExperiments(category.slug)"></app-lab-carousel>
+            </app-lab-category>
+          </li>
+        }
+
+        @if (soonCategories.length > 0) {
+          <li class="lab-catalog__item">
+            <app-lab-category
+              [soon]="true"
+              [index]="formatIndex(readyCategories.length)"
+              title="Coming next"
+              description="Направления, которые появятся в лаборатории следующими.">
+              <ul appLabRoadmap [categories]="soonCategories"></ul>
+            </app-lab-category>
+          </li>
+        }
+      </ul>
+    </section>
+  </div>
+</app-layout>

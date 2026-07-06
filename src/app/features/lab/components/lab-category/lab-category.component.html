@@ -1,0 +1,9 @@
+<header class="lab-category__head">
+  <span class="lab-category__index">{{ index }}</span>
+  <h2 class="lab-category__title">{{ title }}</h2>
+  @if (count) {
+    <span class="lab-category__count">{{ count }}</span>
+  }
+</header>
+<p class="lab-category__description">{{ description }}</p>
+<ng-content></ng-content>

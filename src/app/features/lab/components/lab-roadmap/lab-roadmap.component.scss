@@ -1,0 +1,43 @@
+@use "../../../../../scss/variable.scss" as *;
+
+:host {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  @media (min-width: $tablet) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (min-width: $desktop) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  ::ng-deep .lab-roadmap__item {
+    list-style: none;
+  }
+}
+
+.lab-roadmap__tile {
+  padding: 18px 20px;
+  border: 1px dashed rgba(134, 134, 139, 0.3);
+  border-radius: 12px;
+  opacity: 0.65;
+  height: 100%;
+}
+
+.lab-roadmap__title {
+  color: var(--text-ivory);
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.lab-roadmap__description {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}

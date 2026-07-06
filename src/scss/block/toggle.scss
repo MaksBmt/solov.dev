@@ -1,0 +1,91 @@
+@use "../variable.scss" as *;
+
+$toggle-size: 32px;
+$line-width: 24px;
+$line-height: 2px;
+$line-gap: 6px;
+$line-left: calc(($toggle-size - $line-width) / 2);
+$line-center-top: calc(($toggle-size - $line-height) / 2);
+$line-offset: calc($line-gap + $line-height);
+
+.toggle {
+  position: relative;
+  width: $toggle-size;
+  height: $toggle-size;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+
+  @media (min-width: $tablet) {
+    display: none;
+  }
+}
+
+.toggle__line {
+  position: absolute;
+  left: $line-left;
+  width: $line-width;
+  height: $line-height;
+  background-color: var(--text-primary);
+  border-radius: 1px;
+  transform-origin: center;
+  transition:
+    top 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+    transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity 0.3s ease,
+    background-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.toggle__line:nth-child(1) {
+  top: calc(#{$line-center-top} - #{$line-offset});
+}
+
+.toggle__line:nth-child(2) {
+  top: $line-center-top;
+}
+
+.toggle__line:nth-child(3) {
+  top: calc(#{$line-center-top} + #{$line-offset});
+}
+
+.toggle[aria-expanded="true"] .toggle__line {
+  background-color: var(--accent-amber);
+  box-shadow: 0 0 6px 1px rgba(245, 158, 11, 0.5);
+}
+
+.toggle[aria-expanded="true"] .toggle__line:nth-child(1) {
+  top: $line-center-top;
+  transform: rotate(45deg);
+}
+
+.toggle[aria-expanded="true"] .toggle__line:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.toggle[aria-expanded="true"] .toggle__line:nth-child(3) {
+  top: $line-center-top;
+  transform: rotate(-45deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toggle__line {
+    transition: background-color 0.15s ease, opacity 0.15s ease;
+  }
+
+  .toggle[aria-expanded="true"] .toggle__line:nth-child(1),
+  .toggle[aria-expanded="true"] .toggle__line:nth-child(3) {
+    top: $line-center-top;
+    transform: rotate(45deg);
+  }
+
+  .toggle[aria-expanded="true"] .toggle__line:nth-child(3) {
+    transform: rotate(-45deg);
+  }
+
+  .toggle[aria-expanded="true"] .toggle__line:nth-child(2) {
+    opacity: 0;
+  }
+}

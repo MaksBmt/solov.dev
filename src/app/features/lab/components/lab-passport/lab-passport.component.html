@@ -1,0 +1,11 @@
+<section class="lab-passport">
+  <h2 class="lab-passport__title">// tech passport</h2>
+  <ul class="lab-passport__list">
+    @for (key of getPassportKeys(); track key) {
+      <li class="lab-passport__item" [class.lab-passport__item--accent]="key === 'noLibraries'">
+        <span class="lab-passport__check">✓</span>
+        <span>{{ getPassportLabel(key) }}</span>
+      </li>
+    }
+  </ul>
+</section>

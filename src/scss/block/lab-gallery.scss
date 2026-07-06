@@ -1,0 +1,53 @@
+@use "../variable.scss" as *;
+
+// Список карточек экспериментов внутри карусели.
+.lab-gallery {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+  margin: 0;
+  padding: 12px 4px 24px;
+  touch-action: pan-y pinch-zoom;
+}
+
+.lab-gallery__item {
+  flex: 0 0 min(88%, 340px);
+  min-width: 0;
+  list-style: none;
+  transform-style: preserve-3d;
+  transition:
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.45s ease;
+
+  @media (min-width: $tablet) {
+    flex-basis: min(72%, 360px);
+  }
+
+  @media (min-width: $desktop) {
+    flex-basis: min(42%, 380px);
+  }
+}
+
+// Perspective Rail: боковые элементы «уходят» в глубину
+.lab-gallery__item--prev {
+  transform: rotateY(12deg) scale(0.88) translateZ(-40px);
+  opacity: 0.55;
+}
+
+.lab-gallery__item--next {
+  transform: rotateY(-12deg) scale(0.88) translateZ(-40px);
+  opacity: 0.55;
+}
+
+.lab-gallery__item--active {
+  transform: rotateY(0deg) scale(1) translateZ(0);
+  opacity: 1;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lab-gallery__item {
+    transition: opacity 0.2s ease;
+    transform: none !important;
+  }
+}

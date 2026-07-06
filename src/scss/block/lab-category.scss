@@ -1,0 +1,48 @@
+@use "../variable.scss" as *;
+
+.lab-category {
+  scroll-margin-top: 80px;
+}
+
+.lab-category__head {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.lab-category__index {
+  color: var(--accent-amber);
+  font-family: monospace;
+  font-size: 0.85rem;
+}
+
+.lab-category__title {
+  color: var(--text-ivory);
+  font-size: 1.5rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+
+  @media (min-width: $tablet) {
+    font-size: 1.9rem;
+  }
+}
+
+.lab-category__count {
+  color: var(--text-secondary);
+  font-family: monospace;
+  font-size: 0.8rem;
+}
+
+.lab-category__description {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 28px;
+}
+
+.lab-category--soon {
+  .lab-category__title {
+    font-size: 1.5rem;
+  }
+}

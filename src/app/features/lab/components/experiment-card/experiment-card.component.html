@@ -1,0 +1,21 @@
+<article class="experiment-card" [class.experiment-card--soon]="experiment.status !== 'ready'">
+  @if (experiment.status === 'ready') {
+    <a class="experiment-card__link" [routerLink]="['/lab-' + experiment.slug]">
+      <div class="experiment-card__head">
+        <h3 class="experiment-card__title">{{ experiment.title }}</h3>
+        <span class="experiment-card__cta">→</span>
+      </div>
+      <p class="experiment-card__description">{{ experiment.description }}</p>
+    </a>
+  } @else {
+    <div class="experiment-card__head">
+      <h3 class="experiment-card__title">{{ experiment.title }}</h3>
+      <span class="experiment-card__badge experiment-card__badge--soon">SOON</span>
+    </div>
+    <p class="experiment-card__description">{{ experiment.description }}</p>
+  }
+
+  <app-difficulty class="experiment-card__meta difficulty" [difficulty]="experiment.difficulty"></app-difficulty>
+
+  <app-tech-tags [tags]="experiment.tech"></app-tech-tags>
+</article>

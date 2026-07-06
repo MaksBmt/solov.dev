@@ -1,0 +1,45 @@
+@mixin button() {
+    text-align: center;
+    display: block;
+    cursor: pointer;
+    box-shadow: none;
+    appearance: none;
+    border: none;
+  }
+
+  @function em($pixels, $context: $browser-context) {
+    $result: calc($pixels / $context);
+    @return ($result)+0em;
+  }
+  
+  // $min-font-size-px - минимальное значение шрифта в пикселях
+  // $min-font-size - минимальное значение шрифта в числе
+  // $max-font-size - максимальное значение шрифта в числе
+  // $min-width-px - минимальное значение вьпорта в пикселях
+  // $max-width - максимальное значение вьюпорта в числе
+  // $min-width - минимальное значение вьюпорта в числе
+  
+  @function resize-font($min-font-size-px, $max-font-size, $min-font-size, $min-width-px, $max-width, $min-width) {
+    $font-size: calc($min-font-size-px + (($max-font-size - $min-font-size) * (100vw - $min-width-px) / ($max-width - $min-width)));
+    @return ($font-size);
+  }
+  
+  @function resize-mobile($min-font-size-px, $max-font-size, $min-font-size) {
+    $font-size: resize-font($min-font-size-px, $max-font-size, $min-font-size, 360px, 768, 360);
+    @return ($font-size);
+  }
+
+  @function resize-lg-mobile($min-font-size-px, $max-font-size, $min-font-size) {
+    $font-size: resize-font($min-font-size-px, $max-font-size, $min-font-size, 550px, 1280, 550);
+    @return ($font-size);
+  }
+  
+  // @function resize-font-tablet($min-font-size-px, $max-font-size, $min-font-size) {
+  //   $font-size: resize-font($min-font-size-px, $max-font-size, $min-font-size, 768px, 1024, 768);
+  //   @return ($font-size);
+  // }
+
+  @function resize-desktop($min-font-size-px, $max-font-size, $min-font-size) {
+    $font-size: resize-font($min-font-size-px, $max-font-size, $min-font-size, 1280px, 1920, 1280);
+    @return ($font-size);
+  }

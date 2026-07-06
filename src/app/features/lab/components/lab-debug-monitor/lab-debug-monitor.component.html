@@ -1,0 +1,11 @@
+<section class="debug-monitor">
+  <h3 class="debug-monitor__heading">monitor</h3>
+  <ul class="debug-monitor__list">
+    @for (item of debugMonitor; track item.id) {
+      <li class="debug-monitor__item">
+        <span class="debug-monitor__label">{{ item.label }}</span>
+        <span class="debug-monitor__value">{{ monitorValues[item.id] || '—' }}</span>
+      </li>
+    }
+  </ul>
+</section>

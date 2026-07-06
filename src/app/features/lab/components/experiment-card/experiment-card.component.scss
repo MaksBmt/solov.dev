@@ -1,0 +1,99 @@
+@use "../../../../../scss/variable.scss" as *;
+
+.experiment-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  height: 100%;
+  padding: 24px;
+  border: 1px solid rgba(245, 158, 11, 0.18);
+  border-radius: 14px;
+  background:
+    linear-gradient(160deg, rgba(245, 158, 11, 0.05) 0%, transparent 45%),
+    rgba(22, 24, 30, 0.6);
+  color: inherit;
+  transition:
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.experiment-card--soon {
+  opacity: 0.55;
+}
+
+.experiment-card__link {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+
+  &:hover,
+  &:focus-visible {
+    .experiment-card__title {
+      color: var(--accent-soft);
+    }
+
+    .experiment-card__cta {
+      transform: translateX(4px);
+      color: var(--accent-amber);
+    }
+  }
+}
+
+.experiment-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.experiment-card__title {
+  color: var(--text-ivory);
+  font-size: 1.1rem;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.experiment-card__cta {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), color 0.35s ease;
+}
+
+.experiment-card__badge {
+  color: var(--text-secondary);
+  font-family: monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  border: 1px solid rgba(134, 134, 139, 0.4);
+  border-radius: 20px;
+  padding: 3px 10px;
+}
+
+.experiment-card__meta {
+  margin: 0;
+}
+
+.experiment-card__description {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+:host-context(.lab-gallery__item--active) .experiment-card {
+  border-color: rgba(245, 158, 11, 0.5);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4), 0 0 24px rgba(245, 158, 11, 0.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .experiment-card__cta,
+  .experiment-card__title {
+    transition: none;
+  }
+
+  .experiment-card__link:hover .experiment-card__cta,
+  .experiment-card__link:focus-visible .experiment-card__cta {
+    transform: none;
+  }
+}

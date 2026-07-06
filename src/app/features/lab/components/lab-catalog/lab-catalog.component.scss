@@ -1,0 +1,12 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(48px, 8vh, 80px);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  ::ng-deep .lab-catalog__item {
+    list-style: none;
+  }
+}

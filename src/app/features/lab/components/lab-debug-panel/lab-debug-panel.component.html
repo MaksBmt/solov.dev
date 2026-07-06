@@ -1,0 +1,31 @@
+<div class="debug-panel" *ngIf="showDebug">
+  <div class="debug-panel__head">
+    <p class="debug-panel__title">// live debug</p>
+    <p class="debug-panel__hint">Подробный разбор констант и логики — в <button type="button" class="debug-panel__link" (click)="onOpenCode.emit()">View Code</button>.</p>
+  </div>
+  
+  <app-lab-debug-monitor
+    *ngIf="debugMonitor?.length"
+    [debugMonitor]="debugMonitor!"
+    [monitorValues]="monitorValues">
+  </app-lab-debug-monitor>
+  
+  @if (debugControls?.length) {
+    <section>
+      <h3 class="debug-panel__heading">controls — меняйте и сразу смотрите на сцену</h3>
+      <ul class="debug-panel__controls">
+        @for (control of debugControls; track control.id) {
+          <app-lab-debug-control
+            [control]="control"
+            [controlValue]="controlValues[control.id]"
+            (controlChange)="onControlInput(control, $event)">
+          </app-lab-debug-control>
+        }
+      </ul>
+    </section>
+  }
+  
+  @if (debugLegend) {
+    <p class="debug-panel__legend">{{ debugLegend }}</p>
+  }
+</div>
