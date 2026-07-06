@@ -1,18 +1,16 @@
 <app-lab-demo-layout 
   experimentSlug="magnetic-button" 
-  codeName="magnetic-button.component.ts"
-  [sourceCode]="sourceCode"
-  [varsTargetRef]="majorBtnRef"
   (onReset)="reset()"
   (onParamChange)="onParamChange($event)"
   (onDrawDebug)="drawDebug($event)">
   
-  <div scene class="js-lab-magnetic" style="width: 100%; height: 100%; position: absolute; inset: 0;">
+  <div scene #sceneHost class="js-lab-scene js-lab-magnetic" style="width: 100%; height: 100%; position: absolute; inset: 0;">
     <div class="magnetic">
       <button appButton
         class="magnetic__item magnetic__item--minor js-magnetic-item"
         type="button"
-        #minorBtn1
+        data-radius="110"
+        data-strength="0.4"
       >
         <span class="magnetic__label">PULL</span>
       </button>
@@ -21,6 +19,8 @@
         class="magnetic__item magnetic__item--major js-magnetic-item"
         type="button"
         #majorBtn
+        data-radius="170"
+        data-strength="0.5"
         data-debug-vars="--mx --my"
       >
         <span class="magnetic__label">HOVER ME</span>
@@ -29,7 +29,8 @@
       <button appButton
         class="magnetic__item magnetic__item--minor js-magnetic-item"
         type="button"
-        #minorBtn2
+        data-radius="110"
+        data-strength="0.4"
       >
         <span class="magnetic__label">ME TOO</span>
       </button>

@@ -77,7 +77,7 @@ export const experiments = [
       clipPath: false,
       mask: false,
       intersectionObserver: false,
-      resizeObserver: true,
+      resizeObserver: false,
       pointerEvents: true,
       noLibraries: true,
     },
@@ -86,6 +86,7 @@ export const experiments = [
       + 'и возвращается на место через линейную интерполяцию. Смещение живёт в CSS-переменных, '
       + 'анимация — один цикл requestAnimationFrame.',
     status: 'ready',
+    sourceFile: 'magnetic-button.component.ts',
     debugControls: [
       {
         id: 'lerp',
@@ -134,24 +135,25 @@ export const experiments = [
     title: 'Spotlight',
     category: 'cursor',
     difficulty: 3,
-    tech: ['CSS Variables', 'mask', 'radial-gradient', 'Pointer Events', 'requestAnimationFrame'],
+    tech: ['CSS Variables', 'clip-path', 'Pointer Events', 'requestAnimationFrame'],
     passport: {
       cssOnly: false,
       js: true,
       raf: true,
       cssVars: true,
       svg: false,
-      clipPath: false,
-      mask: true,
+      clipPath: true,
+      mask: false,
       intersectionObserver: false,
-      resizeObserver: true,
+      resizeObserver: false,
       pointerEvents: true,
       noLibraries: true,
     },
     description:
-      'Фонарик из radial-gradient маски: контент скрыт в темноте, пятно света следует за курсором '
-      + 'с инерцией. Координаты и радиус луча — живые CSS-переменные, которые видно в Debug-режиме.',
+      'Фонарик через clip-path: контент скрыт в темноте, круглое пятно света следует за курсором '
+      + 'с инерцией. Координаты и радиус луча — CSS-переменные --sx / --sy / --sr, видны в Debug-режиме.',
     status: 'ready',
+    sourceFile: 'spotlight.component.ts',
     debugControls: [
       {
         id: 'positionLerp',
@@ -201,17 +203,17 @@ export const experiments = [
     title: 'Liquid Cursor',
     category: 'cursor',
     difficulty: 5,
-    tech: ['SVG Filters', 'DOM', 'Pointer Events', 'Interpolation', 'requestAnimationFrame'],
+    tech: ['SVG Filters', 'DOM', 'transform', 'Pointer Events', 'requestAnimationFrame'],
     passport: {
       cssOnly: false,
       js: true,
       raf: true,
-      cssVars: true,
+      cssVars: false,
       svg: true,
       clipPath: false,
       mask: false,
       intersectionObserver: false,
-      resizeObserver: true,
+      resizeObserver: false,
       pointerEvents: true,
       noLibraries: true,
     },
@@ -219,6 +221,7 @@ export const experiments = [
       'Жидкий курсор: цепочка частиц с покадровой интерполяцией сливается в каплю через '
       + 'SVG-фильтр (feGaussianBlur + feColorMatrix). Классический gooey-эффект — без Canvas и WebGL.',
     status: 'ready',
+    sourceFile: 'liquid-cursor.component.ts',
     debugControls: [
       {
         id: 'headLerp',

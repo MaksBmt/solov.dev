@@ -8,7 +8,6 @@ import { LabDebugControlComponent } from '../lab-debug-control/lab-debug-control
   selector: 'app-lab-debug-panel',
   standalone: true,
   imports: [CommonModule, LabDebugMonitorComponent, LabDebugControlComponent],
-  styleUrls: ['./lab-debug-panel.component.scss'],
   templateUrl: './lab-debug-panel.component.html'
 })
 export class LabDebugPanelComponent {

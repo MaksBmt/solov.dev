@@ -1,14 +1,11 @@
 <app-lab-demo-layout 
   experimentSlug="liquid-cursor" 
-  codeName="liquid-cursor.component.ts"
-  [sourceCode]="sourceCode"
   [isImmersive]="true"
-  [varsTargetRef]="liquidRef"
   (onReset)="reset()"
   (onParamChange)="onParamChange($event)"
   (onDrawDebug)="drawDebug($event)">
   
-  <div scene class="js-lab-liquid-scene" style="width: 100%; height: 100%; position: absolute; inset: 0;">
+  <div scene #sceneHost class="js-lab-scene js-lab-liquid-scene" style="width: 100%; height: 100%; position: absolute; inset: 0;">
     <svg class="liquid__defs" width="0" height="0" aria-hidden="true" focusable="false">
       <defs>
         <filter id="lab-goo">
@@ -19,8 +16,8 @@
       </defs>
     </svg>
 
-    <div class="liquid js-liquid" data-debug-vars="--lx --ly" #liquid>
-      <div class="liquid__field js-liquid-field" #field>
+    <div class="liquid js-liquid" data-debug-vars="--lx --ly">
+      <div class="liquid__field js-liquid-field">
         @for (blob of blobs; track $index) {
           <span class="liquid__blob" [style.width.px]="blob.size" [style.height.px]="blob.size" [style.transform]="blob.transform"></span>
         }

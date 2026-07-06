@@ -4,21 +4,33 @@
   </div>
 
   <div main>
-    <section class="lab-demo" [class.lab-demo--debug]="showDebug" [attr.data-experiment]="experimentSlug">
+    <section #labDemoSection class="lab-demo" [class.lab-demo--debug]="showDebug" [attr.data-experiment]="experimentSlug">
       <header appLabTopbar>
         <app-breadcrumbs [items]="[{ label: 'Home', url: '/' }, { label: 'THE.LAB', url: '/lab' }, { label: experiment?.title }]"></app-breadcrumbs>
-        <h1 class="lab-demo__title">{{ experiment?.title }}</h1>
-        <label appLabSwitch label="Show Debug" [(checked)]="showDebug" (checkedChange)="toggleDebug()"></label>
+        <label appLabSwitch label="Show Debug" [checked]="showDebug" (checkedChange)="onDebugToggle($event)"></label>
       </header>
 
       <div appDemoLayout>
         <div appDemoScene [isImmersive]="isImmersive" [showDebug]="showDebug">
-          <ng-content select="[scene]"></ng-content>
+          <ng-content select="[scene]" ngProjectAs="[scene]"></ng-content>
+
+          <app-lab-debug-panel
+            debug
+            ngProjectAs="[debug]"
+            [showDebug]="showDebug"
+            [debugMonitor]="experiment?.debugMonitor"
+            [monitorValues]="monitorValues"
+            [debugControls]="experiment?.debugControls"
+            [controlValues]="controlValues"
+            [debugLegend]="experiment?.debugLegend"
+            (onOpenCode)="openCode()"
+            (onControlChange)="onControlChange($event.control, $event.event)">
+          </app-lab-debug-panel>
         </div>
 
         <aside class="lab-demo__panel">
-          <div appDemoInfo 
-               [title]="experiment?.title" 
+          <div appDemoInfo
+               [title]="experiment?.title"
                [difficulty]="experiment?.difficulty || 0"
                [description]="experiment?.description"
                [techTags]="experiment?.tech || []"></div>
@@ -37,26 +49,16 @@
               </button>
             </li>
           </ul>
+          <p class="lab-actions__hint">// returns demo to initial state and resets debug controls</p>
         </aside>
       </div>
 
-      <app-code-view 
+      <app-code-view
         [hidden]="!showCode"
         [codeName]="codeName"
         [sourceCode]="sourceCode"
         [codeLines]="codeLines">
       </app-code-view>
-      
-      <app-lab-debug-panel
-        [showDebug]="showDebug"
-        [debugMonitor]="experiment?.debugMonitor"
-        [monitorValues]="monitorValues"
-        [debugControls]="experiment?.debugControls"
-        [controlValues]="controlValues"
-        [debugLegend]="experiment?.debugLegend"
-        (onOpenCode)="openCode()"
-        (onControlChange)="onControlChange($event.control, $event.event)">
-      </app-lab-debug-panel>
     </section>
   </div>
 </app-layout>
