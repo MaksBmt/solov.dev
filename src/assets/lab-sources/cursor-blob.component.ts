@@ -1,4 +1,14 @@
-import { Component, AfterViewInit, OnDestroy, Inject, PLATFORM_ID, NgZone, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  AfterViewInit,
+  OnDestroy,
+  PLATFORM_ID,
+  NgZone,
+  ViewChild,
+  ElementRef,
+  ViewEncapsulation,
+  inject,
+} from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { LabDemoLayoutComponent } from '../../../shell/lab-demo-layout/lab-demo-layout.component';
 
@@ -8,11 +18,6 @@ import { LabDemoLayoutComponent } from '../../../shell/lab-demo-layout/lab-demo-
  * Одна SVG-капля: центр догоняет курсор через lerp, скорость
  * Скорость берётся из движения курсора, капля вытягивается эллипсом
  * по направлению velocity. Замкнутый path — кубические Безье между точками.
- *
- * POSITION_LERP — скорость следования центра за курсором (0.08…0.5).
- * STRETCH — сила деформации от скорости (0.3…2.5).
- * BASE_RADIUS — радиус капли в покое (20…56 px).
- * VELOCITY_LERP — сглаживание скорости курсора (0.05…0.5).
  */
 const POINT_COUNT = 8;
 const POSITION_LERP = 0.38;
@@ -20,6 +25,7 @@ const VELOCITY_LERP = 0.28;
 const BASE_RADIUS = 34;
 const STRETCH = 1.35;
 const MIN_RADIUS = 10;
+const SCENE_INIT_MAX_ATTEMPTS = 30;
 
 interface BlobPoint {
   x: number;
@@ -29,11 +35,15 @@ interface BlobPoint {
 @Component({
   selector: 'app-cursor-blob',
   standalone: true,
-  imports: [LabDemoLayoutComponent],
+  imports: [CommonModule, LabDemoLayoutComponent],
   styleUrls: ['./cursor-blob.component.scss'],
-  templateUrl: './cursor-blob.component.html'
+  templateUrl: './cursor-blob.component.html',
+  encapsulation: ViewEncapsulation.None,
 })
 export class CursorBlobComponent implements AfterViewInit, OnDestroy {
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly ngZone = inject(NgZone);
+
   @ViewChild('sceneHost') sceneHostRef!: ElementRef<HTMLElement>;
 
   positionLerp = POSITION_LERP;
@@ -51,46 +61,55 @@ export class CursorBlobComponent implements AfterViewInit, OnDestroy {
   private anchorPoints: BlobPoint[] = [];
   private rafId: number | null = null;
   private reducedMotion = false;
-  private boundTick!: () => void;
-  private boundOnPointerMove!: (e: PointerEvent) => void;
-  private boundOnPointerLeave!: () => void;
-
-  constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
-    private ngZone: NgZone
-  ) {
-    this.boundTick = this.tick.bind(this);
-    this.boundOnPointerMove = this.onPointerMove.bind(this);
-    this.boundOnPointerLeave = this.onPointerLeave.bind(this);
-  }
+  private initialized = false;
+  private readonly boundTick = () => this.tick();
+  private readonly boundOnPointerMove = (e: PointerEvent) => this.onPointerMove(e);
+  private readonly boundOnPointerLeave = () => this.onPointerLeave();
 
   ngAfterViewInit() {
     if (!isPlatformBrowser(this.platformId)) return;
-
-    this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    this.sceneEl = this.sceneHostRef?.nativeElement ?? null;
-    this.blobEl = this.sceneEl?.querySelector<HTMLElement>('.js-blob') ?? null;
-    this.pathEl = this.sceneEl?.querySelector<SVGPathElement>('.js-blob-path') ?? null;
-
-    if (!this.sceneEl || !this.blobEl || !this.pathEl) return;
-
-    this.reset();
-    this.sceneEl.addEventListener('pointermove', this.boundOnPointerMove);
-    this.sceneEl.addEventListener('pointerdown', this.boundOnPointerMove);
-    this.sceneEl.addEventListener('pointerleave', this.boundOnPointerLeave);
-
-    this.ngZone.runOutsideAngular(() => {
-      this.rafId = requestAnimationFrame(this.boundTick);
-    });
+    this.scheduleSceneInit();
   }
 
   ngOnDestroy() {
+    if (!isPlatformBrowser(this.platformId)) return;
     if (this.rafId !== null) cancelAnimationFrame(this.rafId);
     if (!this.sceneEl) return;
 
     this.sceneEl.removeEventListener('pointermove', this.boundOnPointerMove);
     this.sceneEl.removeEventListener('pointerdown', this.boundOnPointerMove);
     this.sceneEl.removeEventListener('pointerleave', this.boundOnPointerLeave);
+  }
+
+  private scheduleSceneInit(attempt = 0) {
+    if (!isPlatformBrowser(this.platformId)) return;
+    if (this.initScene() || attempt >= SCENE_INIT_MAX_ATTEMPTS) return;
+    requestAnimationFrame(() => this.scheduleSceneInit(attempt + 1));
+  }
+
+  private initScene(): boolean {
+    if (this.initialized) return true;
+
+    this.sceneEl = this.sceneHostRef?.nativeElement ?? null;
+    this.blobEl = this.sceneEl?.querySelector<HTMLElement>('.js-blob') ?? null;
+    this.pathEl = this.sceneEl?.querySelector<SVGPathElement>('.js-blob-path') ?? null;
+
+    if (!this.sceneEl || !this.blobEl || !this.pathEl) return false;
+    if (this.sceneEl.clientWidth === 0 || this.sceneEl.clientHeight === 0) return false;
+
+    this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this.reset();
+
+    this.sceneEl.addEventListener('pointermove', this.boundOnPointerMove);
+    this.sceneEl.addEventListener('pointerdown', this.boundOnPointerMove);
+    this.sceneEl.addEventListener('pointerleave', this.boundOnPointerLeave);
+
+    this.initialized = true;
+    this.ngZone.runOutsideAngular(() => {
+      this.rafId = requestAnimationFrame(this.boundTick);
+    });
+
+    return true;
   }
 
   onPointerMove(event: PointerEvent) {

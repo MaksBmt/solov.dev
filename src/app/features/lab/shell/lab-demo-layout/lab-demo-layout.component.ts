@@ -137,7 +137,11 @@ export class LabDemoLayoutComponent implements OnInit, AfterViewInit, OnDestroy 
       this.frames = 0;
       this.fpsWindowStart = performance.now();
       this.ngZone.runOutsideAngular(() => {
-        this.rafId = requestAnimationFrame(this.boundTick);
+        const loop = () => {
+          this.tick();
+          this.rafId = requestAnimationFrame(loop);
+        };
+        this.rafId = requestAnimationFrame(loop);
       });
     } else {
       if (this.rafId !== null) cancelAnimationFrame(this.rafId);
@@ -176,7 +180,12 @@ export class LabDemoLayoutComponent implements OnInit, AfterViewInit, OnDestroy 
     this.codeName = sourceFile;
 
     fetch(`assets/lab-sources/${sourceFile}`)
-      .then((response) => response.text())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Source not found: ${sourceFile}`);
+        }
+        return response.text();
+      })
       .then((code) => {
         this.sourceCode = code.replace(/\r\n/g, '\n');
         if (this.showCode()) {
@@ -187,6 +196,7 @@ export class LabDemoLayoutComponent implements OnInit, AfterViewInit, OnDestroy 
       .catch(() => {
         this.sourceCode = '';
         this.codeLines = [];
+        this.cdr.markForCheck();
       });
   }
 
@@ -330,7 +340,5 @@ export class LabDemoLayoutComponent implements OnInit, AfterViewInit, OnDestroy 
         this.onDrawDebug.emit({ ctx, width: sceneEl.clientWidth, height: sceneEl.clientHeight, pointer: this.pointer });
       }
     }
-
-    this.rafId = requestAnimationFrame(this.boundTick);
   }
 }

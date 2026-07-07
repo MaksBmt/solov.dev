@@ -59,10 +59,7 @@ export class AmbientCanvasComponent implements AfterViewInit, OnDestroy {
       this.resize();
       this.createLines();
       this.bindResize();
-
-      this.ngZone.runOutsideAngular(() => {
-        this.startLoop();
-      });
+      this.startLoop();
     }
   }
 
@@ -105,50 +102,55 @@ export class AmbientCanvasComponent implements AfterViewInit, OnDestroy {
   }
 
   private startLoop() {
-    const tick = () => {
-      const { x, y } = this.mouseTracker.getMousePosition();
-      const { width, height } = this.viewport;
+    this.ngZone.runOutsideAngular(() => {
+      const tick = () => {
+        const { x, y } = this.mouseTracker.getMousePosition();
+        const { width, height } = this.viewport;
 
-      this.time += 0.016;
+        this.time += 0.016;
 
-      const targetRotY = this.time * 0.05 + ((x / width) - 0.5) * 0.4;
-      const targetRotX = ((y / height) - 0.5) * 0.3;
-      this.rotY += (targetRotY - this.rotY) * 0.05;
-      this.rotX += (targetRotX - this.rotX) * 0.05;
+        const targetRotY = this.time * 0.05 + ((x / width) - 0.5) * 0.4;
+        const targetRotX = ((y / height) - 0.5) * 0.3;
+        this.rotY += (targetRotY - this.rotY) * 0.05;
+        this.rotX += (targetRotX - this.rotX) * 0.05;
 
-      if (!this.ctx) return;
+        if (!this.ctx) {
+          this.rafId = requestAnimationFrame(tick);
+          return;
+        }
 
-      this.ctx.globalCompositeOperation = 'source-over';
-      this.ctx.fillStyle = BACKGROUND_COLOR;
-      this.ctx.fillRect(0, 0, width, height);
+        this.ctx.globalCompositeOperation = 'source-over';
+        this.ctx.fillStyle = BACKGROUND_COLOR;
+        this.ctx.fillRect(0, 0, width, height);
 
-      this.lines.forEach((line) => line.update(this.time, this.rotX, this.rotY, x, y));
+        this.lines.forEach((line) => line.update(this.time, this.rotX, this.rotY, x, y));
 
-      this.lines.forEach((line) => {
-        if (line.layer === 'smoke') line.draw(this.ctx!, this.time);
-      });
+        this.lines.forEach((line) => {
+          if (line.layer === 'smoke') line.draw(this.ctx!, this.time);
+        });
 
-      this.ctx.globalCompositeOperation = 'lighter';
-      this.lines.forEach((line) => {
-        if (line.layer !== 'smoke') line.draw(this.ctx!, this.time);
-      });
+        this.ctx.globalCompositeOperation = 'lighter';
+        this.lines.forEach((line) => {
+          if (line.layer !== 'smoke') line.draw(this.ctx!, this.time);
+        });
 
-      this.fogCtx.globalCompositeOperation = 'source-over';
-      this.fogCtx.clearRect(0, 0, this.fogCanvas.width, this.fogCanvas.height);
-      this.fogCtx.drawImage(this.canvasRef.nativeElement, 0, 0, this.fogCanvas.width, this.fogCanvas.height);
+        this.fogCtx.globalCompositeOperation = 'source-over';
+        this.fogCtx.clearRect(0, 0, this.fogCanvas.width, this.fogCanvas.height);
+        this.fogCtx.drawImage(this.canvasRef.nativeElement, 0, 0, this.fogCanvas.width, this.fogCanvas.height);
 
-      this.fogCtx.globalCompositeOperation = 'difference';
-      this.fogCtx.fillStyle = BACKGROUND_COLOR;
-      this.fogCtx.fillRect(0, 0, this.fogCanvas.width, this.fogCanvas.height);
+        this.fogCtx.globalCompositeOperation = 'difference';
+        this.fogCtx.fillStyle = BACKGROUND_COLOR;
+        this.fogCtx.fillRect(0, 0, this.fogCanvas.width, this.fogCanvas.height);
 
-      this.ctx.globalAlpha = FOG_ALPHA;
-      this.ctx.drawImage(this.fogCanvas, 0, 0, width, height);
-      this.ctx.globalAlpha = 1;
-      this.ctx.globalCompositeOperation = 'source-over';
+        this.ctx.globalAlpha = FOG_ALPHA;
+        this.ctx.drawImage(this.fogCanvas, 0, 0, width, height);
+        this.ctx.globalAlpha = 1;
+        this.ctx.globalCompositeOperation = 'source-over';
+
+        this.rafId = requestAnimationFrame(tick);
+      };
 
       this.rafId = requestAnimationFrame(tick);
-    };
-
-    tick();
+    });
   }
 }

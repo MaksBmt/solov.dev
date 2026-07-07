@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "npm run sync:lab-sources && ng serve",
     "build": "ng build",
     "sync:lab-sources": "node scripts/sync-lab-sources.js",
     "watch": "ng build --watch --configuration development",

@@ -1,4 +1,4 @@
-﻿@use "../../../../../../scss/variable.scss" as *;
+@use "../../../../../../scss/variable.scss" as *;
 
 .spotlight {
   --sx: 50%;
@@ -18,12 +18,10 @@
   padding: 24px;
 }
 
-// Р•РґРІР° СЂР°Р·Р»РёС‡РёРјС‹Р№ В«РєРѕРЅС‚СѓСЂ РІ С‚РµРјРЅРѕС‚РµВ»
 .spotlight__layer--dim {
   opacity: 0.13;
 }
 
-// РћСЃРІРµС‰С‘РЅРЅС‹Р№ СЃР»РѕР№: РІРёРґРµРЅ С‚РѕР»СЊРєРѕ РІРЅСѓС‚СЂРё РїСЏС‚РЅР° РјР°СЃРєРё
 .spotlight__layer--lit {
   -webkit-mask-image: radial-gradient(
     circle var(--sr) at var(--sx) var(--sy),
@@ -75,4 +73,3 @@
   font-size: 0.75rem;
   pointer-events: none;
 }
-

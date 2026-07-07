@@ -52,9 +52,7 @@ export class PointerComponent implements AfterViewInit, OnDestroy {
       this.createBeads();
       this.resizeTrail();
       this.bindEvents();
-      this.ngZone.runOutsideAngular(() => {
-        this.startLoop();
-      });
+      this.startLoop();
       this.setupMagneticTargets();
     }
   }
@@ -116,22 +114,23 @@ export class PointerComponent implements AfterViewInit, OnDestroy {
   }
 
   private startLoop() {
-    const tick = () => {
-      const { x, y } = this.mouseTracker.getMousePosition();
+    this.ngZone.runOutsideAngular(() => {
+      const tick = () => {
+        const { x, y } = this.mouseTracker.getMousePosition();
 
-      this.cursorX += (x - this.cursorX) * CURSOR_LERP;
-      this.cursorY += (y - this.cursorY) * CURSOR_LERP;
+        this.cursorX += (x - this.cursorX) * CURSOR_LERP;
+        this.cursorY += (y - this.cursorY) * CURSOR_LERP;
 
-      if (this.pointerDivRef?.nativeElement) {
-        this.pointerDivRef.nativeElement.style.transform = `translate3d(${this.cursorX}px, ${this.cursorY}px, 0)`;
-      }
+        if (this.pointerDivRef?.nativeElement) {
+          this.pointerDivRef.nativeElement.style.transform = `translate3d(${this.cursorX}px, ${this.cursorY}px, 0)`;
+        }
 
-      this.drawBeads();
+        this.drawBeads();
+        this.rafId = requestAnimationFrame(tick);
+      };
 
       this.rafId = requestAnimationFrame(tick);
-    };
-
-    tick();
+    });
   }
 
   private drawBeads() {

@@ -1,4 +1,14 @@
-import { Component, AfterViewInit, OnDestroy, Inject, PLATFORM_ID, NgZone, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  AfterViewInit,
+  OnDestroy,
+  PLATFORM_ID,
+  NgZone,
+  ViewChild,
+  ElementRef,
+  ViewEncapsulation,
+  inject,
+} from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { LabDemoLayoutComponent } from '../../../shell/lab-demo-layout/lab-demo-layout.component';
 
@@ -9,15 +19,13 @@ import { LabDemoLayoutComponent } from '../../../shell/lab-demo-layout/lab-demo-
  * частица догоняет предыдущую (покадровая линейная интерполяция).
  * Частицы — DOM-элементы; «жидкое» слияние делает SVG-фильтр:
  * feGaussianBlur + feColorMatrix (gooey-эффект).
- *
- * HEAD_LERP / TAIL_LERP — скорость следования головы и хвоста (0.1…0.6).
- * stdDeviation фильтра — степень размытия для слияния капли (4…24).
  */
 const BLOB_COUNT = 14;
 const HEAD_SIZE = 46;
 const TAIL_SIZE = 8;
 const HEAD_LERP = 0.35;
 const TAIL_LERP = 0.32;
+const SCENE_INIT_MAX_ATTEMPTS = 30;
 
 interface LiquidBlob {
   element: HTMLElement;
@@ -29,11 +37,15 @@ interface LiquidBlob {
 @Component({
   selector: 'app-liquid-cursor',
   standalone: true,
-  imports: [LabDemoLayoutComponent],
+  imports: [CommonModule, LabDemoLayoutComponent],
   styleUrls: ['./liquid-cursor.component.scss'],
-  templateUrl: './liquid-cursor.component.html'
+  templateUrl: './liquid-cursor.component.html',
+  encapsulation: ViewEncapsulation.None,
 })
 export class LiquidCursorComponent implements AfterViewInit, OnDestroy {
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly ngZone = inject(NgZone);
+
   @ViewChild('sceneHost') sceneHostRef!: ElementRef<HTMLElement>;
 
   blobs: LiquidBlob[] = [];
@@ -48,20 +60,61 @@ export class LiquidCursorComponent implements AfterViewInit, OnDestroy {
   private pointer: { x: number; y: number } | null = null;
   private rafId: number | null = null;
   private reducedMotion = false;
-  private boundTick!: () => void;
-  private boundOnPointerMove!: (e: PointerEvent) => void;
-  private boundOnPointerLeave!: () => void;
+  private initialized = false;
+  private readonly boundTick = () => this.tick();
+  private readonly boundOnPointerMove = (e: PointerEvent) => this.onPointerMove(e);
+  private readonly boundOnPointerLeave = () => this.onPointerLeave();
 
-  constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
-    private ngZone: NgZone
-  ) {
-    this.boundTick = this.tick.bind(this);
-    this.boundOnPointerMove = this.onPointerMove.bind(this);
-    this.boundOnPointerLeave = this.onPointerLeave.bind(this);
+  ngAfterViewInit() {
+    if (!isPlatformBrowser(this.platformId)) return;
+    this.scheduleSceneInit();
   }
 
-  createBlobs() {
+  ngOnDestroy() {
+    if (!isPlatformBrowser(this.platformId)) return;
+    if (this.rafId !== null) cancelAnimationFrame(this.rafId);
+    if (!this.sceneEl) return;
+
+    this.sceneEl.removeEventListener('pointermove', this.boundOnPointerMove);
+    this.sceneEl.removeEventListener('pointerdown', this.boundOnPointerMove);
+    this.sceneEl.removeEventListener('pointerleave', this.boundOnPointerLeave);
+    this.blobs.forEach((blob) => blob.element.remove());
+    this.blobs = [];
+  }
+
+  private scheduleSceneInit(attempt = 0) {
+    if (!isPlatformBrowser(this.platformId)) return;
+    if (this.initScene() || attempt >= SCENE_INIT_MAX_ATTEMPTS) return;
+    requestAnimationFrame(() => this.scheduleSceneInit(attempt + 1));
+  }
+
+  private initScene(): boolean {
+    if (this.initialized) return true;
+
+    this.sceneEl = this.sceneHostRef?.nativeElement ?? null;
+    this.liquidEl = this.sceneEl?.querySelector<HTMLElement>('.js-liquid') ?? null;
+    this.fieldEl = this.sceneEl?.querySelector<HTMLElement>('.js-liquid-field') ?? null;
+    this.blurNode = this.sceneEl?.querySelector('#lab-goo feGaussianBlur') ?? null;
+
+    if (!this.sceneEl || !this.liquidEl || !this.fieldEl) return false;
+    if (this.sceneEl.clientWidth === 0 || this.sceneEl.clientHeight === 0) return false;
+
+    this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this.createBlobs();
+    this.sceneEl.addEventListener('pointermove', this.boundOnPointerMove);
+    this.sceneEl.addEventListener('pointerdown', this.boundOnPointerMove);
+    this.sceneEl.addEventListener('pointerleave', this.boundOnPointerLeave);
+    this.reset();
+
+    this.initialized = true;
+    this.ngZone.runOutsideAngular(() => {
+      this.rafId = requestAnimationFrame(this.boundTick);
+    });
+
+    return true;
+  }
+
+  private createBlobs() {
     if (!this.fieldEl) return;
 
     this.blobs.forEach((blob) => blob.element.remove());
@@ -79,40 +132,6 @@ export class LiquidCursorComponent implements AfterViewInit, OnDestroy {
 
       this.blobs.push({ element, size, x: 0, y: 0 });
     }
-  }
-
-  ngAfterViewInit() {
-    if (!isPlatformBrowser(this.platformId)) return;
-
-    this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    this.sceneEl = this.sceneHostRef?.nativeElement ?? null;
-    this.liquidEl = this.sceneEl?.querySelector<HTMLElement>('.js-liquid') ?? null;
-    this.fieldEl = this.sceneEl?.querySelector<HTMLElement>('.js-liquid-field') ?? null;
-    this.blurNode = this.sceneEl?.querySelector('#lab-goo feGaussianBlur') ?? null;
-
-    if (!this.sceneEl || !this.liquidEl || !this.fieldEl) return;
-
-    this.createBlobs();
-    this.sceneEl.addEventListener('pointermove', this.boundOnPointerMove);
-    this.sceneEl.addEventListener('pointerdown', this.boundOnPointerMove);
-    this.sceneEl.addEventListener('pointerleave', this.boundOnPointerLeave);
-
-    this.reset();
-
-    this.ngZone.runOutsideAngular(() => {
-      this.rafId = requestAnimationFrame(this.boundTick);
-    });
-  }
-
-  ngOnDestroy() {
-    if (this.rafId !== null) cancelAnimationFrame(this.rafId);
-    if (!this.sceneEl) return;
-
-    this.sceneEl.removeEventListener('pointermove', this.boundOnPointerMove);
-    this.sceneEl.removeEventListener('pointerdown', this.boundOnPointerMove);
-    this.sceneEl.removeEventListener('pointerleave', this.boundOnPointerLeave);
-    this.blobs.forEach((blob) => blob.element.remove());
-    this.blobs = [];
   }
 
   onPointerMove(event: PointerEvent) {
