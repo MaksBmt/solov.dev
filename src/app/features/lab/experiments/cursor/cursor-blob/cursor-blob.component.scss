@@ -1,0 +1,34 @@
+.blob {
+  --bx: 0px;
+  --by: 0px;
+
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.blob__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.blob__shape {
+  filter: drop-shadow(0 0 18px rgba(245, 158, 11, 0.35));
+  will-change: d;
+}
+
+.blob__hint {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: var(--text-secondary);
+  font-family: monospace;
+  font-size: 0.75rem;
+  pointer-events: none;
+}

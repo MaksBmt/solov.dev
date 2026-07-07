@@ -1,0 +1,23 @@
+<app-lab-demo-layout
+  experimentSlug="cursor-blob"
+  [isImmersive]="true"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)"
+  (onDrawDebug)="drawDebug($event)">
+
+  <div scene #sceneHost class="js-lab-scene js-lab-blob-scene" style="width: 100%; height: 100%; position: absolute; inset: 0;">
+    <div class="blob js-blob" data-debug-vars="--bx --by">
+      <svg class="blob__canvas" aria-hidden="true" focusable="false">
+        <defs>
+          <radialGradient id="lab-blob-gradient" cx="35%" cy="30%" r="70%">
+            <stop offset="0%" stop-color="#fdba74" />
+            <stop offset="100%" stop-color="#f59e0b" />
+          </radialGradient>
+        </defs>
+        <path class="blob__shape js-blob-path" fill="url(#lab-blob-gradient)" />
+      </svg>
+    </div>
+
+    <p class="blob__hint">// move fast — the blob stretches with velocity</p>
+  </div>
+</app-lab-demo-layout>

@@ -8,6 +8,8 @@ const loaders: Record<string, () => Promise<any>> = {
     import('../experiments/cursor/spotlight/spotlight.component').then((m) => m.SpotlightComponent),
   'liquid-cursor': () =>
     import('../experiments/cursor/liquid-cursor/liquid-cursor.component').then((m) => m.LiquidCursorComponent),
+  'cursor-blob': () =>
+    import('../experiments/cursor/cursor-blob/cursor-blob.component').then((m) => m.CursorBlobComponent),
 };
 
 export function buildExperimentRoutes(): Routes {
