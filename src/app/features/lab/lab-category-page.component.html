@@ -1,0 +1,26 @@
+<app-layout [page]="true">
+  <div header>
+    <app-header></app-header>
+  </div>
+
+  <div main>
+    @if (category) {
+      <section class="lab">
+        <app-breadcrumbs [items]="[
+          { label: 'Home', url: '/' },
+          { label: 'THE.LAB', url: '/lab' },
+          { label: category.title }
+        ]"></app-breadcrumbs>
+
+        <app-lab-category
+          [id]="'lab-' + category.slug"
+          [index]="'01'"
+          [title]="category.title"
+          [count]="readyCount + ' / ' + experiments.length"
+          [description]="category.description">
+          <app-lab-carousel [experiments]="experiments"></app-lab-carousel>
+        </app-lab-category>
+      </section>
+    }
+  </div>
+</app-layout>

@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { passportLabels } from '../../../../core/utils/experiments';
+import { passportLabels } from '../../data/experiments';
 
 @Component({
   selector: 'app-lab-passport',

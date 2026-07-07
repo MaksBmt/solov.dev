@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { MAIN_NAVIGATION, NavItem } from '../../../core/config/navigation.config';
 
 @Component({
   selector: 'app-navigation',
@@ -16,6 +17,7 @@ import { RouterModule } from '@angular/router';
   }
 })
 export class NavigationComponent {
+  @Input() items: NavItem[] = MAIN_NAVIGATION;
   @Input() type: 'horizontal' | 'drawer' = 'horizontal';
   @Input() ariaLabel: string = 'Меню';
 }

@@ -1,7 +1,7 @@
 import { Component, HostListener, ViewChild, ElementRef, OnInit, Inject, PLATFORM_ID, NgZone } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
-import { BrandComponent } from '../brand.component';
+import { BrandComponent } from '../brand/brand.component';
 import { filter } from 'rxjs/operators';
 import { NavigationComponent } from '../../shared/components/navigation/navigation.component';
 

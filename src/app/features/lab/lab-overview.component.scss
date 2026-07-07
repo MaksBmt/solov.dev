@@ -1,23 +1,5 @@
 @use "../../../scss/variable.scss" as *;
 
-.page--lab {
-  overflow-x: hidden;
-
-  .button {
-    cursor: pointer;
-  }
-}
-
-.layout--page {
-  min-height: 100vh;
-  gap: clamp(40px, 8vh, 72px);
-  padding: 40px 24px 64px;
-
-  @media (min-width: $tablet) {
-    padding: 50px 60px 80px;
-  }
-}
-
 .lab {
   width: 100%;
   max-width: 1160px;

@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { difficultyLabel, difficultyStars } from '../../../core/utils/experiments';
+import { difficultyLabel, difficultyStars } from '../../../features/lab/data/experiments';
 
 @Component({
   selector: 'app-difficulty',

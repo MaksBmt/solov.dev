@@ -8,7 +8,8 @@ import { LabDebugControlComponent } from '../lab-debug-control/lab-debug-control
   selector: 'app-lab-debug-panel',
   standalone: true,
   imports: [CommonModule, LabDebugMonitorComponent, LabDebugControlComponent],
-  templateUrl: './lab-debug-panel.component.html'
+  templateUrl: './lab-debug-panel.component.html',
+  styleUrls: ['./lab-debug-panel.component.scss'],
 })
 export class LabDebugPanelComponent {
   @Input() showDebug: boolean = false;

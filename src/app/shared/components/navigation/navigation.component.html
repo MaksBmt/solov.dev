@@ -1,6 +1,9 @@
-<ul class="navigation__list">
-  <li class="navigation__item"><a class="navigation__link" routerLink="/projects" routerLinkActive="navigation__link--current">Projects</a></li>
-  <li class="navigation__item"><a class="navigation__link" routerLink="/lab" routerLinkActive="navigation__link--current">Lab</a></li>
-  <li class="navigation__item"><a class="navigation__link" routerLink="/about" routerLinkActive="navigation__link--current">About</a></li>
-  <li class="navigation__item"><a class="navigation__link" routerLink="/contact" routerLinkActive="navigation__link--current">Contact</a></li>
-</ul>
+@if (items.length) {
+  <ul class="navigation__list">
+    @for (item of items; track item.path) {
+      <li class="navigation__item">
+        <a class="navigation__link" [routerLink]="item.path" routerLinkActive="navigation__link--current">{{ item.label }}</a>
+      </li>
+    }
+  </ul>
+}

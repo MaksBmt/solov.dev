@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { HeaderComponent } from '../../layout/header/header.component';
 import { LabCarouselComponent } from './components/lab-carousel/lab-carousel.component';
-import { categories, getExperimentsByCategory } from '../../core/utils/experiments';
+import { categories, getExperimentsByCategory } from './data/experiments';
 import { BreadcrumbsComponent } from '../../shared/components/breadcrumbs/breadcrumbs.component';
 import { TitleComponent } from '../../shared/components/title/title.component';
 import { HighlightComponent } from '../../shared/components/highlight/highlight.component';
@@ -12,15 +12,17 @@ import { LabCatalogComponent } from './components/lab-catalog/lab-catalog.compon
 import { LabCategoryComponent } from './components/lab-category/lab-category.component';
 import { LabRoadmapComponent } from './components/lab-roadmap/lab-roadmap.component';
 import { LayoutComponent } from '../../shared/components/layout/layout.component';
+import { PageMetaService } from '../../core/services/page-meta.service';
+import { getSitePage } from '../../core/config/site-pages.config';
 
 @Component({
   selector: 'app-lab-overview',
   standalone: true,
   imports: [
-    CommonModule, 
-    RouterModule, 
-    HeaderComponent, 
-    LabCarouselComponent, 
+    CommonModule,
+    RouterModule,
+    HeaderComponent,
+    LabCarouselComponent,
     BreadcrumbsComponent,
     TitleComponent,
     HighlightComponent,
@@ -28,18 +30,23 @@ import { LayoutComponent } from '../../shared/components/layout/layout.component
     LabCatalogComponent,
     LabCategoryComponent,
     LabRoadmapComponent,
-    LayoutComponent
+    LayoutComponent,
   ],
   templateUrl: './lab-overview.component.html',
-  styleUrls: ['./lab-overview.component.scss']
+  styleUrls: ['./lab-overview.component.scss'],
 })
 export class LabOverviewComponent implements OnInit {
   readyCategories: any[] = [];
   soonCategories: any[] = [];
 
-  ngOnInit() {
-    this.readyCategories = categories.filter(c => c.status === 'ready');
-    this.soonCategories = categories.filter(c => c.status !== 'ready');
+  constructor(private pageMeta: PageMetaService) {}
+
+  ngOnInit(): void {
+    const page = getSitePage('lab');
+    if (page) this.pageMeta.setPageMeta(page);
+
+    this.readyCategories = categories.filter((c) => c.status === 'ready');
+    this.soonCategories = categories.filter((c) => c.status !== 'ready');
   }
 
   getExperiments(categorySlug: string) {

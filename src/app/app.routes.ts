@@ -1,20 +1,25 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './features/home/home.component';
-import { LabOverviewComponent } from './features/lab/lab-overview.component';
-import { LiquidCursorComponent } from './features/lab/experiments/liquid-cursor/liquid-cursor.component';
-import { MagneticButtonComponent } from './features/lab/experiments/magnetic-button/magnetic-button.component';
-import { SpotlightComponent } from './features/lab/experiments/spotlight/spotlight.component';
+import { ProjectsComponent } from './features/projects/projects.component';
+import { AboutComponent } from './features/about/about.component';
+import { ContactComponent } from './features/contact/contact.component';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent },
+  { path: '', component: HomeComponent, data: { pageKey: 'home' } },
   { path: 'index.html', redirectTo: '', pathMatch: 'full' },
-  { path: 'lab', component: LabOverviewComponent },
+  { path: 'projects', component: ProjectsComponent, data: { pageKey: 'projects' } },
+  { path: 'about', component: AboutComponent, data: { pageKey: 'about' } },
+  { path: 'contact', component: ContactComponent, data: { pageKey: 'contact' } },
+  {
+    path: 'lab',
+    loadChildren: () => import('./features/lab/lab.routes').then((m) => m.labRoutes),
+  },
   { path: 'lab.html', redirectTo: 'lab', pathMatch: 'full' },
-  { path: 'lab-liquid-cursor', component: LiquidCursorComponent },
-  { path: 'lab-liquid-cursor.html', redirectTo: 'lab-liquid-cursor', pathMatch: 'full' },
-  { path: 'lab-magnetic-button', component: MagneticButtonComponent },
-  { path: 'lab-magnetic-button.html', redirectTo: 'lab-magnetic-button', pathMatch: 'full' },
-  { path: 'lab-spotlight', component: SpotlightComponent },
-  { path: 'lab-spotlight.html', redirectTo: 'lab-spotlight', pathMatch: 'full' },
-  { path: '**', redirectTo: '' }
+  { path: 'lab-magnetic-button', redirectTo: 'lab/cursor/magnetic-button', pathMatch: 'full' },
+  { path: 'lab-magnetic-button.html', redirectTo: 'lab/cursor/magnetic-button', pathMatch: 'full' },
+  { path: 'lab-spotlight', redirectTo: 'lab/cursor/spotlight', pathMatch: 'full' },
+  { path: 'lab-spotlight.html', redirectTo: 'lab/cursor/spotlight', pathMatch: 'full' },
+  { path: 'lab-liquid-cursor', redirectTo: 'lab/cursor/liquid-cursor', pathMatch: 'full' },
+  { path: 'lab-liquid-cursor.html', redirectTo: 'lab/cursor/liquid-cursor', pathMatch: 'full' },
+  { path: '**', redirectTo: '' },
 ];

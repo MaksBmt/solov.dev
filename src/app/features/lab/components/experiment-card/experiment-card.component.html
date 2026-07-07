@@ -1,6 +1,6 @@
 <article class="experiment-card" [class.experiment-card--soon]="experiment.status !== 'ready'">
   @if (experiment.status === 'ready') {
-    <a class="experiment-card__link" [routerLink]="['/lab-' + experiment.slug]">
+    <a class="experiment-card__link" [routerLink]="['/lab', experiment.category, experiment.slug]">
       <div class="experiment-card__head">
         <h3 class="experiment-card__title">{{ experiment.title }}</h3>
         <span class="experiment-card__cta">→</span>

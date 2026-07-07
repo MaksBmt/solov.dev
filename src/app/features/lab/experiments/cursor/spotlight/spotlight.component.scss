@@ -1,0 +1,78 @@
+﻿@use "../../../../../../scss/variable.scss" as *;
+
+.spotlight {
+  --sx: 50%;
+  --sy: 50%;
+  --sr: 0px;
+
+  position: absolute;
+  inset: 0;
+}
+
+.spotlight__layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+// Р•РґРІР° СЂР°Р·Р»РёС‡РёРјС‹Р№ В«РєРѕРЅС‚СѓСЂ РІ С‚РµРјРЅРѕС‚РµВ»
+.spotlight__layer--dim {
+  opacity: 0.13;
+}
+
+// РћСЃРІРµС‰С‘РЅРЅС‹Р№ СЃР»РѕР№: РІРёРґРµРЅ С‚РѕР»СЊРєРѕ РІРЅСѓС‚СЂРё РїСЏС‚РЅР° РјР°СЃРєРё
+.spotlight__layer--lit {
+  -webkit-mask-image: radial-gradient(
+    circle var(--sr) at var(--sx) var(--sy),
+    #000 0%,
+    #000 35%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    circle var(--sr) at var(--sx) var(--sy),
+    #000 0%,
+    #000 35%,
+    transparent 100%
+  );
+  background: radial-gradient(
+    circle calc(var(--sr) * 1.1) at var(--sx) var(--sy),
+    rgba(245, 158, 11, 0.09) 0%,
+    transparent 70%
+  );
+}
+
+.spotlight__content {
+  font-family: monospace;
+  font-size: clamp(0.72rem, 2vw, 0.95rem);
+  line-height: 2;
+  color: var(--text-ivory);
+}
+
+.spotlight__caption {
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.spotlight__line--indent {
+  padding-left: 2ch;
+}
+
+.spotlight__accent {
+  color: var(--accent-amber);
+}
+
+.spotlight__hint {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: var(--text-secondary);
+  font-family: monospace;
+  font-size: 0.75rem;
+  pointer-events: none;
+}
+

@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, ElementRef, AfterViewInit, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, Input, ViewChild, ElementRef, AfterViewInit, OnDestroy, Inject, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { LabGalleryComponent } from '../lab-gallery/lab-gallery.component';
 import EmblaCarousel, { EmblaCarouselType } from 'embla-carousel';
@@ -20,29 +20,38 @@ export class LabCarouselComponent implements AfterViewInit, OnDestroy {
   canScrollNext = true;
   progress = 0;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngAfterViewInit() {
-    if (isPlatformBrowser(this.platformId)) {
-      if (this.experiments.length <= 1) {
-        this.canScrollPrev = false;
-        this.canScrollNext = false;
-        this.updateState();
-        return;
-      }
-
-      this.emblaApi = EmblaCarousel(this.viewportRef.nativeElement, {
-        align: 'center',
-        containScroll: 'trimSnaps',
-        dragFree: false,
-        loop: false,
-      });
-
-      this.emblaApi.on('select', () => this.updateState());
-      this.emblaApi.on('reInit', () => this.updateState());
-      
-      this.updateState();
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
     }
+
+    if (this.experiments.length <= 1) {
+      this.canScrollPrev = false;
+      this.canScrollNext = false;
+      this.progress = 100;
+      return;
+    }
+
+    this.emblaApi = EmblaCarousel(this.viewportRef.nativeElement, {
+      align: 'center',
+      containScroll: 'trimSnaps',
+      dragFree: false,
+      loop: false,
+    });
+
+    this.emblaApi.on('select', () => this.updateState());
+    this.emblaApi.on('reInit', () => this.updateState());
+
+    // Embla init updates snaps synchronously — defer to avoid NG0100 in dev mode.
+    queueMicrotask(() => {
+      this.updateState();
+      this.cdr.markForCheck();
+    });
   }
 
   ngOnDestroy() {
