@@ -20,16 +20,16 @@ const HEAD_LERP = 0.35;
 const TAIL_LERP = 0.32;
 
 interface LiquidBlob {
+  element: HTMLElement;
   size: number;
   x: number;
   y: number;
-  transform: string;
 }
 
 @Component({
   selector: 'app-liquid-cursor',
   standalone: true,
-  imports: [CommonModule, LabDemoLayoutComponent],
+  imports: [LabDemoLayoutComponent],
   styleUrls: ['./liquid-cursor.component.scss'],
   templateUrl: './liquid-cursor.component.html'
 })
@@ -43,6 +43,7 @@ export class LiquidCursorComponent implements AfterViewInit, OnDestroy {
 
   private sceneEl: HTMLElement | null = null;
   private liquidEl: HTMLElement | null = null;
+  private fieldEl: HTMLElement | null = null;
   private blurNode: Element | null = null;
   private pointer: { x: number; y: number } | null = null;
   private rafId: number | null = null;
@@ -58,15 +59,25 @@ export class LiquidCursorComponent implements AfterViewInit, OnDestroy {
     this.boundTick = this.tick.bind(this);
     this.boundOnPointerMove = this.onPointerMove.bind(this);
     this.boundOnPointerLeave = this.onPointerLeave.bind(this);
-    this.createBlobs();
   }
 
   createBlobs() {
+    if (!this.fieldEl) return;
+
+    this.blobs.forEach((blob) => blob.element.remove());
     this.blobs = [];
+
     for (let i = 0; i < BLOB_COUNT; i += 1) {
       const progress = i / (BLOB_COUNT - 1);
       const size = HEAD_SIZE - (HEAD_SIZE - TAIL_SIZE) * progress;
-      this.blobs.push({ size, x: 0, y: 0, transform: '' });
+
+      const element = document.createElement('span');
+      element.className = 'liquid__blob';
+      element.style.width = `${size}px`;
+      element.style.height = `${size}px`;
+      this.fieldEl.appendChild(element);
+
+      this.blobs.push({ element, size, x: 0, y: 0 });
     }
   }
 
@@ -76,10 +87,12 @@ export class LiquidCursorComponent implements AfterViewInit, OnDestroy {
     this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     this.sceneEl = this.sceneHostRef?.nativeElement ?? null;
     this.liquidEl = this.sceneEl?.querySelector<HTMLElement>('.js-liquid') ?? null;
+    this.fieldEl = this.sceneEl?.querySelector<HTMLElement>('.js-liquid-field') ?? null;
     this.blurNode = this.sceneEl?.querySelector('#lab-goo feGaussianBlur') ?? null;
 
-    if (!this.sceneEl || !this.liquidEl) return;
+    if (!this.sceneEl || !this.liquidEl || !this.fieldEl) return;
 
+    this.createBlobs();
     this.sceneEl.addEventListener('pointermove', this.boundOnPointerMove);
     this.sceneEl.addEventListener('pointerdown', this.boundOnPointerMove);
     this.sceneEl.addEventListener('pointerleave', this.boundOnPointerLeave);
@@ -98,6 +111,8 @@ export class LiquidCursorComponent implements AfterViewInit, OnDestroy {
     this.sceneEl.removeEventListener('pointermove', this.boundOnPointerMove);
     this.sceneEl.removeEventListener('pointerdown', this.boundOnPointerMove);
     this.sceneEl.removeEventListener('pointerleave', this.boundOnPointerLeave);
+    this.blobs.forEach((blob) => blob.element.remove());
+    this.blobs = [];
   }
 
   onPointerMove(event: PointerEvent) {
@@ -145,17 +160,19 @@ export class LiquidCursorComponent implements AfterViewInit, OnDestroy {
     if (!this.blobs.length) return;
 
     const head = this.blobs[0];
-    const target = this.pointer && !this.reducedMotion ? this.pointer : { x: head.x, y: head.y };
+    const target = this.pointer || { x: head.x, y: head.y };
+    const headLerp = this.reducedMotion ? 1 : this.headLerp;
+    const tailLerp = this.reducedMotion ? 1 : this.tailLerp;
 
-    head.x += (target.x - head.x) * this.headLerp;
-    head.y += (target.y - head.y) * this.headLerp;
+    head.x += (target.x - head.x) * headLerp;
+    head.y += (target.y - head.y) * headLerp;
     this.applyPosition(head);
 
     for (let i = 1; i < this.blobs.length; i += 1) {
       const blob = this.blobs[i];
       const leader = this.blobs[i - 1];
-      blob.x += (leader.x - blob.x) * this.tailLerp;
-      blob.y += (leader.y - blob.y) * this.tailLerp;
+      blob.x += (leader.x - blob.x) * tailLerp;
+      blob.y += (leader.y - blob.y) * tailLerp;
       this.applyPosition(blob);
     }
 
@@ -165,7 +182,8 @@ export class LiquidCursorComponent implements AfterViewInit, OnDestroy {
 
   applyPosition(blob: LiquidBlob) {
     const offset = blob.size / 2;
-    blob.transform = `translate3d(${(blob.x - offset).toFixed(1)}px, ${(blob.y - offset).toFixed(1)}px, 0)`;
+    blob.element.style.transform =
+      `translate3d(${(blob.x - offset).toFixed(1)}px, ${(blob.y - offset).toFixed(1)}px, 0)`;
   }
 
   applyVars(x: number, y: number) {

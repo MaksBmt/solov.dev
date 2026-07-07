@@ -17,11 +17,7 @@
     </svg>
 
     <div class="liquid js-liquid" data-debug-vars="--lx --ly">
-      <div class="liquid__field js-liquid-field">
-        @for (blob of blobs; track $index) {
-          <span class="liquid__blob" [style.width.px]="blob.size" [style.height.px]="blob.size" [style.transform]="blob.transform"></span>
-        }
-      </div>
+      <div class="liquid__field js-liquid-field"></div>
     </div>
 
     <p class="liquid__hint">// move the cursor — the drop will follow</p>

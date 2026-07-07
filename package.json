@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "sync:lab-sources": "node scripts/sync-lab-sources.js",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:solov-dev-angular": "node dist/solov-dev-angular/server/server.mjs"
