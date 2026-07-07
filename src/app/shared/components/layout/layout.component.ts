@@ -1,4 +1,4 @@
-import { Component, Input, HostBinding } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -6,11 +6,14 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './layout.component.html',
-  styleUrls: ['./layout.component.scss']
+  styleUrls: ['./layout.component.scss'],
+  host: {
+    class: 'layout',
+    '[class.layout--fullscreen]': 'fullscreen()',
+    '[class.layout--page]': 'page()',
+  },
 })
 export class LayoutComponent {
-  @Input() @HostBinding('class.layout--fullscreen') fullscreen = false;
-  @Input() @HostBinding('class.layout--page') page = false;
-  
-  @HostBinding('class.layout') isLayout = true;
+  readonly fullscreen = input(false);
+  readonly page = input(false);
 }

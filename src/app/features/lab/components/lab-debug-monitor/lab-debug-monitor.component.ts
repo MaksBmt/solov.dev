@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -6,9 +6,9 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   styleUrls: ['./lab-debug-monitor.component.scss'],
-  templateUrl: './lab-debug-monitor.component.html'
+  templateUrl: './lab-debug-monitor.component.html',
 })
 export class LabDebugMonitorComponent {
-  @Input() debugMonitor: any[] = [];
-  @Input() monitorValues: Record<string, string> = {};
+  readonly debugMonitor = input<any[]>([]);
+  readonly monitorValues = input<Record<string, string>>({});
 }

@@ -1,8 +1,8 @@
-@for (category of categories; track category.slug) {
+@for (category of categories(); track category.slug) {
   <li class="lab-roadmap__item">
-    <div class="lab-roadmap__tile">
+    <article class="lab-roadmap__card">
       <h3 class="lab-roadmap__title">{{ category.title }}</h3>
       <p class="lab-roadmap__description">{{ category.description }}</p>
-    </div>
+    </article>
   </li>
 }

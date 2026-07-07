@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, ElementRef, AfterViewInit, OnDestroy, Inject, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
+import { Component, PLATFORM_ID, ChangeDetectorRef, ViewChild, ElementRef, AfterViewInit, OnDestroy, inject, input, signal } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { LabGalleryComponent } from '../lab-gallery/lab-gallery.component';
 import EmblaCarousel, { EmblaCarouselType } from 'embla-carousel';
@@ -11,29 +11,27 @@ import EmblaCarousel, { EmblaCarouselType } from 'embla-carousel';
   styleUrls: ['./lab-carousel.component.scss'],
 })
 export class LabCarouselComponent implements AfterViewInit, OnDestroy {
-  @Input() experiments: any[] = [];
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly cdr = inject(ChangeDetectorRef);
+
+  readonly experiments = input<any[]>([]);
   @ViewChild('viewport') viewportRef!: ElementRef<HTMLDivElement>;
 
   private emblaApi: EmblaCarouselType | null = null;
-  activeIndex = 0;
-  canScrollPrev = false;
-  canScrollNext = true;
-  progress = 0;
-
-  constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
-    private cdr: ChangeDetectorRef
-  ) {}
+  readonly activeIndex = signal(0);
+  readonly canScrollPrev = signal(false);
+  readonly canScrollNext = signal(true);
+  readonly progress = signal(0);
 
   ngAfterViewInit() {
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
 
-    if (this.experiments.length <= 1) {
-      this.canScrollPrev = false;
-      this.canScrollNext = false;
-      this.progress = 100;
+    if (this.experiments().length <= 1) {
+      this.canScrollPrev.set(false);
+      this.canScrollNext.set(false);
+      this.progress.set(100);
       return;
     }
 
@@ -47,7 +45,6 @@ export class LabCarouselComponent implements AfterViewInit, OnDestroy {
     this.emblaApi.on('select', () => this.updateState());
     this.emblaApi.on('reInit', () => this.updateState());
 
-    // Embla init updates snaps synchronously — defer to avoid NG0100 in dev mode.
     queueMicrotask(() => {
       this.updateState();
       this.cdr.markForCheck();
@@ -55,6 +52,8 @@ export class LabCarouselComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     if (this.emblaApi) {
       this.emblaApi.destroy();
     }
@@ -70,21 +69,21 @@ export class LabCarouselComponent implements AfterViewInit, OnDestroy {
 
   private updateState() {
     if (!this.emblaApi) return;
-    this.activeIndex = this.emblaApi.selectedScrollSnap();
-    this.canScrollPrev = this.emblaApi.canScrollPrev();
-    this.canScrollNext = this.emblaApi.canScrollNext();
+    this.activeIndex.set(this.emblaApi.selectedScrollSnap());
+    this.canScrollPrev.set(this.emblaApi.canScrollPrev());
+    this.canScrollNext.set(this.emblaApi.canScrollNext());
 
     const total = this.emblaApi.scrollSnapList().length;
     if (total > 1) {
-      this.progress = ((this.activeIndex + 1) / total) * 100;
+      this.progress.set(((this.activeIndex() + 1) / total) * 100);
     } else {
-      this.progress = 100;
+      this.progress.set(100);
     }
   }
 
   formatCounter(): string {
-    const total = this.emblaApi ? this.emblaApi.scrollSnapList().length : Math.max(1, this.experiments.length);
-    const current = this.activeIndex + 1;
+    const total = this.emblaApi ? this.emblaApi.scrollSnapList().length : Math.max(1, this.experiments().length);
+    const current = this.activeIndex() + 1;
     return `${String(current).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
   }
 }

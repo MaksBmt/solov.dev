@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
@@ -7,8 +7,8 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [CommonModule, RouterModule],
   styleUrls: ['./breadcrumbs.component.scss'],
-  templateUrl: './breadcrumbs.component.html'
+  templateUrl: './breadcrumbs.component.html',
 })
 export class BreadcrumbsComponent {
-  @Input() items: { label: string, url?: string }[] = [];
+  readonly items = input<{ label: string; url?: string }[]>([]);
 }

@@ -1,4 +1,4 @@
-import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { isPlatformBrowser } from '@angular/common';
 import { PageMeta } from '../../features/lab/models/experiment.model';
@@ -8,11 +8,9 @@ const DEFAULT_DESCRIPTION = 'Портфолио frontend-инженера: ин�
 
 @Injectable({ providedIn: 'root' })
 export class PageMetaService {
-  constructor(
-    private title: Title,
-    private meta: Meta,
-    @Inject(PLATFORM_ID) private platformId: Object
-  ) {}
+  private readonly title = inject(Title);
+  private readonly meta = inject(Meta);
+  private readonly platformId = inject(PLATFORM_ID);
 
   setPageMeta(meta: PageMeta): void {
     const title = meta.title || DEFAULT_TITLE;

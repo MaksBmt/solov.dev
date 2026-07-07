@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -6,12 +6,12 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   styleUrls: ['./lab-debug-control.component.scss'],
-  templateUrl: './lab-debug-control.component.html'
+  templateUrl: './lab-debug-control.component.html',
 })
 export class LabDebugControlComponent {
-  @Input() control: any;
-  @Input() controlValue: number | undefined = 0;
-  @Output() controlChange = new EventEmitter<Event>();
+  readonly control = input<any>();
+  readonly controlValue = input<number | undefined>(0);
+  readonly controlChange = output<Event>();
 
   onInput(event: Event) {
     this.controlChange.emit(event);

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { passportLabels } from '../../data/experiments';
 
@@ -7,14 +7,15 @@ import { passportLabels } from '../../data/experiments';
   standalone: true,
   imports: [CommonModule],
   styleUrls: ['./lab-passport.component.scss'],
-  templateUrl: './lab-passport.component.html'
+  templateUrl: './lab-passport.component.html',
 })
 export class LabPassportComponent {
-  @Input() passport: any;
+  readonly passport = input<any>();
 
   getPassportKeys() {
-    if (!this.passport) return [];
-    return Object.keys(passportLabels).filter(key => this.passport[key]);
+    const data = this.passport();
+    if (!data) return [];
+    return Object.keys(passportLabels).filter((key) => data[key]);
   }
 
   getPassportLabel(key: string) {

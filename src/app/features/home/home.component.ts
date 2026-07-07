@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { HeaderComponent } from '../../layout/header/header.component';
 import { FooterComponent } from '../../layout/footer/footer.component';
 import { LayoutComponent } from '../../shared/components/layout/layout.component';
@@ -15,10 +15,10 @@ import { getSitePage } from '../../core/config/site-pages.config';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit {
-  constructor(private pageMeta: PageMetaService) {}
+export class HomeComponent {
+  private readonly pageMeta = inject(PageMetaService);
 
-  ngOnInit(): void {
+  constructor() {
     const page = getSitePage('home');
     if (page) this.pageMeta.setPageMeta(page);
   }

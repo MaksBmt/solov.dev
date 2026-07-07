@@ -1,4 +1,18 @@
-import { Component, Input, OnInit, AfterViewInit, ViewChild, ElementRef, OnDestroy, Inject, PLATFORM_ID, NgZone, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  AfterViewInit,
+  ViewChild,
+  ElementRef,
+  OnDestroy,
+  PLATFORM_ID,
+  NgZone,
+  ChangeDetectorRef,
+  inject,
+  input,
+  output,
+  signal,
+} from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -46,26 +60,32 @@ import { PageMetaService } from '../../../../core/services/page-meta.service';
     LayoutComponent,
   ],
   styleUrls: ['./lab-demo-layout.component.scss'],
-  templateUrl: './lab-demo-layout.component.html'
+  templateUrl: './lab-demo-layout.component.html',
 })
 export class LabDemoLayoutComponent implements OnInit, AfterViewInit, OnDestroy {
-  @Input() experimentSlug!: string;
-  @Input() isImmersive: boolean = false;
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly ngZone = inject(NgZone);
+  private readonly mouseTracker = inject(MouseTrackerService);
+  private readonly pageMeta = inject(PageMetaService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
-  @Output() onReset = new EventEmitter<void>();
-  @Output() onParamChange = new EventEmitter<{id: string, value: number, control: any, silent?: boolean}>();
-  @Output() onDrawDebug = new EventEmitter<{ctx: CanvasRenderingContext2D, width: number, height: number, pointer: any}>();
+  readonly experimentSlug = input.required<string>();
+  readonly isImmersive = input(false);
+
+  readonly onReset = output<void>();
+  readonly onParamChange = output<{ id: string; value: number; control: any; silent?: boolean }>();
+  readonly onDrawDebug = output<{ ctx: CanvasRenderingContext2D; width: number; height: number; pointer: any }>();
 
   @ViewChild(DemoSceneComponent) demoScene!: DemoSceneComponent;
   @ViewChild('labDemoSection') labDemoSectionRef!: ElementRef<HTMLElement>;
   @ViewChild(CodeViewComponent, { read: ElementRef }) codeViewRef!: ElementRef<HTMLElement>;
 
   experiment: any;
-  showDebug = false;
-  showCode = false;
+  readonly showDebug = signal(false);
+  readonly showCode = signal(false);
   codeName = '';
   sourceCode = '';
-  codeLines: {text: string, key?: string, highlight: boolean}[] = [];
+  codeLines: { text: string; key?: string; highlight: boolean }[] = [];
 
   controlValues: Record<string, number> = {};
   monitorValues: Record<string, string> = {};
@@ -74,22 +94,13 @@ export class LabDemoLayoutComponent implements OnInit, AfterViewInit, OnDestroy 
   private resizeObserver: ResizeObserver | null = null;
   private frames = 0;
   private fpsWindowStart = 0;
-  private boundTick!: () => void;
+  private readonly boundTick = () => this.tick();
   private pointer: any = null;
   private scenePointerMoveHandler?: (e: PointerEvent) => void;
   private scenePointerLeaveHandler?: () => void;
 
-  constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
-    private ngZone: NgZone,
-    private mouseTracker: MouseTrackerService,
-    private pageMeta: PageMetaService
-  ) {
-    this.boundTick = this.tick.bind(this);
-  }
-
   ngOnInit() {
-    this.experiment = getExperiment(this.experimentSlug);
+    this.experiment = getExperiment(this.experimentSlug());
     if (this.experiment) {
       const category = getCategory(this.experiment.category);
       this.pageMeta.setExperimentMeta(
@@ -110,13 +121,17 @@ export class LabDemoLayoutComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   ngOnDestroy() {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     if (this.rafId !== null) cancelAnimationFrame(this.rafId);
     if (this.resizeObserver) this.resizeObserver.disconnect();
     this.unbindScenePointerTracking();
   }
 
   onDebugToggle(enabled: boolean) {
-    this.showDebug = enabled;
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    this.showDebug.set(enabled);
 
     if (enabled) {
       this.frames = 0;
@@ -136,17 +151,19 @@ export class LabDemoLayoutComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   toggleCode() {
-    this.showCode = !this.showCode;
-    if (this.showCode && !this.codeLines.length && this.sourceCode) {
+    this.showCode.update((value) => !value);
+    if (this.showCode() && !this.codeLines.length && this.sourceCode) {
       this.initCodeLines();
     }
   }
 
   openCode() {
-    this.showCode = true;
+    this.showCode.set(true);
     if (!this.codeLines.length && this.sourceCode) {
       this.initCodeLines();
     }
+    if (!isPlatformBrowser(this.platformId)) return;
+
     setTimeout(() => {
       this.codeViewRef?.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }, 50);
@@ -162,9 +179,10 @@ export class LabDemoLayoutComponent implements OnInit, AfterViewInit, OnDestroy 
       .then((response) => response.text())
       .then((code) => {
         this.sourceCode = code.replace(/\r\n/g, '\n');
-        if (this.showCode) {
+        if (this.showCode()) {
           this.initCodeLines();
         }
+        this.cdr.markForCheck();
       })
       .catch(() => {
         this.sourceCode = '';
@@ -178,7 +196,7 @@ export class LabDemoLayoutComponent implements OnInit, AfterViewInit, OnDestroy 
       .filter((c: any) => c.codeKey)
       .map((c: any) => c.codeKey);
 
-    this.codeLines = this.sourceCode.replace(/\r\n/g, '\n').split('\n').map(line => {
+    this.codeLines = this.sourceCode.replace(/\r\n/g, '\n').split('\n').map((line) => {
       let key = undefined;
       for (const codeKey of codeKeys) {
         if (line.includes(codeKey)) {
@@ -206,11 +224,11 @@ export class LabDemoLayoutComponent implements OnInit, AfterViewInit, OnDestroy 
 
   syncCodeLine(codeKey: string, value: number) {
     if (!codeKey) return;
-    const line = this.codeLines.find(l => l.key === codeKey);
+    const line = this.codeLines.find((l) => l.key === codeKey);
     if (line) {
       line.text = line.text.replace(/(=\s*)[\d.]+/, (_, prefix) => `${prefix}${this.formatCodeValue(value)}`);
       line.highlight = true;
-      setTimeout(() => line.highlight = false, 1500);
+      setTimeout(() => (line.highlight = false), 1500);
     }
   }
 
@@ -273,7 +291,7 @@ export class LabDemoLayoutComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   tick() {
-    if (!this.showDebug) return;
+    if (!this.showDebug()) return;
 
     const now = performance.now();
     this.frames += 1;

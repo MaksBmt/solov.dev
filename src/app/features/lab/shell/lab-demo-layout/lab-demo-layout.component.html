@@ -4,20 +4,20 @@
   </div>
 
   <div main>
-    <section #labDemoSection class="lab-demo" [class.lab-demo--debug]="showDebug" [attr.data-experiment]="experimentSlug">
+    <section #labDemoSection class="lab-demo" [class.lab-demo--debug]="showDebug()" [attr.data-experiment]="experimentSlug()">
       <header appLabTopbar>
         <app-breadcrumbs [items]="[{ label: 'Home', url: '/' }, { label: 'THE.LAB', url: '/lab' }, { label: experiment?.title }]"></app-breadcrumbs>
-        <label appLabSwitch label="Show Debug" [checked]="showDebug" (checkedChange)="onDebugToggle($event)"></label>
+        <label appLabSwitch label="Show Debug" [checked]="showDebug()" (checkedChange)="onDebugToggle($event)"></label>
       </header>
 
       <div appDemoLayout>
-        <div appDemoScene [isImmersive]="isImmersive" [showDebug]="showDebug">
+        <div appDemoScene [isImmersive]="isImmersive()" [showDebug]="showDebug()">
           <ng-content select="[scene]" ngProjectAs="[scene]"></ng-content>
 
           <app-lab-debug-panel
             debug
             ngProjectAs="[debug]"
-            [showDebug]="showDebug"
+            [showDebug]="showDebug()"
             [debugMonitor]="experiment?.debugMonitor"
             [monitorValues]="monitorValues"
             [debugControls]="experiment?.debugControls"
@@ -44,7 +44,7 @@
               </button>
             </li>
             <li class="lab-actions__item">
-              <button appButton class="lab-actions__button" type="button" [attr.aria-expanded]="showCode" (click)="toggleCode()">
+              <button appButton class="lab-actions__button" type="button" [attr.aria-expanded]="showCode()" (click)="toggleCode()">
                 <span appMark>[</span>VIEW CODE<span appMark>]</span>
               </button>
             </li>
@@ -54,7 +54,7 @@
       </div>
 
       <app-code-view
-        [hidden]="!showCode"
+        [hidden]="!showCode()"
         [codeName]="codeName"
         [sourceCode]="sourceCode"
         [codeLines]="codeLines">

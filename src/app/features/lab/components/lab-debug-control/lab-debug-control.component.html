@@ -1,14 +1,16 @@
-<li class="debug-control">
-  <div class="debug-control__head">
-    <span class="debug-control__label">{{ control.label }}</span>
-    <span class="debug-control__value">{{ formatControlValue(controlValue, control.step) }}</span>
+@if (control(); as ctrl) {
+  <div class="debug-control">
+    <div class="debug-control__head">
+      <span class="debug-control__label">{{ ctrl.label }}</span>
+      <span class="debug-control__value">{{ formatControlValue(controlValue(), ctrl.step) }}</span>
+    </div>
+    @if (ctrl.description) {
+      <p class="debug-control__desc">{{ ctrl.description }}</p>
+    }
+    <input class="debug-control__range" type="range"
+           [min]="ctrl.min" [max]="ctrl.max" [step]="ctrl.step"
+           [value]="controlValue()"
+           [attr.aria-label]="ctrl.label"
+           (input)="onInput($event)">
   </div>
-  @if (control.description) {
-    <p class="debug-control__desc">{{ control.description }}</p>
-  }
-  <input type="range" class="debug-control__range" 
-         [min]="control.min" [max]="control.max" [step]="control.step" 
-         [value]="controlValue" 
-         [attr.aria-label]="control.label"
-         (input)="onInput($event)">
-</li>
+}

@@ -1,12 +1,14 @@
-import { Component, Input, HostBinding } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'ul[appLabRoadmap]',
   standalone: true,
   templateUrl: './lab-roadmap.component.html',
-  styleUrls: ['./lab-roadmap.component.scss']
+  styleUrls: ['./lab-roadmap.component.scss'],
+  host: {
+    class: 'lab-roadmap',
+  },
 })
 export class LabRoadmapComponent {
-  @Input() categories: any[] = [];
-  @HostBinding('class.lab-roadmap') isRoadmap = true;
+  readonly categories = input<any[]>([]);
 }

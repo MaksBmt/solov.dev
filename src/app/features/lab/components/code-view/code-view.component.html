@@ -1,13 +1,13 @@
-<div class="code-view" [hidden]="hidden">
+<div class="code-view" [hidden]="hidden()">
   <header class="code-view__head">
     <span class="code-view__caption">// source</span>
-    <span class="code-view__name">{{ codeName }}</span>
+    <span class="code-view__name">{{ codeName() }}</span>
     <button appButton class="code-view__copy" type="button" (click)="copyCode()" #copyBtn>
-      <span appMark>[</span>{{ copyText }}<span appMark>]</span>
+      <span appMark>[</span>{{ copyText() }}<span appMark>]</span>
     </button>
   </header>
   <ol class="code-view__list">
-    @for (line of codeLines; track $index) {
+    @for (line of codeLines(); track $index) {
       <li class="code-view__line" [attr.data-code-key]="line.key" [class.code-view__line--highlight]="line.highlight">{{ line.text }}</li>
     }
   </ol>

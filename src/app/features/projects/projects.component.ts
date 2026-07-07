@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { HeaderComponent } from '../../layout/header/header.component';
 import { FooterComponent } from '../../layout/footer/footer.component';
 import { LayoutComponent } from '../../shared/components/layout/layout.component';
@@ -13,13 +13,13 @@ import { getSitePage } from '../../core/config/site-pages.config';
   templateUrl: './projects.component.html',
   styleUrls: ['./projects.component.scss'],
 })
-export class ProjectsComponent implements OnInit {
-  title = 'Projects';
-  lead = 'Раздел в разработке — здесь появятся кейсы и проекты.';
+export class ProjectsComponent {
+  private readonly pageMeta = inject(PageMetaService);
 
-  constructor(private pageMeta: PageMetaService) {}
+  readonly title = signal('Projects');
+  readonly lead = signal('Раздел в разработке — здесь появятся кейсы и проекты.');
 
-  ngOnInit(): void {
+  constructor() {
     const page = getSitePage('projects');
     if (page) this.pageMeta.setPageMeta(page);
   }

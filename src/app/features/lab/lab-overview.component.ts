@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { HeaderComponent } from '../../layout/header/header.component';
@@ -35,18 +35,15 @@ import { getSitePage } from '../../core/config/site-pages.config';
   templateUrl: './lab-overview.component.html',
   styleUrls: ['./lab-overview.component.scss'],
 })
-export class LabOverviewComponent implements OnInit {
-  readyCategories: any[] = [];
-  soonCategories: any[] = [];
+export class LabOverviewComponent {
+  private readonly pageMeta = inject(PageMetaService);
 
-  constructor(private pageMeta: PageMetaService) {}
+  readonly readyCategories = categories.filter((c) => c.status === 'ready');
+  readonly soonCategories = categories.filter((c) => c.status !== 'ready');
 
-  ngOnInit(): void {
+  constructor() {
     const page = getSitePage('lab');
     if (page) this.pageMeta.setPageMeta(page);
-
-    this.readyCategories = categories.filter((c) => c.status === 'ready');
-    this.soonCategories = categories.filter((c) => c.status !== 'ready');
   }
 
   getExperiments(categorySlug: string) {

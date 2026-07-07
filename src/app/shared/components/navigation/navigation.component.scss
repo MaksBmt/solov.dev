@@ -32,7 +32,7 @@
   }
 }
 
-:host-context(.header__drawer--open):host(.navigation--drawer) .navigation__item {
+:host(.navigation--drawer.navigation--open) .navigation__item {
   opacity: 1;
   transform: translateX(0);
 

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ExperimentCardComponent } from '../experiment-card/experiment-card.component';
 
@@ -9,10 +9,10 @@ import { ExperimentCardComponent } from '../experiment-card/experiment-card.comp
   styleUrls: ['./lab-gallery.component.scss'],
   templateUrl: './lab-gallery.component.html',
   host: {
-    'class': 'lab-gallery'
-  }
+    class: 'lab-gallery',
+  },
 })
 export class LabGalleryComponent {
-  @Input() experiments: any[] = [];
-  @Input() activeIndex: number = 0;
+  readonly experiments = input<any[]>([]);
+  readonly activeIndex = input(0);
 }

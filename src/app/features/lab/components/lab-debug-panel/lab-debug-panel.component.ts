@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { LabDebugMonitorComponent } from '../lab-debug-monitor/lab-debug-monitor.component';
@@ -12,15 +12,15 @@ import { LabDebugControlComponent } from '../lab-debug-control/lab-debug-control
   styleUrls: ['./lab-debug-panel.component.scss'],
 })
 export class LabDebugPanelComponent {
-  @Input() showDebug: boolean = false;
-  @Input() debugMonitor?: any[];
-  @Input() monitorValues: Record<string, string> = {};
-  @Input() debugControls?: any[];
-  @Input() controlValues: Record<string, number> = {};
-  @Input() debugLegend?: string;
+  readonly showDebug = input(false);
+  readonly debugMonitor = input<any[]>();
+  readonly monitorValues = input<Record<string, string>>({});
+  readonly debugControls = input<any[]>();
+  readonly controlValues = input<Record<string, number>>({});
+  readonly debugLegend = input<string>();
 
-  @Output() onOpenCode = new EventEmitter<void>();
-  @Output() onControlChange = new EventEmitter<{control: any, event: Event}>();
+  readonly onOpenCode = output<void>();
+  readonly onControlChange = output<{ control: any; event: Event }>();
 
   onControlInput(control: any, event: Event) {
     this.onControlChange.emit({ control, event });

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { HeaderComponent } from '../../layout/header/header.component';
@@ -25,27 +25,30 @@ import { Experiment } from './models/experiment.model';
   templateUrl: './lab-category-page.component.html',
   styleUrls: ['./lab-category-page.component.scss'],
 })
-export class LabCategoryPageComponent implements OnInit {
-  categorySlug = '';
-  category: (typeof categories)[number] | null = null;
-  experiments: Experiment[] = [];
+export class LabCategoryPageComponent {
+  private readonly route = inject(ActivatedRoute);
+  private readonly pageMeta = inject(PageMetaService);
 
-  constructor(private route: ActivatedRoute, private pageMeta: PageMetaService) {}
+  readonly categorySlug = signal('');
+  readonly category = signal<(typeof categories)[number] | null>(null);
+  readonly experiments = signal<Experiment[]>([]);
+  readonly readyCount = computed(() =>
+    this.experiments().filter((item) => item.status === 'ready').length
+  );
 
-  ngOnInit(): void {
-    this.categorySlug = this.route.snapshot.paramMap.get('category') ?? '';
-    this.category = getCategory(this.categorySlug);
-    this.experiments = getExperimentsByCategory(this.categorySlug) as Experiment[];
+  constructor() {
+    const slug = this.route.snapshot.paramMap.get('category') ?? '';
+    const category = getCategory(slug);
 
-    if (this.category) {
+    this.categorySlug.set(slug);
+    this.category.set(category);
+    this.experiments.set(getExperimentsByCategory(slug) as Experiment[]);
+
+    if (category) {
       this.pageMeta.setPageMeta({
-        title: `${this.category.title} — THE.LAB`,
-        description: this.category.description,
+        title: `${category.title} — THE.LAB`,
+        description: category.description,
       });
     }
-  }
-
-  get readyCount(): number {
-    return this.experiments.filter((item) => item.status === 'ready').length;
   }
 }

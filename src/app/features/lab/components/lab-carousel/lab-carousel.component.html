@@ -1,22 +1,22 @@
 <div class="lab-carousel js-lab-carousel">
   <div class="lab-carousel__viewport" #viewport>
     <ul appLabGallery
-      [experiments]="experiments" 
-      [activeIndex]="activeIndex">
+      [experiments]="experiments()" 
+      [activeIndex]="activeIndex()">
     </ul>
   </div>
 
   <button type="button" class="lab-carousel__nav lab-carousel__nav--prev js-lab-carousel-prev"
           aria-label="Предыдущий эксперимент" 
-          [disabled]="!canScrollPrev" 
+          [disabled]="!canScrollPrev()" 
           (click)="scrollPrev()">←</button>
   <button type="button" class="lab-carousel__nav lab-carousel__nav--next js-lab-carousel-next"
           aria-label="Следующий эксперимент" 
-          [disabled]="!canScrollNext" 
+          [disabled]="!canScrollNext()" 
           (click)="scrollNext()">→</button>
 
   <div class="lab-carousel__progress">
-    <div class="lab-carousel__progress-bar js-lab-carousel-progress" [style.--progress]="progress + '%'"></div>
+    <div class="lab-carousel__progress-bar js-lab-carousel-progress" [style.--progress]="progress() + '%'"></div>
     <span class="lab-carousel__counter js-lab-carousel-counter">{{ formatCounter() }}</span>
   </div>
 </div>

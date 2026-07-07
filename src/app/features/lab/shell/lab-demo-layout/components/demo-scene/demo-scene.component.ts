@@ -1,17 +1,18 @@
-import { Component, HostBinding, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, input, ViewChild, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'div[appDemoScene]',
   standalone: true,
   templateUrl: './demo-scene.component.html',
   styleUrls: ['./demo-scene.component.scss'],
+  host: {
+    class: 'demo-scene',
+  },
 })
 export class DemoSceneComponent {
-  @Input() isImmersive = false;
-  @Input() showDebug = false;
+  readonly isImmersive = input(false);
+  readonly showDebug = input(false);
 
   @ViewChild('sceneArea') sceneAreaRef!: ElementRef<HTMLElement>;
   @ViewChild('debugCanvas') debugCanvasRef!: ElementRef<HTMLCanvasElement>;
-
-  @HostBinding('class.demo-scene') isDemoScene = true;
 }

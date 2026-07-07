@@ -1,21 +1,22 @@
-import { Injectable, Inject, PLATFORM_ID, NgZone } from '@angular/core';
+import { Injectable, NgZone, PLATFORM_ID, inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FaviconAnimatorService {
+  private readonly ngZone = inject(NgZone);
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+
   private link: HTMLLinkElement | null = null;
-  private svgUrl: string = '';
-  private svgText: string = '';
+  private svgUrl = '';
+  private svgText = '';
   private parser: DOMParser | null = null;
   private serializer: XMLSerializer | null = null;
   private animationFrame: number | null = null;
   private startTime: number | null = null;
-  private isBrowser: boolean;
 
-  constructor(@Inject(PLATFORM_ID) platformId: Object, private ngZone: NgZone) {
-    this.isBrowser = isPlatformBrowser(platformId);
+  constructor() {
     if (this.isBrowser) {
       this.link = document.querySelector('link[rel*="icon"]');
       if (this.link) {
@@ -119,9 +120,9 @@ export class FaviconAnimatorService {
   }
 
   stop() {
-    if (this.animationFrame) {
-      cancelAnimationFrame(this.animationFrame);
-      this.animationFrame = null;
-    }
+    if (!this.isBrowser || !this.animationFrame) return;
+
+    cancelAnimationFrame(this.animationFrame);
+    this.animationFrame = null;
   }
 }

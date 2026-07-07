@@ -1,6 +1,6 @@
 <nav class="breadcrumbs" aria-label="Навигация по сайту">
   <ol class="breadcrumbs__list">
-    @for (item of items; track $index; let last = $last) {
+    @for (item of items(); track $index; let last = $last) {
       <li
         class="breadcrumbs__item"
         [class.breadcrumbs__item--current]="last"

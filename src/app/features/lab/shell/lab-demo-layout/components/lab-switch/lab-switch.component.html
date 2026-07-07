@@ -1,3 +1,3 @@
-<input class="lab-switch__input" type="checkbox" [checked]="checked" (change)="onToggle($event)">
+<input class="lab-switch__input" type="checkbox" [checked]="checked()" (change)="onToggle($event)">
 <span class="lab-switch__track" aria-hidden="true"><span class="lab-switch__thumb"></span></span>
-<span class="lab-switch__label">{{ label }}</span>
+<span class="lab-switch__label">{{ label() }}</span>

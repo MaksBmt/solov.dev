@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { DifficultyComponent } from '../../../../shared/components/difficulty/difficulty.component';
@@ -12,5 +12,5 @@ import { TechTagsComponent } from '../../../../shared/components/tech-tags/tech-
   styleUrls: ['./experiment-card.component.scss'],
 })
 export class ExperimentCardComponent {
-  @Input() experiment: any;
+  readonly experiment = input<any>();
 }

@@ -1,7 +1,7 @@
-<div #sceneArea class="demo-scene__area js-lab-scene" [class.demo-scene__area--immersive]="isImmersive">
+<div #sceneArea class="demo-scene__area js-lab-scene" [class.demo-scene__area--immersive]="isImmersive()">
   <ng-content select="[scene]"></ng-content>
   <canvas #debugCanvas class="demo-scene__canvas"></canvas>
 </div>
-<div class="demo-scene__debug js-debug-panel" [hidden]="!showDebug">
+<div class="demo-scene__debug js-debug-panel" [hidden]="!showDebug()">
   <ng-content select="[debug]"></ng-content>
 </div>

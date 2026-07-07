@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, OnDestroy, Inject, PLATFORM_ID, NgZone, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, PLATFORM_ID, NgZone, ViewChild, AfterViewInit, inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { MouseTrackerService } from '../../../core/services/mouse-tracker.service';
 import SphereLine, { createBundle } from '../../../core/utils/sphere-line';
@@ -26,24 +26,24 @@ const BACKGROUND_COLOR = '#0a0b0e';
   styleUrls: ['./ambient-canvas.component.scss'],
 })
 export class AmbientCanvasComponent implements AfterViewInit, OnDestroy {
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly ngZone = inject(NgZone);
+  private readonly mouseTracker = inject(MouseTrackerService);
+
   @ViewChild('canvasRef') canvasRef!: ElementRef<HTMLCanvasElement>;
 
   private ctx: CanvasRenderingContext2D | null = null;
   private lines: SphereLine[] = [];
-  private time: number = 0;
+  private time = 0;
   private rafId: number | null = null;
-  private rotX: number = 0;
-  private rotY: number = 0;
+  private rotX = 0;
+  private rotY = 0;
   private viewport = { width: 0, height: 0 };
   private fogCanvas!: HTMLCanvasElement;
   private fogCtx!: CanvasRenderingContext2D;
-  private boundOnResize!: () => void;
+  private boundOnResize = () => this.resize();
 
-  constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
-    private ngZone: NgZone,
-    private mouseTracker: MouseTrackerService
-  ) {
+  constructor() {
     if (isPlatformBrowser(this.platformId)) {
       this.viewport.width = window.innerWidth;
       this.viewport.height = window.innerHeight;
@@ -84,14 +84,13 @@ export class AmbientCanvasComponent implements AfterViewInit, OnDestroy {
   }
 
   private bindResize() {
-    this.boundOnResize = () => this.resize();
     window.addEventListener('resize', this.boundOnResize);
   }
 
   private resize() {
     this.viewport.width = window.innerWidth;
     this.viewport.height = window.innerHeight;
-    
+
     if (this.canvasRef?.nativeElement) {
       this.canvasRef.nativeElement.width = this.viewport.width;
       this.canvasRef.nativeElement.height = this.viewport.height;
@@ -141,7 +140,7 @@ export class AmbientCanvasComponent implements AfterViewInit, OnDestroy {
       this.fogCtx.globalCompositeOperation = 'difference';
       this.fogCtx.fillStyle = BACKGROUND_COLOR;
       this.fogCtx.fillRect(0, 0, this.fogCanvas.width, this.fogCanvas.height);
-      
+
       this.ctx.globalAlpha = FOG_ALPHA;
       this.ctx.drawImage(this.fogCanvas, 0, 0, width, height);
       this.ctx.globalAlpha = 1;

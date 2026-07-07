@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, OnDestroy, Inject, PLATFORM_ID, NgZone, ViewChild, ElementRef } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy, PLATFORM_ID, NgZone, ViewChild, ElementRef, inject } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { LabDemoLayoutComponent } from '../../../shell/lab-demo-layout/lab-demo-layout.component';
 
@@ -32,6 +32,9 @@ export class SpotlightContentComponent {}
   templateUrl: './spotlight.component.html'
 })
 export class SpotlightComponent implements AfterViewInit, OnDestroy {
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly ngZone = inject(NgZone);
+
   @ViewChild('sceneHost') sceneHostRef!: ElementRef<HTMLElement>;
 
   positionLerp = POSITION_LERP;
@@ -44,18 +47,9 @@ export class SpotlightComponent implements AfterViewInit, OnDestroy {
   private current = { x: 0, y: 0, radius: 0 };
   private rafId: number | null = null;
   private reducedMotion = false;
-  private boundTick!: () => void;
-  private boundOnPointerMove!: (e: PointerEvent) => void;
-  private boundOnPointerLeave!: () => void;
-
-  constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
-    private ngZone: NgZone
-  ) {
-    this.boundTick = this.tick.bind(this);
-    this.boundOnPointerMove = this.onPointerMove.bind(this);
-    this.boundOnPointerLeave = this.onPointerLeave.bind(this);
-  }
+  private readonly boundTick = () => this.tick();
+  private readonly boundOnPointerMove = (e: PointerEvent) => this.onPointerMove(e);
+  private readonly boundOnPointerLeave = () => this.onPointerLeave();
 
   ngAfterViewInit() {
     if (!isPlatformBrowser(this.platformId)) return;
@@ -80,6 +74,8 @@ export class SpotlightComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     if (this.rafId !== null) cancelAnimationFrame(this.rafId);
     if (!this.sceneEl) return;
 

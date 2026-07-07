@@ -1,20 +1,21 @@
-import { Component, Input, Output, EventEmitter, HostBinding } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 
 @Component({
   selector: 'label[appLabSwitch]',
   standalone: true,
   templateUrl: './lab-switch.component.html',
-  styleUrls: ['./lab-switch.component.scss']
+  styleUrls: ['./lab-switch.component.scss'],
+  host: {
+    class: 'lab-switch',
+  },
 })
 export class LabSwitchComponent {
-  @Input() label: string = '';
-  @Input() checked: boolean = false;
-  @Output() checkedChange = new EventEmitter<boolean>();
-  
-  @HostBinding('class.lab-switch') isSwitch = true;
+  readonly label = input('');
+  readonly checked = input(false);
+  readonly checkedChange = output<boolean>();
 
   onToggle(event: Event) {
-    const input = event.target as HTMLInputElement;
-    this.checkedChange.emit(input.checked);
+    const inputEl = event.target as HTMLInputElement;
+    this.checkedChange.emit(inputEl.checked);
   }
 }

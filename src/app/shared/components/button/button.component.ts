@@ -1,4 +1,4 @@
-import { Component, Input, HostBinding } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -8,9 +8,10 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./button.component.scss'],
   template: '<ng-content></ng-content>',
   host: {
-    'class': 'button'
-  }
+    class: 'button',
+    '[class.button--primary]': 'primary()',
+  },
 })
 export class ButtonComponent {
-  @Input() @HostBinding('class.button--primary') primary: boolean = false;
+  readonly primary = input(false);
 }

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { difficultyLabel, difficultyStars } from '../../../features/lab/data/experiments';
 
@@ -7,16 +7,16 @@ import { difficultyLabel, difficultyStars } from '../../../features/lab/data/exp
   standalone: true,
   imports: [CommonModule],
   styleUrls: ['./difficulty.component.scss'],
-  templateUrl: './difficulty.component.html'
+  templateUrl: './difficulty.component.html',
 })
 export class DifficultyComponent {
-  @Input() difficulty: number = 0;
+  readonly difficulty = input(0);
 
   getStars() {
-    return difficultyStars(this.difficulty);
+    return difficultyStars(this.difficulty());
   }
 
   getLabel() {
-    return difficultyLabel(this.difficulty);
+    return difficultyLabel(this.difficulty());
   }
 }

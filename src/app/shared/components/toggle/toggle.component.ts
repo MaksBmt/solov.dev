@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -7,17 +7,17 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   template: `
     <button class="toggle js-toggle" type="button" 
-            [attr.aria-expanded]="isOpen" 
-            [attr.aria-label]="isOpen ? 'Закрыть меню' : 'Открыть меню'"
+            [attr.aria-expanded]="isOpen()" 
+            [attr.aria-label]="isOpen() ? 'Закрыть меню' : 'Открыть меню'"
             (click)="onClick.emit($event)">
       <span class="toggle__line"></span>
       <span class="toggle__line"></span>
       <span class="toggle__line"></span>
     </button>
   `,
-  styleUrls: ['./toggle.component.scss']
+  styleUrls: ['./toggle.component.scss'],
 })
 export class ToggleComponent {
-  @Input() isOpen = false;
-  @Output() onClick = new EventEmitter<Event>();
+  readonly isOpen = input(false);
+  readonly onClick = output<Event>();
 }

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, OnDestroy, Inject, PLATFORM_ID, NgZone, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, PLATFORM_ID, NgZone, ViewChild, AfterViewInit, inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { MouseTrackerService } from '../../../core/services/mouse-tracker.service';
 
@@ -12,30 +12,32 @@ const TRAIL_FADE = 0.32;
   templateUrl: './pointer.component.html',
   styleUrls: ['./pointer.component.scss'],
 })
-export class PointerComponent implements OnInit, AfterViewInit, OnDestroy {
+export class PointerComponent implements AfterViewInit, OnDestroy {
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly ngZone = inject(NgZone);
+  private readonly mouseTracker = inject(MouseTrackerService);
+
   @ViewChild('trailCanvas') trailCanvasRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('pointerDiv') pointerDivRef!: ElementRef<HTMLDivElement>;
 
   private trailCtx: CanvasRenderingContext2D | null = null;
-  private cursorX: number = 0;
-  private cursorY: number = 0;
-  private prevX: number = 0;
-  private prevY: number = 0;
-  private intensity: number = 0;
-  private time: number = 0;
+  private cursorX = 0;
+  private cursorY = 0;
+  private prevX = 0;
+  private prevY = 0;
+  private intensity = 0;
+  private time = 0;
   private rafId: number | null = null;
   private beads: any[] = [];
-  private boundOnResize!: () => void;
-  private boundOnMouseLeave!: () => void;
-  private boundOnMouseEnter!: () => void;
+  private boundOnResize = () => this.resizeTrail();
+  private boundOnMouseLeave = () => {
+    this.pointerDivRef.nativeElement.classList.add('pointer--hidden');
+  };
+  private boundOnMouseEnter = () => {
+    this.pointerDivRef.nativeElement.classList.remove('pointer--hidden');
+  };
 
-  constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
-    private ngZone: NgZone,
-    private mouseTracker: MouseTrackerService
-  ) {}
-
-  ngOnInit() {
+  constructor() {
     if (isPlatformBrowser(this.platformId)) {
       this.cursorX = window.innerWidth / 2;
       this.cursorY = window.innerHeight / 2;
@@ -83,25 +85,13 @@ export class PointerComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private bindEvents() {
-    this.boundOnResize = () => this.resizeTrail();
     window.addEventListener('resize', this.boundOnResize);
-
-    this.boundOnMouseLeave = () => {
-      this.pointerDivRef.nativeElement.classList.add('pointer--hidden');
-    };
-    this.boundOnMouseEnter = () => {
-      this.pointerDivRef.nativeElement.classList.remove('pointer--hidden');
-    };
-
     document.documentElement.addEventListener('mouseleave', this.boundOnMouseLeave);
     document.documentElement.addEventListener('mouseenter', this.boundOnMouseEnter);
   }
 
-  public setupMagneticTargets() {
-    // This can be called when new content is added, or we can use a directive instead.
-    // To match original behavior exactly for now without rewriting the HTML:
+  setupMagneticTargets() {
     document.querySelectorAll('.js-magnetic-target').forEach((target) => {
-      // Avoid duplicate listeners
       const oldEnter = (target as any)['_ptr_enter'];
       if (oldEnter) target.removeEventListener('mouseenter', oldEnter);
       const oldLeave = (target as any)['_ptr_leave'];
@@ -109,7 +99,7 @@ export class PointerComponent implements OnInit, AfterViewInit, OnDestroy {
 
       const enterFn = () => this.pointerDivRef.nativeElement.classList.add('pointer--magnetic');
       const leaveFn = () => this.pointerDivRef.nativeElement.classList.remove('pointer--magnetic');
-      
+
       (target as any)['_ptr_enter'] = enterFn;
       (target as any)['_ptr_leave'] = leaveFn;
 
@@ -131,7 +121,7 @@ export class PointerComponent implements OnInit, AfterViewInit, OnDestroy {
 
       this.cursorX += (x - this.cursorX) * CURSOR_LERP;
       this.cursorY += (y - this.cursorY) * CURSOR_LERP;
-      
+
       if (this.pointerDivRef?.nativeElement) {
         this.pointerDivRef.nativeElement.style.transform = `translate3d(${this.cursorX}px, ${this.cursorY}px, 0)`;
       }
@@ -153,7 +143,7 @@ export class PointerComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.time += 0.016;
 
-    const Math_hypot = Math.hypot || function(a: number, b: number) { return Math.sqrt(a*a + b*b); };
+    const Math_hypot = Math.hypot || function (a: number, b: number) { return Math.sqrt(a * a + b * b); };
     const speed = Math_hypot(this.cursorX - this.prevX, this.cursorY - this.prevY);
     this.prevX = this.cursorX;
     this.prevY = this.cursorY;

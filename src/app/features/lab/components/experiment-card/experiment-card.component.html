@@ -1,21 +1,23 @@
-<article class="experiment-card" [class.experiment-card--soon]="experiment.status !== 'ready'">
-  @if (experiment.status === 'ready') {
-    <a class="experiment-card__link" [routerLink]="['/lab', experiment.category, experiment.slug]">
+@if (experiment(); as exp) {
+  <article class="experiment-card" [class.experiment-card--soon]="exp.status !== 'ready'">
+    @if (exp.status === 'ready') {
+      <a class="experiment-card__link" [routerLink]="['/lab', exp.category, exp.slug]">
+        <div class="experiment-card__head">
+          <h3 class="experiment-card__title">{{ exp.title }}</h3>
+          <span class="experiment-card__cta">→</span>
+        </div>
+        <p class="experiment-card__description">{{ exp.description }}</p>
+      </a>
+    } @else {
       <div class="experiment-card__head">
-        <h3 class="experiment-card__title">{{ experiment.title }}</h3>
-        <span class="experiment-card__cta">→</span>
+        <h3 class="experiment-card__title">{{ exp.title }}</h3>
+        <span class="experiment-card__badge experiment-card__badge--soon">SOON</span>
       </div>
-      <p class="experiment-card__description">{{ experiment.description }}</p>
-    </a>
-  } @else {
-    <div class="experiment-card__head">
-      <h3 class="experiment-card__title">{{ experiment.title }}</h3>
-      <span class="experiment-card__badge experiment-card__badge--soon">SOON</span>
-    </div>
-    <p class="experiment-card__description">{{ experiment.description }}</p>
-  }
+      <p class="experiment-card__description">{{ exp.description }}</p>
+    }
 
-  <app-difficulty class="experiment-card__meta difficulty" [difficulty]="experiment.difficulty"></app-difficulty>
+    <app-difficulty class="experiment-card__meta difficulty" [difficulty]="exp.difficulty"></app-difficulty>
 
-  <app-tech-tags [tags]="experiment.tech"></app-tech-tags>
-</article>
+    <app-tech-tags [tags]="exp.tech"></app-tech-tags>
+  </article>
+}

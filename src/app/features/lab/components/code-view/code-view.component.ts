@@ -1,5 +1,5 @@
-import { Component, Input, ViewChild, ElementRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, PLATFORM_ID, inject, input, signal } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ButtonComponent } from '../../../../shared/components/button/button.component';
 import { MarkComponent } from '../../../../shared/components/mark/mark.component';
 
@@ -8,26 +8,31 @@ import { MarkComponent } from '../../../../shared/components/mark/mark.component
   standalone: true,
   imports: [CommonModule, ButtonComponent, MarkComponent],
   styleUrls: ['./code-view.component.scss'],
-  templateUrl: './code-view.component.html'
+  templateUrl: './code-view.component.html',
 })
 export class CodeViewComponent {
-  @Input() codeName: string = '';
-  @Input() sourceCode: string = '';
-  @Input() codeLines: {text: string, key?: string, highlight: boolean}[] = [];
-  @Input() hidden: boolean = true;
+  private readonly platformId = inject(PLATFORM_ID);
 
-  @ViewChild('copyBtn') copyBtnRef!: ElementRef<HTMLButtonElement>;
-  
-  copyText = 'COPY';
+  readonly codeName = input('');
+  readonly sourceCode = input('');
+  readonly codeLines = input<{ text: string; key?: string; highlight: boolean }[]>([]);
+  readonly hidden = input(true);
+
+  readonly copyText = signal('COPY');
 
   async copyCode() {
-    const text = this.codeLines.length > 0 ? this.codeLines.map(l => l.text).join('\n') : this.sourceCode;
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    const lines = this.codeLines();
+    const text = lines.length > 0 ? lines.map((l) => l.text).join('\n') : this.sourceCode();
     try {
       await navigator.clipboard.writeText(text);
-      this.copyText = 'COPIED';
+      this.copyText.set('COPIED');
       setTimeout(() => {
-        this.copyText = 'COPY';
+        this.copyText.set('COPY');
       }, 2000);
-    } catch (e) {}
+    } catch {
+      // clipboard unavailable
+    }
   }
 }
