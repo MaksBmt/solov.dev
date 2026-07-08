@@ -1,0 +1,183 @@
+@use "../../../../../../scss/variable.scss" as *;
+
+.stack-cards {
+  position: absolute;
+  inset: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 16px 24px;
+  scrollbar-color: rgba(245, 158, 11, 0.45) rgba(14, 15, 19, 0.6);
+  scrollbar-width: thin;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(14, 15, 19, 0.6);
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(245, 158, 11, 0.45);
+    border-radius: 4px;
+  }
+}
+
+.stack-cards__vars {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.stack-cards__intro {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 2500;
+  width: min(calc(100% - 32px), 360px);
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(245, 158, 11, 0.28);
+  background: rgba(14, 15, 19, 0.9);
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+}
+
+.stack-cards__intro-title {
+  margin: 0 0 4px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text-primary, #f4f4f5);
+}
+
+.stack-cards__intro-text {
+  margin: 0;
+  font-size: 0.76rem;
+  color: var(--text-secondary, #a1a1aa);
+}
+
+.stack-cards__deck {
+  padding-top: 16px;
+}
+
+.stack-cards__card {
+  position: sticky;
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 0;
+  width: min(100%, 420px);
+  height: var(--card-height, 172px);
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 16px;
+  border: 1px solid rgba(244, 244, 245, 0.14);
+  transform-origin: top center;
+  will-change: transform;
+  overflow: hidden;
+  box-shadow:
+    0 14px 30px rgba(0, 0, 0, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.stack-cards__card--active {
+  box-shadow:
+    0 20px 38px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(245, 158, 11, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.stack-cards__tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: monospace;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: rgba(14, 15, 19, 0.92);
+}
+
+.stack-cards__card--amber .stack-cards__tab { background: #fbbf24; }
+.stack-cards__card--violet .stack-cards__tab { background: #c4b5fd; }
+.stack-cards__card--emerald .stack-cards__tab { background: #6ee7b7; }
+.stack-cards__card--cyan .stack-cards__tab { background: #67e8f9; }
+.stack-cards__card--rose .stack-cards__tab { background: #fb7185; }
+.stack-cards__card--zinc .stack-cards__tab { background: #d4d4d8; }
+
+.stack-cards__body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  padding: 14px 16px;
+  min-width: 0;
+}
+
+.stack-cards__card--amber {
+  background: linear-gradient(135deg, rgba(39, 39, 42, 0.98), rgba(24, 24, 27, 0.98));
+}
+
+.stack-cards__card--violet {
+  background: linear-gradient(135deg, rgba(46, 38, 64, 0.98), rgba(24, 24, 27, 0.98));
+}
+
+.stack-cards__card--emerald {
+  background: linear-gradient(135deg, rgba(24, 48, 40, 0.98), rgba(24, 24, 27, 0.98));
+}
+
+.stack-cards__card--cyan {
+  background: linear-gradient(135deg, rgba(22, 50, 56, 0.98), rgba(24, 24, 27, 0.98));
+}
+
+.stack-cards__card--rose {
+  background: linear-gradient(135deg, rgba(56, 28, 36, 0.98), rgba(24, 24, 27, 0.98));
+}
+
+.stack-cards__card--zinc {
+  background: linear-gradient(135deg, rgba(39, 39, 42, 0.98), rgba(24, 24, 27, 0.98));
+}
+
+.stack-cards__title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-primary, #f4f4f5);
+}
+
+.stack-cards__subtitle {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: var(--text-secondary, #a1a1aa);
+}
+
+.stack-cards__badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-family: monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(14, 15, 19, 0.92);
+  background: rgba(245, 158, 11, 0.92);
+}
+
+.stack-cards__tail {
+  height: var(--tail-height, 348px);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stack-cards__card {
+    transform: none !important;
+    filter: none !important;
+  }
+}

@@ -12,7 +12,7 @@ export const routes: Routes = [
   { path: 'contact', component: ContactComponent, data: { pageKey: 'contact' } },
   {
     path: 'lab',
-    loadChildren: () => import('./features/lab/lab.routes').then((m) => m.labRoutes),
+    loadChildren: () => import('./features/lab/lab.routes').then((m) => m.getLabRoutes()),
   },
   { path: 'lab.html', redirectTo: 'lab', pathMatch: 'full' },
   { path: 'lab-magnetic-button', redirectTo: 'lab/cursor/magnetic-button', pathMatch: 'full' },

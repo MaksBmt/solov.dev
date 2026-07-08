@@ -1,0 +1,69 @@
+<app-lab-demo-layout
+  experimentSlug="parallax"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)"
+  (onDrawDebug)="drawDebug($event)">
+
+  <div scene #scrollHost class="parallax js-lab-scene">
+    <div
+      #varsHost
+      class="parallax__vars"
+      data-debug-vars="--scroll-progress --layer-far-y --layer-mid-y --layer-near-y --layer-fg-y"
+      aria-hidden="true"
+    ></div>
+
+    @if (scrollProgress < 0.04) {
+      <div class="parallax__intro">
+        <p class="parallax__intro-title">Прокрутите эту область ↓</p>
+        <p class="parallax__intro-text">Слои движутся с разной скоростью — так появляется глубина</p>
+      </div>
+    }
+
+    <div class="parallax__track" [style.height.px]="sceneHeight">
+      <div class="parallax__viewport">
+        <div class="parallax__layer parallax__layer--sky js-parallax-layer" data-layer="far">
+          <div class="parallax__stars"></div>
+          <span class="parallax__tag">far · {{ farSpeed.toFixed(2) }}x</span>
+        </div>
+
+        <div class="parallax__layer parallax__layer--mountains js-parallax-layer" data-layer="mid">
+          <svg class="parallax__svg" viewBox="0 0 800 220" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M0 180 L120 90 L220 150 L340 60 L460 130 L580 40 L700 120 L800 80 L800 220 L0 220 Z" />
+          </svg>
+          <span class="parallax__tag">mid · {{ midSpeed.toFixed(2) }}x</span>
+        </div>
+
+        <div class="parallax__layer parallax__layer--city js-parallax-layer" data-layer="near">
+          <svg class="parallax__svg" viewBox="0 0 800 180" preserveAspectRatio="none" aria-hidden="true">
+            <rect x="40" y="70" width="70" height="110" rx="4" />
+            <rect x="130" y="40" width="90" height="140" rx="4" />
+            <rect x="240" y="85" width="60" height="95" rx="4" />
+            <rect x="320" y="25" width="110" height="155" rx="4" />
+            <rect x="450" y="60" width="80" height="120" rx="4" />
+            <rect x="550" y="95" width="65" height="85" rx="4" />
+            <rect x="630" y="35" width="100" height="145" rx="4" />
+          </svg>
+          <span class="parallax__tag">near · {{ nearSpeed.toFixed(2) }}x</span>
+        </div>
+
+        <div class="parallax__layer parallax__layer--fg js-parallax-layer" data-layer="fg">
+          <div class="parallax__orbs" aria-hidden="true">
+            <span class="parallax__orb parallax__orb--1"></span>
+            <span class="parallax__orb parallax__orb--2"></span>
+            <span class="parallax__orb parallax__orb--3"></span>
+          </div>
+          <div class="parallax__hero">
+            <p class="parallax__eyebrow">depth through motion</p>
+            <h2 class="parallax__title">Parallax<br>Scene</h2>
+            <p class="parallax__caption">Ближние слои движутся быстрее дальних</p>
+          </div>
+          <span class="parallax__tag parallax__tag--fg">fg · {{ fgSpeed.toFixed(2) }}x</span>
+        </div>
+
+        <div class="parallax__progress">
+          <span>{{ (scrollProgress * 100) | number:'1.0-0' }}%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-lab-demo-layout>

@@ -22,11 +22,15 @@ export class LabCarouselComponent implements AfterViewInit, OnDestroy {
   readonly canScrollPrev = signal(false);
   readonly canScrollNext = signal(true);
   readonly progress = signal(0);
+  readonly counterText = signal('01 / 01');
 
   ngAfterViewInit() {
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
+
+    const total = Math.max(1, this.experiments().length);
+    this.counterText.set(`01 / ${String(total).padStart(2, '0')}`);
 
     if (this.experiments().length <= 1) {
       this.canScrollPrev.set(false);
@@ -79,11 +83,10 @@ export class LabCarouselComponent implements AfterViewInit, OnDestroy {
     } else {
       this.progress.set(100);
     }
-  }
 
-  formatCounter(): string {
-    const total = this.emblaApi ? this.emblaApi.scrollSnapList().length : Math.max(1, this.experiments().length);
     const current = this.activeIndex() + 1;
-    return `${String(current).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
+    this.counterText.set(
+      `${String(current).padStart(2, '0')} / ${String(Math.max(1, total)).padStart(2, '0')}`
+    );
   }
 }

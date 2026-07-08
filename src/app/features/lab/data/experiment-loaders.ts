@@ -16,12 +16,31 @@ const loaders: Record<string, () => Promise<any>> = {
     import('../experiments/cursor/cursor-distortion/cursor-distortion.component').then((m) => m.CursorDistortionComponent),
   'interactive-grid': () =>
     import('../experiments/cursor/interactive-grid/interactive-grid.component').then((m) => m.InteractiveGridComponent),
+  'stack-cards': () =>
+    import('../experiments/scroll/stack-cards/stack-cards.component').then((m) => m.StackCardsComponent),
+  parallax: () =>
+    import('../experiments/scroll/parallax/parallax.component').then((m) => m.ParallaxComponent),
+  'scroll-reveal': () =>
+    import('../experiments/scroll/scroll-reveal/scroll-reveal.component').then((m) => m.ScrollRevealComponent),
 };
 
+function getExperimentLoader(slug: string) {
+  return loaders[slug];
+}
+
 export function buildExperimentRoutes(): Routes {
-  return getReadyExperiments().map((experiment) => ({
-    path: `${experiment.category}/${experiment.slug}`,
-    loadComponent: loaders[experiment.slug],
-    data: { experimentSlug: experiment.slug, pageKey: 'lab-experiment' },
-  }));
+  return getReadyExperiments().flatMap((experiment) => {
+    const loadComponent = getExperimentLoader(experiment.slug);
+
+    if (!loadComponent) {
+      console.error(`[lab] Missing loadComponent for ready experiment "${experiment.slug}"`);
+      return [];
+    }
+
+    return [{
+      path: `${experiment.category}/${experiment.slug}`,
+      loadComponent,
+      data: { experimentSlug: experiment.slug, pageKey: 'lab-experiment' },
+    }];
+  });
 }

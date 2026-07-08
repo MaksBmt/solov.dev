@@ -1,0 +1,45 @@
+<app-lab-demo-layout
+  experimentSlug="stack-cards"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)"
+  (onDrawDebug)="drawDebug($event)">
+
+  <div scene #scrollHost class="stack-cards js-lab-scene">
+    <div
+      #varsHost
+      class="stack-cards__vars"
+      data-debug-vars="--scroll-progress --active-index --stack-depth"
+      aria-hidden="true"
+    ></div>
+
+    @if (scrollProgress < 0.03) {
+      <div class="stack-cards__intro">
+        <p class="stack-cards__intro-title">Прокрутите эту область ↓</p>
+        <p class="stack-cards__intro-text">Каждая следующая карточка ложится поверх предыдущих</p>
+      </div>
+    }
+
+    <div class="stack-cards__deck">
+      @for (card of cards; track card.index) {
+        <article
+          class="stack-cards__card js-stack-card stack-cards__card--{{ card.tone }}"
+          [class.stack-cards__card--active]="card.index === activeIndex"
+          [class.stack-cards__card--stacked]="card.index < activeIndex"
+          [attr.data-index]="card.index"
+          [style.top.px]="cardStickyTop(card.index)"
+          [style.margin-bottom.px]="card.index < cards.length - 1 ? sectionGap : 0"
+        >
+          <div class="stack-cards__tab">{{ card.label }}</div>
+          <div class="stack-cards__body">
+            <h3 class="stack-cards__title">{{ card.title }}</h3>
+            <p class="stack-cards__subtitle">{{ card.subtitle }}</p>
+          </div>
+          @if (card.index === activeIndex) {
+            <span class="stack-cards__badge">сверху</span>
+          }
+        </article>
+      }
+      <div class="stack-cards__tail" aria-hidden="true"></div>
+    </div>
+  </div>
+</app-lab-demo-layout>

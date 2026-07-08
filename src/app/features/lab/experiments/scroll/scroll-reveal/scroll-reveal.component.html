@@ -1,0 +1,50 @@
+<app-lab-demo-layout
+  experimentSlug="scroll-reveal"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)"
+  (onDrawDebug)="drawDebug($event)">
+
+  <div scene #scrollHost class="scroll-reveal js-lab-scene">
+    <div
+      #varsHost
+      class="scroll-reveal__vars"
+      data-debug-vars="--scroll-progress --visible-count --item-count"
+      aria-hidden="true"
+    ></div>
+
+    @if (scrollProgress < 0.02 && visibleCount === 0) {
+      <div class="scroll-reveal__intro">
+        <p class="scroll-reveal__intro-title">Прокрутите эту область ↓</p>
+        <p class="scroll-reveal__intro-text">Блоки появятся, когда войдут в зону видимости</p>
+        <p class="scroll-reveal__intro-note">Анимация одноразовая — для повтора нажмите <span class="scroll-reveal__intro-kbd">RESET SCENE</span></p>
+      </div>
+    }
+
+    <div class="scroll-reveal__list">
+      @for (item of items; track item.index) {
+        <article
+          class="scroll-reveal__item js-reveal-item scroll-reveal__item--{{ item.variant }} scroll-reveal__item--{{ item.tone }}"
+          [class.is-visible]="item.visible"
+          [attr.data-index]="item.index"
+          [style.--item-index]="item.index"
+        >
+          <span class="scroll-reveal__label">{{ item.label }}</span>
+          <div class="scroll-reveal__body">
+            <h3 class="scroll-reveal__title">{{ item.title }}</h3>
+            <p class="scroll-reveal__subtitle">{{ item.subtitle }}</p>
+          </div>
+          <span class="scroll-reveal__variant">{{ item.variant }}</span>
+        </article>
+      }
+      <footer class="scroll-reveal__footer">
+        <p>{{ visibleCount }} / {{ items.length }} revealed</p>
+      </footer>
+    </div>
+
+    @if (visibleCount > 0) {
+      <div class="scroll-reveal__replay-hint" role="status">
+        <p>Повтор анимации возможен после нажатия <span class="scroll-reveal__replay-kbd">RESET SCENE</span> в панели слева</p>
+      </div>
+    }
+  </div>
+</app-lab-demo-layout>
