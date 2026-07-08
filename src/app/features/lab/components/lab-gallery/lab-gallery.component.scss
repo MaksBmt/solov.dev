@@ -32,11 +32,21 @@
 .lab-gallery__item--prev {
   transform: rotateY(12deg) scale(0.88) translateZ(-40px);
   opacity: 0.55;
+
+  &:not(.lab-gallery__item--active):hover {
+    transform: rotateY(7deg) scale(0.93) translateZ(-18px);
+    opacity: 0.9;
+  }
 }
 
 .lab-gallery__item--next {
   transform: rotateY(-12deg) scale(0.88) translateZ(-40px);
   opacity: 0.55;
+
+  &:not(.lab-gallery__item--active):hover {
+    transform: rotateY(-7deg) scale(0.93) translateZ(-18px);
+    opacity: 0.9;
+  }
 }
 
 .lab-gallery__item--active {
