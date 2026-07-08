@@ -9,29 +9,29 @@ export class FaviconAnimatorService {
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   private link: HTMLLinkElement | null = null;
-  private svgUrl = '';
   private svgText = '';
   private parser: DOMParser | null = null;
   private serializer: XMLSerializer | null = null;
   private animationFrame: number | null = null;
   private startTime: number | null = null;
 
-  constructor() {
-    if (this.isBrowser) {
-      this.link = document.querySelector('link[rel*="icon"]');
-      if (this.link) {
-        this.svgUrl = this.link.getAttribute('href')?.split('?')[0] || '';
-        this.parser = new DOMParser();
-        this.serializer = new XMLSerializer();
-      }
-    }
-  }
-
   async init() {
-    if (!this.isBrowser || !this.link || !this.svgUrl) return;
+    if (!this.isBrowser) return;
+
+    this.link =
+      document.querySelector('link[rel="icon"][type="image/svg+xml"]') ??
+      document.querySelector('link[rel*="icon"]');
+    if (!this.link) return;
+
+    const href = this.link.getAttribute('href');
+    if (!href) return;
+
+    const svgUrl = new URL(href, document.baseURI).href.split('?')[0];
+    this.parser = new DOMParser();
+    this.serializer = new XMLSerializer();
 
     try {
-      const response = await fetch(this.svgUrl);
+      const response = await fetch(svgUrl);
       if (!response.ok) return;
       this.svgText = await response.text();
       this.ngZone.runOutsideAngular(() => {

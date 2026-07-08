@@ -1,4 +1,4 @@
-import { Component, PLATFORM_ID, Renderer2, inject } from '@angular/core';
+import { Component, PLATFORM_ID, Renderer2, afterNextRender, inject } from '@angular/core';
 import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { CommonModule, isPlatformBrowser, DOCUMENT } from '@angular/common';
 import { filter } from 'rxjs/operators';
@@ -19,9 +19,9 @@ export class AppComponent {
   private readonly faviconAnimator = inject(FaviconAnimatorService);
 
   constructor() {
-    if (isPlatformBrowser(this.platformId)) {
+    afterNextRender(() => {
       this.faviconAnimator.init();
-    }
+    });
 
     this.router.events.pipe(
       filter((event): event is NavigationEnd => event instanceof NavigationEnd),
