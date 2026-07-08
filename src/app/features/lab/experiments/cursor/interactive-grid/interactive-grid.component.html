@@ -1,0 +1,15 @@
+<app-lab-demo-layout
+  experimentSlug="interactive-grid"
+  [isImmersive]="true"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)"
+  (onDrawDebug)="drawDebug($event)">
+
+  <div scene #sceneHost class="js-lab-scene js-lab-grid-scene" style="width: 100%; height: 100%; position: absolute; inset: 0;">
+    <div class="grid js-grid" data-debug-vars="--gx --gy --active">
+      <div class="grid__field js-grid-field"></div>
+    </div>
+
+    <p class="grid__hint">// move the cursor — cells ripple in a wave</p>
+  </div>
+</app-lab-demo-layout>

@@ -14,6 +14,8 @@ const loaders: Record<string, () => Promise<any>> = {
     import('../experiments/cursor/cursor-trails/cursor-trails.component').then((m) => m.CursorTrailsComponent),
   'cursor-distortion': () =>
     import('../experiments/cursor/cursor-distortion/cursor-distortion.component').then((m) => m.CursorDistortionComponent),
+  'interactive-grid': () =>
+    import('../experiments/cursor/interactive-grid/interactive-grid.component').then((m) => m.InteractiveGridComponent),
 };
 
 export function buildExperimentRoutes(): Routes {
