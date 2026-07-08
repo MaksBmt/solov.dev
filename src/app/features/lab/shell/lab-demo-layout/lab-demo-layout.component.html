@@ -53,6 +53,8 @@
         </aside>
       </div>
 
+      <app-lab-experiment-nav [currentSlug]="experimentSlug()"></app-lab-experiment-nav>
+
       <app-code-view
         [hidden]="!showCode()"
         [codeName]="codeName"

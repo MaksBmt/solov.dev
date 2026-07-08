@@ -1,0 +1,55 @@
+@if (nav(); as n) {
+  <nav class="lab-experiment-nav" aria-label="Навигация по экспериментам раздела">
+    <header class="lab-experiment-nav__head">
+      <p class="lab-experiment-nav__caption">
+        // more in
+        <a class="lab-experiment-nav__category" [routerLink]="['/lab', n.categorySlug]">
+          {{ n.categoryTitle }}
+        </a>
+      </p>
+      <span class="lab-experiment-nav__counter">{{ n.counter }}</span>
+    </header>
+
+    <ul class="lab-experiment-nav__list">
+      @for (item of n.siblings; track item.slug) {
+        <li class="lab-experiment-nav__item">
+          @if (item.slug === currentSlug()) {
+            <span class="lab-experiment-nav__link lab-experiment-nav__link--current" aria-current="page">
+              {{ item.title }}
+            </span>
+          } @else {
+            <a
+              class="lab-experiment-nav__link"
+              [routerLink]="routeFor(item.slug, item.category)">
+              {{ item.title }}
+            </a>
+          }
+        </li>
+      }
+    </ul>
+
+    <div class="lab-experiment-nav__steps">
+      @if (n.prev) {
+        <a
+          class="lab-experiment-nav__step lab-experiment-nav__step--prev"
+          [routerLink]="routeFor(n.prev.slug, n.prev.category)">
+          <span class="lab-experiment-nav__step-arrow" aria-hidden="true">←</span>
+          <span class="lab-experiment-nav__step-label">{{ n.prev.title }}</span>
+        </a>
+      } @else {
+        <span class="lab-experiment-nav__step lab-experiment-nav__step--empty" aria-hidden="true"></span>
+      }
+
+      @if (n.next) {
+        <a
+          class="lab-experiment-nav__step lab-experiment-nav__step--next"
+          [routerLink]="routeFor(n.next.slug, n.next.category)">
+          <span class="lab-experiment-nav__step-label">{{ n.next.title }}</span>
+          <span class="lab-experiment-nav__step-arrow" aria-hidden="true">→</span>
+        </a>
+      } @else {
+        <span class="lab-experiment-nav__step lab-experiment-nav__step--empty" aria-hidden="true"></span>
+      }
+    </div>
+  </nav>
+}

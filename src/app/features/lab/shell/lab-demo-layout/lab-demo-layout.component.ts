@@ -22,6 +22,7 @@ import { BreadcrumbsComponent } from '../../../../shared/components/breadcrumbs/
 import { LabPassportComponent } from '../../components/lab-passport/lab-passport.component';
 import { CodeViewComponent } from '../../components/code-view/code-view.component';
 import { LabDebugPanelComponent } from '../../components/lab-debug-panel/lab-debug-panel.component';
+import { LabExperimentNavComponent } from '../../components/lab-experiment-nav/lab-experiment-nav.component';
 
 import { getExperiment, getCategory } from '../../data/experiments';
 import { MouseTrackerService } from '../../../../core/services/mouse-tracker.service';
@@ -49,6 +50,7 @@ import { PageMetaService } from '../../../../core/services/page-meta.service';
     LabPassportComponent,
     CodeViewComponent,
     LabDebugPanelComponent,
+    LabExperimentNavComponent,
     LabTopbarComponent,
     LabSwitchComponent,
     DemoLayoutComponent,

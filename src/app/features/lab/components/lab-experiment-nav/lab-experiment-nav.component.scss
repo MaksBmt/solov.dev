@@ -1,0 +1,175 @@
+@use "../../../../../scss/variable.scss" as *;
+
+.lab-experiment-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 24px;
+  border: 1px solid rgba(245, 158, 11, 0.14);
+  border-radius: 16px;
+  background:
+    linear-gradient(160deg, rgba(245, 158, 11, 0.05) 0%, transparent 45%),
+    rgba(22, 24, 30, 0.6);
+}
+
+.lab-experiment-nav__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.lab-experiment-nav__caption {
+  color: var(--text-secondary);
+  font-family: monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  margin: 0;
+}
+
+.lab-experiment-nav__category {
+  color: var(--accent-soft);
+  text-decoration: none;
+  transition: color 0.3s ease;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--accent-amber);
+  }
+}
+
+.lab-experiment-nav__counter {
+  flex-shrink: 0;
+  color: var(--text-secondary);
+  font-family: monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+}
+
+.lab-experiment-nav__list {
+  display: flex;
+  gap: 10px;
+  margin: 0;
+  padding: 4px 2px 8px;
+  list-style: none;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(245, 158, 11, 0.35) transparent;
+
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background: rgba(245, 158, 11, 0.35);
+  }
+}
+
+.lab-experiment-nav__item {
+  flex: 0 0 auto;
+}
+
+.lab-experiment-nav__link {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: 999px;
+  color: var(--text-primary);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    border-color 0.3s ease,
+    color 0.3s ease,
+    background-color 0.3s ease,
+    box-shadow 0.3s ease;
+
+  &:hover,
+  &:focus-visible {
+    border-color: rgba(245, 158, 11, 0.45);
+    color: var(--accent-soft);
+    background: rgba(245, 158, 11, 0.08);
+    box-shadow: 0 0 14px rgba(245, 158, 11, 0.12);
+  }
+
+  &--current {
+    border-color: rgba(245, 158, 11, 0.55);
+    color: var(--accent-amber);
+    background: rgba(245, 158, 11, 0.12);
+    box-shadow: 0 0 18px rgba(245, 158, 11, 0.16);
+    cursor: default;
+  }
+}
+
+.lab-experiment-nav__steps {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding-top: 4px;
+  border-top: 1px solid rgba(245, 158, 11, 0.12);
+}
+
+.lab-experiment-nav__step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid rgba(245, 158, 11, 0.18);
+  border-radius: 12px;
+  color: var(--text-primary);
+  font-size: 0.78rem;
+  text-decoration: none;
+  transition:
+    border-color 0.3s ease,
+    color 0.3s ease,
+    background-color 0.3s ease,
+    box-shadow 0.3s ease;
+
+  &:hover,
+  &:focus-visible {
+    border-color: rgba(245, 158, 11, 0.45);
+    color: var(--accent-soft);
+    background: rgba(245, 158, 11, 0.08);
+    box-shadow: 0 0 16px rgba(245, 158, 11, 0.12);
+  }
+
+  &--prev {
+    justify-content: flex-start;
+  }
+
+  &--next {
+    justify-content: flex-end;
+    text-align: right;
+  }
+
+  &--empty {
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+
+.lab-experiment-nav__step-arrow {
+  flex-shrink: 0;
+  color: var(--accent-amber);
+  font-family: monospace;
+  font-size: 1rem;
+}
+
+.lab-experiment-nav__step-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lab-experiment-nav__link,
+  .lab-experiment-nav__step,
+  .lab-experiment-nav__category {
+    transition: none;
+  }
+}
