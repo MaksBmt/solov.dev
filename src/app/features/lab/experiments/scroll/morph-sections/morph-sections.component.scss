@@ -1,0 +1,173 @@
+@use "../../../../../../scss/variable.scss" as *;
+
+.morph {
+  position: absolute;
+  inset: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-color: rgba(245, 158, 11, 0.45) rgba(14, 15, 19, 0.6);
+  scrollbar-width: thin;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(14, 15, 19, 0.6);
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(245, 158, 11, 0.45);
+    border-radius: 4px;
+  }
+}
+
+.morph__vars {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.morph__intro {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 3000;
+  width: min(calc(100% - 32px), 360px);
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(245, 158, 11, 0.28);
+  background: rgba(14, 15, 19, 0.9);
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+}
+
+.morph__intro-title {
+  margin: 0 0 4px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text-primary, #f4f4f5);
+}
+
+.morph__intro-text {
+  margin: 0;
+  font-size: 0.76rem;
+  color: var(--text-secondary, #a1a1aa);
+}
+
+.morph__track {
+  position: relative;
+}
+
+.morph__viewport {
+  position: sticky;
+  top: 0;
+  display: grid;
+  place-items: center;
+  height: var(--viewport-h, 420px);
+  padding: 20px 16px;
+}
+
+.morph__panel {
+  position: relative;
+  width: min(100%, 420px);
+  height: min(calc(var(--viewport-h, 420px) - 48px), 360px);
+  clip-path: inset(8% 10% 8% 10% round 22px);
+  border: 1px solid rgba(244, 244, 245, 0.12);
+  background:
+    radial-gradient(circle at 20% 20%, hsl(var(--panel-hue, 38) 85% 62% / 0.35), transparent 45%),
+    radial-gradient(circle at 80% 80%, hsl(calc(var(--panel-hue, 38) + 40) 80% 55% / 0.25), transparent 50%),
+    linear-gradient(145deg, rgba(24, 24, 27, 0.95), rgba(14, 15, 19, 0.98));
+  transition: clip-path 0.15s linear;
+  overflow: hidden;
+}
+
+.morph__glow {
+  position: absolute;
+  inset: -20%;
+  background: radial-gradient(circle at 50% 50%, hsl(var(--panel-hue, 38) 90% 60% / 0.18), transparent 60%);
+  pointer-events: none;
+}
+
+.morph__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  padding: 28px 24px;
+}
+
+.morph__eyebrow {
+  margin: 0 0 8px;
+  font-size: 0.68rem;
+  font-family: ui-monospace, monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(245, 158, 11, 0.75);
+}
+
+.morph__title {
+  margin: 0 0 8px;
+  font-size: clamp(1.2rem, 3vw, 1.6rem);
+  font-weight: 700;
+  color: var(--text-primary, #f4f4f5);
+}
+
+.morph__caption {
+  margin: 0 0 18px;
+  max-width: 32ch;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--text-secondary, #a1a1aa);
+}
+
+.morph__meter {
+  width: min(100%, 220px);
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(244, 244, 245, 0.1);
+  overflow: hidden;
+
+  span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #f59e0b, hsl(var(--panel-hue, 38) 80% 60%));
+    transition: width 0.12s linear;
+  }
+}
+
+.morph__steps {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  display: flex;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.morph__step {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(244, 244, 245, 0.18);
+  transition: background 0.2s ease, transform 0.2s ease;
+
+  &--passed {
+    background: rgba(245, 158, 11, 0.45);
+  }
+
+  &--active {
+    background: #f59e0b;
+    transform: scale(1.25);
+  }
+}

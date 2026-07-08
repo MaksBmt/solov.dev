@@ -1,0 +1,51 @@
+<app-lab-demo-layout
+  experimentSlug="pinned-elements"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)"
+  (onDrawDebug)="drawDebug($event)">
+
+  <div scene #scrollHost class="pinned js-lab-scene">
+    <div
+      #varsHost
+      class="pinned__vars"
+      data-debug-vars="--scroll-progress --active-index --pin-top"
+      aria-hidden="true"
+    ></div>
+
+    @if (scrollProgress < 0.03) {
+      <div class="pinned__intro">
+        <p class="pinned__intro-title">Прокрутите эту область ↓</p>
+        <p class="pinned__intro-text">Метки слева прилипают, пока секция проходит мимо</p>
+      </div>
+    }
+
+    <div class="pinned__list">
+      @for (section of sections; track section.index) {
+        <section
+          class="pinned__section js-pinned-section pinned__section--{{ section.tone }}"
+          [class.pinned__section--active]="section.index === activeIndex"
+          [style.min-height.px]="sectionHeight"
+          [attr.data-index]="section.index"
+        >
+          <div class="pinned__pin js-pinned-pin">
+            <span class="pinned__badge">{{ section.label }}</span>
+            <h3 class="pinned__title">{{ section.title }}</h3>
+          </div>
+
+          <div class="pinned__body">
+            <p class="pinned__text">{{ section.body }}</p>
+            <p class="pinned__detail">{{ section.detail }}</p>
+            <p class="pinned__text pinned__text--filler">
+              Дополнительный абзац имитирует длинный контент секции. Прокручивайте медленно —
+              метка слева останется на линии pin, пока эта секция не закончится. Следующая
+              секция подхватит sticky без рывка.
+            </p>
+          </div>
+        </section>
+      }
+      <footer class="pinned__footer">
+        <p>active {{ activeIndex + 1 }}/{{ sections.length }}</p>
+      </footer>
+    </div>
+  </div>
+</app-lab-demo-layout>

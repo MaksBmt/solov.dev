@@ -22,6 +22,14 @@ const loaders: Record<string, () => Promise<any>> = {
     import('../experiments/scroll/parallax/parallax.component').then((m) => m.ParallaxComponent),
   'scroll-reveal': () =>
     import('../experiments/scroll/scroll-reveal/scroll-reveal.component').then((m) => m.ScrollRevealComponent),
+  timeline: () =>
+    import('../experiments/scroll/timeline/timeline.component').then((m) => m.TimelineComponent),
+  'morph-sections': () =>
+    import('../experiments/scroll/morph-sections/morph-sections.component').then((m) => m.MorphSectionsComponent),
+  'horizontal-scroll': () =>
+    import('../experiments/scroll/horizontal-scroll/horizontal-scroll.component').then((m) => m.HorizontalScrollComponent),
+  'pinned-elements': () =>
+    import('../experiments/scroll/pinned-elements/pinned-elements.component').then((m) => m.PinnedElementsComponent),
 };
 
 function getExperimentLoader(slug: string) {

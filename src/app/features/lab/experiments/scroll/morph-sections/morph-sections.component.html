@@ -1,0 +1,48 @@
+<app-lab-demo-layout
+  experimentSlug="morph-sections"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)"
+  (onDrawDebug)="drawDebug($event)">
+
+  <div scene #scrollHost class="morph js-lab-scene">
+    <div
+      #varsHost
+      class="morph__vars"
+      data-debug-vars="--scroll-progress --section-index --section-progress --panel-hue"
+      aria-hidden="true"
+    ></div>
+
+    @if (scrollProgress < 0.04) {
+      <div class="morph__intro">
+        <p class="morph__intro-title">Прокрутите эту область ↓</p>
+        <p class="morph__intro-text">Форма и фон плавно меняются между секциями</p>
+      </div>
+    }
+
+    <div class="morph__track" [style.height.px]="sceneHeight">
+      <div class="morph__viewport">
+        <div #panelHost class="morph__panel">
+          <div class="morph__glow" aria-hidden="true"></div>
+          <div class="morph__content">
+            <p class="morph__eyebrow">section {{ activeIndex + 1 }} / {{ sections.length }}</p>
+            <h2 class="morph__title">{{ sections[activeIndex].title }}</h2>
+            <p class="morph__caption">{{ sections[activeIndex].subtitle }}</p>
+            <div class="morph__meter">
+              <span [style.width.%]="sectionProgress * 100"></span>
+            </div>
+          </div>
+        </div>
+
+        <ul class="morph__steps" aria-hidden="true">
+          @for (section of sections; track section.index) {
+            <li
+              class="morph__step"
+              [class.morph__step--active]="section.index === activeIndex"
+              [class.morph__step--passed]="section.index < activeIndex"
+            ></li>
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</app-lab-demo-layout>

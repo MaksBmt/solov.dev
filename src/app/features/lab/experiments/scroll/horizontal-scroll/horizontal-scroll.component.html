@@ -1,0 +1,46 @@
+<app-lab-demo-layout
+  experimentSlug="horizontal-scroll"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)"
+  (onDrawDebug)="drawDebug($event)">
+
+  <div scene #scrollHost class="horizontal js-lab-scene">
+    <div
+      #varsHost
+      class="horizontal__vars"
+      data-debug-vars="--scroll-progress --translate-x --active-index"
+      aria-hidden="true"
+    ></div>
+
+    @if (scrollProgress < 0.04) {
+      <div class="horizontal__intro">
+        <p class="horizontal__intro-title">Прокрутите эту область ↓</p>
+        <p class="horizontal__intro-text">Вертикальный scroll двигает галерею влево</p>
+      </div>
+    }
+
+    <div class="horizontal__track" [style.height.px]="sceneHeight">
+      <div class="horizontal__viewport">
+        <div class="horizontal__rail">
+          <div #stripHost class="horizontal__strip">
+            @for (panel of panels; track panel.index) {
+              <article
+                class="horizontal__panel js-horizontal-panel horizontal__panel--{{ panel.tone }}"
+                [class.horizontal__panel--active]="panel.index === activeIndex"
+              >
+                <span class="horizontal__label">{{ panel.label }}</span>
+                <h3 class="horizontal__title">{{ panel.title }}</h3>
+                <p class="horizontal__subtitle">{{ panel.subtitle }}</p>
+              </article>
+            }
+          </div>
+        </div>
+
+        <div class="horizontal__progress">
+          <span>{{ (scrollProgress * 100) | number:'1.0-0' }}%</span>
+          <span>{{ activeIndex + 1 }}/{{ panels.length }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-lab-demo-layout>

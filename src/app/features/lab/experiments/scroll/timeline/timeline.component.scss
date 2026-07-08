@@ -1,0 +1,194 @@
+@use "../../../../../../scss/variable.scss" as *;
+
+.timeline {
+  position: absolute;
+  inset: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 16px 20px;
+  scrollbar-color: rgba(245, 158, 11, 0.45) rgba(14, 15, 19, 0.6);
+  scrollbar-width: thin;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(14, 15, 19, 0.6);
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(245, 158, 11, 0.45);
+    border-radius: 4px;
+  }
+}
+
+.timeline__vars {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.timeline__intro {
+  position: absolute;
+  left: 50%;
+  top: 42%;
+  z-index: 20;
+  width: min(calc(100% - 32px), 360px);
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(245, 158, 11, 0.28);
+  background: rgba(14, 15, 19, 0.9);
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+}
+
+.timeline__intro-title {
+  margin: 0 0 4px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text-primary, #f4f4f5);
+}
+
+.timeline__intro-text {
+  margin: 0;
+  font-size: 0.76rem;
+  color: var(--text-secondary, #a1a1aa);
+}
+
+.timeline__layout {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 14px;
+  width: min(100%, 460px);
+  margin: 20px auto 0;
+  padding-top: 8px;
+}
+
+.timeline__rail {
+  position: relative;
+  min-height: 100%;
+}
+
+.timeline__rail-track,
+.timeline__rail-fill {
+  position: absolute;
+  left: 50%;
+  top: 12px;
+  bottom: 12px;
+  width: var(--line-width, 3px);
+  transform: translateX(-50%);
+  border-radius: 999px;
+}
+
+.timeline__rail-track {
+  background: rgba(244, 244, 245, 0.1);
+}
+
+.timeline__rail-fill {
+  bottom: auto;
+  height: calc(var(--timeline-progress, 0) * (100% - 24px));
+  background: linear-gradient(180deg, #f59e0b, #34d399);
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.35);
+}
+
+.timeline__nodes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--node-gap, 132px);
+  padding-bottom: 24px;
+}
+
+.timeline__node {
+  display: grid;
+  grid-template-columns: 18px 1fr;
+  gap: 12px;
+  align-items: start;
+}
+
+.timeline__dot {
+  position: relative;
+  top: 18px;
+  width: 14px;
+  height: 14px;
+  margin-left: 2px;
+  border-radius: 50%;
+  border: 2px solid rgba(244, 244, 245, 0.25);
+  background: #18181b;
+  transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+}
+
+.timeline__node--passed .timeline__dot {
+  border-color: rgba(52, 211, 153, 0.7);
+  background: rgba(52, 211, 153, 0.25);
+}
+
+.timeline__node--active .timeline__dot {
+  border-color: #34d399;
+  background: rgba(52, 211, 153, 0.45);
+  box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.15);
+}
+
+.timeline__card {
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(244, 244, 245, 0.1);
+  background: rgba(24, 24, 27, 0.72);
+  transition: border-color 0.25s ease, transform 0.25s ease;
+}
+
+.timeline__node--active .timeline__card {
+  border-color: rgba(52, 211, 153, 0.35);
+  transform: translateX(4px);
+}
+
+.timeline__label {
+  display: inline-block;
+  margin-bottom: 6px;
+  font-size: 0.68rem;
+  font-family: ui-monospace, monospace;
+  letter-spacing: 0.08em;
+  color: rgba(245, 158, 11, 0.75);
+}
+
+.timeline__title {
+  margin: 0 0 4px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text-primary, #f4f4f5);
+}
+
+.timeline__subtitle {
+  margin: 0;
+  font-size: 0.74rem;
+  line-height: 1.45;
+  color: var(--text-secondary, #a1a1aa);
+}
+
+.timeline__footer {
+  width: min(100%, 460px);
+  margin: 0 auto;
+  padding: 8px 0 4px;
+  text-align: center;
+
+  p {
+    margin: 0;
+    font-size: 0.72rem;
+    font-family: ui-monospace, monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(245, 158, 11, 0.65);
+  }
+}
+
+.timeline__node--amber .timeline__label { color: #fbbf24; }
+.timeline__node--violet .timeline__label { color: #a78bfa; }
+.timeline__node--emerald .timeline__label { color: #34d399; }
+.timeline__node--cyan .timeline__label { color: #22d3ee; }
+.timeline__node--rose .timeline__label { color: #fb7185; }
+.timeline__node--zinc .timeline__label { color: #d4d4d8; }

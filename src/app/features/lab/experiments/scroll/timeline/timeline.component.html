@@ -1,0 +1,51 @@
+<app-lab-demo-layout
+  experimentSlug="timeline"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)"
+  (onDrawDebug)="drawDebug($event)">
+
+  <div scene #scrollHost class="timeline js-lab-scene">
+    <div
+      #varsHost
+      class="timeline__vars"
+      data-debug-vars="--scroll-progress --timeline-progress --active-index"
+      aria-hidden="true"
+    ></div>
+
+    @if (scrollProgress < 0.03) {
+      <div class="timeline__intro">
+        <p class="timeline__intro-title">Прокрутите эту область ↓</p>
+        <p class="timeline__intro-text">Линия и узлы синхронизированы с scroll progress</p>
+      </div>
+    }
+
+    <div class="timeline__layout">
+      <div #railHost class="timeline__rail" aria-hidden="true">
+        <div class="timeline__rail-track"></div>
+        <div class="timeline__rail-fill"></div>
+      </div>
+
+      <div class="timeline__nodes">
+        @for (node of nodes; track node.index) {
+          <article
+            class="timeline__node js-timeline-node timeline__node--{{ node.tone }}"
+            [class.timeline__node--active]="node.index === activeIndex"
+            [class.timeline__node--passed]="node.index < activeIndex"
+            [attr.data-index]="node.index"
+          >
+            <span class="timeline__dot" aria-hidden="true"></span>
+            <div class="timeline__card">
+              <span class="timeline__label">{{ node.label }}</span>
+              <h3 class="timeline__title">{{ node.title }}</h3>
+              <p class="timeline__subtitle">{{ node.subtitle }}</p>
+            </div>
+          </article>
+        }
+      </div>
+    </div>
+
+    <footer class="timeline__footer">
+      <p>{{ (lineProgress * 100) | number:'1.0-0' }}% · step {{ activeIndex + 1 }}/{{ nodes.length }}</p>
+    </footer>
+  </div>
+</app-lab-demo-layout>
