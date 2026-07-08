@@ -1,0 +1,42 @@
+<app-lab-demo-layout
+  experimentSlug="cursor-distortion"
+  [isImmersive]="true"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)"
+  (onDrawDebug)="drawDebug($event)">
+
+  <div scene #sceneHost class="js-lab-scene js-lab-distortion-scene" style="width: 100%; height: 100%; position: absolute; inset: 0;">
+    <svg class="distortion__defs" width="0" height="0" aria-hidden="true" focusable="false">
+      <defs>
+        <filter id="lab-distort" x="-15%" y="-15%" width="130%" height="130%" color-interpolation-filters="sRGB">
+          <feImage class="js-distortion-feimage" href="" result="map" preserveAspectRatio="none" />
+          <feDisplacementMap
+            class="js-distortion-displace"
+            in="SourceGraphic"
+            in2="map"
+            [attr.scale]="distortScale"
+            xChannelSelector="R"
+            yChannelSelector="G" />
+        </filter>
+      </defs>
+    </svg>
+
+    <canvas class="distortion__map js-distortion-map" aria-hidden="true"></canvas>
+
+    <div class="distortion js-distortion" data-debug-vars="--dx --dy --dr">
+      <div class="distortion__grid" aria-hidden="true"></div>
+      <div class="distortion__content">
+        <p class="distortion__caption">// displacement field</p>
+        <p class="distortion__line">const <span class="distortion__accent">lens</span> = {{ '{' }}</p>
+        <p class="distortion__line distortion__line--indent">filter: <span class="distortion__accent">'feDisplacementMap'</span>,</p>
+        <p class="distortion__line distortion__line--indent">map: <span class="distortion__accent">'canvas'</span>,</p>
+        <p class="distortion__line distortion__line--indent">channels: [<span class="distortion__accent">'R'</span>, 'G'],</p>
+        <p class="distortion__line distortion__line--indent">neutral: <span class="distortion__accent">128</span>,</p>
+        <p class="distortion__line distortion__line--indent">motion: <span class="distortion__accent">'requestAnimationFrame'</span>,</p>
+        <p class="distortion__line">{{ '}' }};</p>
+      </div>
+    </div>
+
+    <p class="distortion__hint">// move the cursor — content bends around the pointer</p>
+  </div>
+</app-lab-demo-layout>
