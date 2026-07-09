@@ -12,6 +12,8 @@ import {
   input,
   output,
   signal,
+  afterNextRender,
+  Injector,
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -70,6 +72,7 @@ export class LabDemoLayoutComponent implements OnInit, AfterViewInit, OnDestroy 
   private readonly mouseTracker = inject(MouseTrackerService);
   private readonly pageMeta = inject(PageMetaService);
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly injector = inject(Injector);
 
   readonly experimentSlug = input.required<string>();
   readonly isImmersive = input(false);
@@ -94,6 +97,7 @@ export class LabDemoLayoutComponent implements OnInit, AfterViewInit, OnDestroy 
 
   private rafId: number | null = null;
   private resizeObserver: ResizeObserver | null = null;
+  private resizeRafId: number | null = null;
   private frames = 0;
   private fpsWindowStart = 0;
   private readonly boundTick = () => this.tick();
@@ -118,15 +122,18 @@ export class LabDemoLayoutComponent implements OnInit, AfterViewInit, OnDestroy 
   ngAfterViewInit() {
     if (!isPlatformBrowser(this.platformId)) return;
 
-    this.initDebugCanvas();
-    this.bindScenePointerTracking();
+    afterNextRender(() => {
+      this.initDebugCanvas();
+      this.bindScenePointerTracking();
+    }, { injector: this.injector });
   }
 
   ngOnDestroy() {
     if (!isPlatformBrowser(this.platformId)) return;
 
     if (this.rafId !== null) cancelAnimationFrame(this.rafId);
-    if (this.resizeObserver) this.resizeObserver.disconnect();
+    if (this.resizeRafId !== null) cancelAnimationFrame(this.resizeRafId);
+    this.resizeObserver?.disconnect();
     this.unbindScenePointerTracking();
   }
 
@@ -292,14 +299,25 @@ export class LabDemoLayoutComponent implements OnInit, AfterViewInit, OnDestroy 
     const scene = this.getSceneElement();
     if (!canvas || !scene) return;
 
-    this.resizeObserver = new ResizeObserver(() => {
+    const resize = () => {
       const dpr = window.devicePixelRatio || 1;
       canvas.width = scene.clientWidth * dpr;
       canvas.height = scene.clientHeight * dpr;
       const ctx = canvas.getContext('2d');
       if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+
+    this.ngZone.runOutsideAngular(() => {
+      this.resizeObserver = new ResizeObserver(() => {
+        if (this.resizeRafId !== null) return;
+        this.resizeRafId = requestAnimationFrame(() => {
+          this.resizeRafId = null;
+          resize();
+        });
+      });
+      this.resizeObserver.observe(scene);
+      resize();
     });
-    this.resizeObserver.observe(scene);
   }
 
   tick() {

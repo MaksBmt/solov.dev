@@ -80,6 +80,20 @@ const loaders: Record<string, () => Promise<any>> = {
     import('../experiments/layout/infinite-sections/infinite-sections.component').then((m) => m.InfiniteSectionsComponent),
   'responsive-tricks': () =>
     import('../experiments/layout/responsive-tricks/responsive-tricks.component').then((m) => m.ResponsiveTricksComponent),
+  noise: () =>
+    import('../experiments/backgrounds/noise/noise.component').then((m) => m.NoiseComponent),
+  'gradient-mesh': () =>
+    import('../experiments/backgrounds/gradient-mesh/gradient-mesh.component').then((m) => m.GradientMeshComponent),
+  particles: () =>
+    import('../experiments/backgrounds/particles/particles.component').then((m) => m.ParticlesComponent),
+  'living-background': () =>
+    import('../experiments/backgrounds/living-background/living-background.component').then((m) => m.LivingBackgroundComponent),
+  'wave-background': () =>
+    import('../experiments/backgrounds/wave-background/wave-background.component').then((m) => m.WaveBackgroundComponent),
+  'glass-refraction': () =>
+    import('../experiments/backgrounds/glass-refraction/glass-refraction.component').then((m) => m.GlassRefractionComponent),
+  'animated-shapes': () =>
+    import('../experiments/backgrounds/animated-shapes/animated-shapes.component').then((m) => m.AnimatedShapesComponent),
 };
 
 function getExperimentLoader(slug: string) {

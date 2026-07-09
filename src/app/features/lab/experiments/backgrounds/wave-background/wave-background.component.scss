@@ -1,0 +1,70 @@
+.wave-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #060810;
+}
+
+.wave-bg__sky {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(56, 189, 248, 0.08) 0%, transparent 55%),
+    linear-gradient(180deg, #0a0e18 0%, #060810 100%);
+  pointer-events: none;
+}
+
+.wave-bg__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.wave-bg__content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
+  pointer-events: none;
+}
+
+.wave-bg__tag {
+  font-family: monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(56, 189, 248, 0.8);
+  margin-bottom: 12px;
+}
+
+.wave-bg__title {
+  margin: 0 0 8px;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 700;
+  color: #f4f4f5;
+}
+
+.wave-bg__text {
+  margin: 0;
+  max-width: 340px;
+  font-size: 0.85rem;
+  color: #a1a1aa;
+}
+
+.wave-bg__hint {
+  position: absolute;
+  bottom: 14px;
+  left: 0;
+  right: 0;
+  margin: 0;
+  text-align: center;
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: #71717a;
+  pointer-events: none;
+}

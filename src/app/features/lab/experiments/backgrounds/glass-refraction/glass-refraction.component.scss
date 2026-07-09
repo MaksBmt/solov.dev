@@ -1,0 +1,175 @@
+.glass-refraction {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #08090d;
+}
+
+.glass-refraction__bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.glass-refraction__orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  animation: glass-orb-drift calc(8s / var(--gradient-speed, 0.4)) ease-in-out infinite alternate;
+}
+
+.glass-refraction__orb--1 {
+  width: 45%;
+  aspect-ratio: 1;
+  top: 10%;
+  left: 15%;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.55), transparent 70%);
+  animation-delay: 0s;
+}
+
+.glass-refraction__orb--2 {
+  width: 50%;
+  aspect-ratio: 1;
+  bottom: 5%;
+  right: 10%;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.5), transparent 70%);
+  animation-delay: -2s;
+}
+
+.glass-refraction__orb--3 {
+  width: 35%;
+  aspect-ratio: 1;
+  top: 40%;
+  left: 45%;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.45), transparent 70%);
+  animation-delay: -4s;
+}
+
+@keyframes glass-orb-drift {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(8%, -6%) scale(1.12); }
+}
+
+.glass-refraction__svg,
+.glass-refraction__disp-map {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.glass-refraction__glass {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  backdrop-filter: blur(var(--glass-blur, 16px)) saturate(1.4);
+  -webkit-backdrop-filter: blur(var(--glass-blur, 16px)) saturate(1.4);
+  filter: url(#glass-disp);
+}
+
+.glass-refraction__panels {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  width: min(100%, 680px);
+}
+
+.glass-refraction__panel {
+  position: relative;
+  min-height: 180px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 8px 32px rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: flex-end;
+  padding: 18px;
+  overflow: hidden;
+}
+
+.glass-refraction__panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at calc(var(--disp-x, 50) * 1%) calc(var(--disp-y, 50) * 1%),
+    hsl(var(--panel-hue, 32) 80% 55% / 0.15),
+    transparent 55%
+  );
+  pointer-events: none;
+}
+
+.glass-refraction__panel-label {
+  position: relative;
+  font-family: monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(244, 244, 245, 0.85);
+}
+
+.glass-refraction__content {
+  position: absolute;
+  top: 24px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  padding: 0 24px;
+  pointer-events: none;
+}
+
+.glass-refraction__tag {
+  font-family: monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(245, 158, 11, 0.75);
+  display: block;
+  margin-bottom: 8px;
+}
+
+.glass-refraction__title {
+  margin: 0 0 6px;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 700;
+  color: #f4f4f5;
+}
+
+.glass-refraction__text {
+  margin: 0 auto;
+  max-width: 360px;
+  font-size: 0.8rem;
+  color: #a1a1aa;
+}
+
+.glass-refraction__hint {
+  position: absolute;
+  bottom: 14px;
+  left: 0;
+  right: 0;
+  margin: 0;
+  text-align: center;
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: #71717a;
+  pointer-events: none;
+}
+
+@media (max-width: 640px) {
+  .glass-refraction__panels {
+    grid-template-columns: 1fr;
+    max-width: 280px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glass-refraction__orb {
+    animation: none;
+  }
+}

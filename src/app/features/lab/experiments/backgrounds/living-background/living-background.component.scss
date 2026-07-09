@@ -1,0 +1,85 @@
+.living-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #07080c;
+}
+
+.living-bg__filter {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.living-bg__stage {
+  position: absolute;
+  inset: -5%;
+  filter: url(#living-goo);
+}
+
+.living-bg__blob {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    circle at 35% 30%,
+    hsl(var(--blob-hue, 32) 88% 58% / 0.9),
+    hsl(calc(var(--blob-hue, 32) + 20) 70% 42% / 0.5) 55%,
+    transparent 72%
+  );
+  will-change: left, top, border-radius;
+}
+
+.living-bg__content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
+  pointer-events: none;
+}
+
+.living-bg__tag {
+  font-family: monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(52, 211, 153, 0.8);
+  margin-bottom: 12px;
+}
+
+.living-bg__title {
+  margin: 0 0 8px;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 700;
+  color: #f4f4f5;
+}
+
+.living-bg__text {
+  margin: 0;
+  max-width: 360px;
+  font-size: 0.85rem;
+  color: #a1a1aa;
+}
+
+.living-bg__hint {
+  position: absolute;
+  bottom: 14px;
+  left: 0;
+  right: 0;
+  margin: 0;
+  text-align: center;
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: #71717a;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .living-bg__blob {
+    animation: none;
+  }
+}

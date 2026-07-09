@@ -1,0 +1,22 @@
+<app-lab-demo-layout
+  experimentSlug="particles"
+  [isImmersive]="true"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)"
+  (onDrawDebug)="drawDebug($event)">
+
+  <div
+    scene
+    #sceneHost
+    class="particles js-lab-scene"
+    data-debug-vars="--particles --link-distance"
+  >
+    <canvas class="particles__canvas js-particles-canvas" aria-hidden="true"></canvas>
+    <div class="particles__content">
+      <span class="particles__tag">constellation</span>
+      <h2 class="particles__title">Particle Field</h2>
+      <p class="particles__text">Cursor repels particles — nearby nodes connect with light</p>
+    </div>
+    <p class="particles__hint">// move cursor — repulsion field + link network</p>
+  </div>
+</app-lab-demo-layout>

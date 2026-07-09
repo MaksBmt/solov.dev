@@ -1,0 +1,26 @@
+<app-lab-demo-layout
+  experimentSlug="gradient-mesh"
+  [isImmersive]="true"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)">
+
+  <div
+    scene
+    #sceneHost
+    class="gradient-mesh js-lab-scene"
+    data-debug-vars="--blob-size --blur-amount --saturation"
+  >
+    <div class="gradient-mesh__field">
+      @for (blob of blobs; track blob.id) {
+        <div class="gradient-mesh__blob js-mesh-blob" [style.--blob-hue]="blob.hue"></div>
+      }
+    </div>
+    <div class="gradient-mesh__overlay" aria-hidden="true"></div>
+    <div class="gradient-mesh__content">
+      <span class="gradient-mesh__tag">mesh gradient</span>
+      <h2 class="gradient-mesh__title">Gradient Mesh</h2>
+      <p class="gradient-mesh__text">Four blurred blobs blend into a living color field</p>
+    </div>
+    <p class="gradient-mesh__hint">// move cursor — blobs orbit and follow</p>
+  </div>
+</app-lab-demo-layout>

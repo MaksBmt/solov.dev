@@ -1,0 +1,39 @@
+<app-lab-demo-layout
+  experimentSlug="animated-shapes"
+  [isImmersive]="true"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)">
+
+  <div
+    scene
+    #sceneHost
+    class="animated-shapes js-lab-scene"
+    data-debug-vars="--shape-count --parallax-strength --pointer-x --pointer-y"
+  >
+    <div class="animated-shapes__stage">
+      @for (shape of shapes; track shape.id) {
+        <div
+          class="animated-shapes__shape js-shape"
+          [class.animated-shapes__shape--circle]="shape.type === 'circle'"
+          [class.animated-shapes__shape--square]="shape.type === 'square'"
+          [class.animated-shapes__shape--triangle]="shape.type === 'triangle'"
+          [class.animated-shapes__shape--ring]="shape.type === 'ring'"
+          [style.--shape-hue]="shape.hue"
+          [style.--shape-size.px]="shape.size"
+          [style.--shape-rotation]="shape.rotation + 'deg'"
+          [style.--float-delay]="shape.delay + 's'"
+          [style.--float-speed]="(floatSpeed * (0.6 + shape.depth * 0.4)) + 's'"
+          [style.left.%]="shape.x * 100"
+          [style.top.%]="shape.y * 100"
+        ></div>
+      }
+    </div>
+
+    <div class="animated-shapes__content">
+      <span class="animated-shapes__tag">depth parallax</span>
+      <h2 class="animated-shapes__title">Animated Shapes</h2>
+      <p class="animated-shapes__text">Floating geometry with mouse parallax and independent float cycles</p>
+    </div>
+    <p class="animated-shapes__hint">// move cursor — shapes drift on depth layers</p>
+  </div>
+</app-lab-demo-layout>

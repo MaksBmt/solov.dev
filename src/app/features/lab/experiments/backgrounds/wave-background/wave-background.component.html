@@ -1,0 +1,23 @@
+<app-lab-demo-layout
+  experimentSlug="wave-background"
+  [isImmersive]="true"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)"
+  (onDrawDebug)="drawDebug($event)">
+
+  <div
+    scene
+    #sceneHost
+    class="wave-bg js-lab-scene"
+    data-debug-vars="--wave-count --ripples"
+  >
+    <div class="wave-bg__sky" aria-hidden="true"></div>
+    <canvas class="wave-bg__canvas js-wave-canvas" aria-hidden="true"></canvas>
+    <div class="wave-bg__content">
+      <span class="wave-bg__tag">ocean waves</span>
+      <h2 class="wave-bg__title">Wave Background</h2>
+      <p class="wave-bg__text">Layered sine waves ripple outward from your cursor</p>
+    </div>
+    <p class="wave-bg__hint">// move cursor — spawn ripple disturbances</p>
+  </div>
+</app-lab-demo-layout>

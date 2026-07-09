@@ -1,0 +1,24 @@
+<app-lab-demo-layout
+  experimentSlug="noise"
+  [isImmersive]="true"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)"
+  (onDrawDebug)="drawDebug($event)">
+
+  <div
+    scene
+    #sceneHost
+    class="noise js-lab-scene"
+    data-debug-vars="--grain-intensity --pointer-x --pointer-y"
+  >
+    <div class="noise__base" aria-hidden="true"></div>
+    <canvas class="noise__canvas js-noise-canvas" aria-hidden="true"></canvas>
+    <div class="noise__vignette" aria-hidden="true"></div>
+    <div class="noise__content">
+      <span class="noise__tag">film grain</span>
+      <h2 class="noise__title">Analog Noise</h2>
+      <p class="noise__text">Move cursor — grain intensifies with chromatic aberration</p>
+    </div>
+    <p class="noise__hint">// procedural grain · pointer boost zone</p>
+  </div>
+</app-lab-demo-layout>

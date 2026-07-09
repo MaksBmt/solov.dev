@@ -1,0 +1,37 @@
+<app-lab-demo-layout
+  experimentSlug="living-background"
+  [isImmersive]="true"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)">
+
+  <div
+    scene
+    #sceneHost
+    class="living-bg js-lab-scene"
+    data-debug-vars="--goo-blur --pointer-x --pointer-y"
+  >
+    <svg class="living-bg__filter" aria-hidden="true">
+      <defs>
+        <filter id="living-goo">
+          <feGaussianBlur in="SourceGraphic" [attr.stdDeviation]="gooBlur" result="blur" />
+          <feColorMatrix in="blur" mode="matrix"
+            values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -10" result="goo" />
+          <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+        </filter>
+      </defs>
+    </svg>
+
+    <div class="living-bg__stage">
+      @for (blob of blobs; track blob.id) {
+        <div class="living-bg__blob js-living-blob" [style.--blob-hue]="blob.hue"></div>
+      }
+    </div>
+
+    <div class="living-bg__content">
+      <span class="living-bg__tag">organic goo</span>
+      <h2 class="living-bg__title">Living Background</h2>
+      <p class="living-bg__text">Amoeba blobs breathe, morph and drift toward your cursor</p>
+    </div>
+    <p class="living-bg__hint">// SVG gooey filter · breathing morph · cursor attraction</p>
+  </div>
+</app-lab-demo-layout>

@@ -1,0 +1,52 @@
+<app-lab-demo-layout
+  experimentSlug="glass-refraction"
+  [isImmersive]="true"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)"
+  (onDrawDebug)="drawDebug($event)">
+
+  <div
+    scene
+    #sceneHost
+    class="glass-refraction js-lab-scene"
+    data-debug-vars="--glass-blur --disp-x --disp-y --disp-r"
+  >
+    <div class="glass-refraction__bg" aria-hidden="true">
+      <div class="glass-refraction__orb glass-refraction__orb--1"></div>
+      <div class="glass-refraction__orb glass-refraction__orb--2"></div>
+      <div class="glass-refraction__orb glass-refraction__orb--3"></div>
+    </div>
+
+    <svg class="glass-refraction__svg" width="0" height="0" aria-hidden="true">
+      <defs>
+        <filter id="glass-disp" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
+          <feImage class="js-glass-feimage" href="" result="map" preserveAspectRatio="none" />
+          <feDisplacementMap
+            in="SourceGraphic"
+            in2="map"
+            [attr.scale]="distortScale"
+            xChannelSelector="R"
+            yChannelSelector="G" />
+        </filter>
+      </defs>
+    </svg>
+    <canvas class="glass-refraction__disp-map js-disp-map" aria-hidden="true"></canvas>
+
+    <div class="glass-refraction__glass js-glass-layer">
+      <div class="glass-refraction__panels">
+        @for (panel of panels; track panel.title) {
+          <div class="glass-refraction__panel" [style.--panel-hue]="panel.hue">
+            <span class="glass-refraction__panel-label">{{ panel.title }}</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="glass-refraction__content">
+      <span class="glass-refraction__tag">frosted lens</span>
+      <h2 class="glass-refraction__title">Glass Refraction</h2>
+      <p class="glass-refraction__text">Animated gradient behind frosted glass — cursor bends the lens</p>
+    </div>
+    <p class="glass-refraction__hint">// move cursor — SVG displacement lens on glass panels</p>
+  </div>
+</app-lab-demo-layout>
