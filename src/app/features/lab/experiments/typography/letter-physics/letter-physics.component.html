@@ -1,0 +1,22 @@
+<app-lab-demo-layout
+  experimentSlug="letter-physics"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)"
+  (onDrawDebug)="drawDebug($event)">
+
+  <div scene #sceneHost class="letter-physics js-lab-scene">
+    <div class="letter-physics__stage">
+      <p class="letter-physics__eyebrow">spring · repulsion · rAF</p>
+
+      <div class="letter-physics__field js-letter-field">
+        @for (char of phrase.split(''); track $index) {
+          <span class="letter-physics__letter js-letter">{{ char }}</span>
+        }
+      </div>
+
+      <p class="letter-physics__sub">Each letter is a soft body — push them with the cursor</p>
+    </div>
+
+    <p class="letter-physics__hint">// наведите курсор — буквы отталкиваются и возвращаются</p>
+  </div>
+</app-lab-demo-layout>

@@ -19,8 +19,8 @@ import { LabDemoLayoutComponent } from '../../../shell/lab-demo-layout/lab-demo-
  */
 const BREATH_SPEED = 0.55;
 const BREATH_AMOUNT = 0.18;
-const ATTRACT_FORCE = 0.22;
-const POSITION_LERP = 0.06;
+const ATTRACT_FORCE = 0.52;
+const POSITION_LERP = 0.13;
 const GOO_BLUR = 18;
 
 interface LivingBlob {
@@ -141,12 +141,15 @@ export class LivingBackgroundComponent implements AfterViewInit, OnDestroy {
       const breath = 1 + Math.sin(this.time * this.breathSpeed + blob.phase) * this.breathAmount;
       blob.scale = breath;
 
-      let targetX = blob.baseX + Math.sin(this.time * 0.3 + blob.phase) * 0.06;
-      let targetY = blob.baseY + Math.cos(this.time * 0.25 + blob.phase) * 0.06;
+      const idleX = blob.baseX + Math.sin(this.time * 0.3 + blob.phase) * 0.06;
+      const idleY = blob.baseY + Math.cos(this.time * 0.25 + blob.phase) * 0.06;
+
+      let targetX = idleX;
+      let targetY = idleY;
 
       if (this.pointer.active) {
-        targetX += (this.pointer.x - blob.baseX) * this.attractForce;
-        targetY += (this.pointer.y - blob.baseY) * this.attractForce;
+        targetX = idleX + (this.pointer.x - idleX) * this.attractForce;
+        targetY = idleY + (this.pointer.y - idleY) * this.attractForce;
       }
 
       blob.x += (targetX - blob.x) * this.positionLerp;

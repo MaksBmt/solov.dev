@@ -1,0 +1,42 @@
+<app-lab-demo-layout
+  experimentSlug="reveal-text"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)">
+
+  <div
+    scene
+    class="reveal-text js-lab-scene"
+    #varsHost
+    data-debug-vars="--visible-count --reveal-duration"
+  >
+    <div class="reveal-text__scroll" #scrollHost>
+      <div class="reveal-text__intro">
+        <p class="reveal-text__eyebrow">clip-path · mask · scroll reveal</p>
+        <h2 class="reveal-text__title">Reveal<br>Text</h2>
+      </div>
+
+      @for (line of lines; track line.index) {
+        <article
+          class="reveal-text__line js-reveal-line"
+          [class.is-visible]="line.visible"
+          [attr.data-index]="line.index"
+          [attr.data-tone]="line.tone"
+          [style.--line-index]="line.index"
+        >
+          <span class="reveal-text__tag">{{ line.tag }}</span>
+          <span class="reveal-text__mask">
+            <span class="reveal-text__copy">{{ line.text }}</span>
+          </span>
+          <span class="reveal-text__ghost" aria-hidden="true">{{ line.text }}</span>
+        </article>
+      }
+
+      <p class="reveal-text__footer">revealed {{ visibleCount }} / {{ lines.length }}</p>
+    </div>
+
+    <p class="reveal-text__hint">
+      // прокрутите — строки снимают маску по очереди<br>
+      // повторить эффект — нажмите Reset
+    </p>
+  </div>
+</app-lab-demo-layout>

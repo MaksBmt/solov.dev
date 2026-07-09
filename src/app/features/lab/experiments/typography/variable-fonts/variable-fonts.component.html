@@ -1,0 +1,35 @@
+<app-lab-demo-layout
+  experimentSlug="variable-fonts"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)">
+
+  <div
+    scene
+    #sceneHost
+    class="variable-fonts js-lab-scene"
+    data-debug-vars="--vf-wght --vf-wdth --vf-slnt"
+  >
+    <div class="variable-fonts__stage js-variable-type">
+      <p class="variable-fonts__eyebrow">font-variation-settings</p>
+      <h2 class="variable-fonts__hero">KINETIC</h2>
+
+      <ul class="variable-fonts__samples">
+        @for (sample of samples; track sample.label) {
+          <li class="variable-fonts__sample">
+            <span class="variable-fonts__label">{{ sample.label }}</span>
+            <span class="variable-fonts__word">{{ sample.word }}</span>
+            <span class="variable-fonts__note">{{ sample.note }}</span>
+          </li>
+        }
+      </ul>
+
+      <div class="variable-fonts__axes" aria-hidden="true">
+        <span>wght <em>{{ '{100…900}' }}</em></span>
+        <span>wdth <em>{{ '{75…125}' }}</em></span>
+        <span>slnt <em>{{ '{-12…0}' }}</em></span>
+      </div>
+    </div>
+
+    <p class="variable-fonts__hint">// двигайте курсор — оси шрифта «дышат» вместе с указателем</p>
+  </div>
+</app-lab-demo-layout>

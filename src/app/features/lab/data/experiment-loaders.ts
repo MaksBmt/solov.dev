@@ -94,6 +94,18 @@ const loaders: Record<string, () => Promise<any>> = {
     import('../experiments/backgrounds/glass-refraction/glass-refraction.component').then((m) => m.GlassRefractionComponent),
   'animated-shapes': () =>
     import('../experiments/backgrounds/animated-shapes/animated-shapes.component').then((m) => m.AnimatedShapesComponent),
+  'variable-fonts': () =>
+    import('../experiments/typography/variable-fonts/variable-fonts.component').then((m) => m.VariableFontsComponent),
+  'mouse-distortion': () =>
+    import('../experiments/typography/mouse-distortion/mouse-distortion.component').then((m) => m.MouseDistortionComponent),
+  'animated-headlines': () =>
+    import('../experiments/typography/animated-headlines/animated-headlines.component').then((m) => m.AnimatedHeadlinesComponent),
+  'reveal-text': () =>
+    import('../experiments/typography/reveal-text/reveal-text.component').then((m) => m.RevealTextComponent),
+  'text-trails': () =>
+    import('../experiments/typography/text-trails/text-trails.component').then((m) => m.TextTrailsComponent),
+  'letter-physics': () =>
+    import('../experiments/typography/letter-physics/letter-physics.component').then((m) => m.LetterPhysicsComponent),
 };
 
 function getExperimentLoader(slug: string) {

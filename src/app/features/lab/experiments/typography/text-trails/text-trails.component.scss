@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap');
+
+.text-trails {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  cursor: crosshair;
+}
+
+.text-trails__stage {
+  position: absolute;
+  inset: 0;
+}
+
+.text-trails__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.text-trails__hero {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  text-align: center;
+}
+
+.text-trails__eyebrow {
+  margin: 0 0 12px;
+  font-family: monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(245, 158, 11, 0.65);
+}
+
+.text-trails__title {
+  margin: 0;
+  font-family: 'Roboto Flex', system-ui, sans-serif;
+  font-size: clamp(2.8rem, 11vw, 6rem);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  color: rgba(244, 244, 245, 0.12);
+  font-variation-settings: 'wght' 900, 'wdth' 120;
+}
+
+.text-trails__hint {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  text-align: center;
+  color: #a1a1aa;
+  font-family: monospace;
+  font-size: 0.75rem;
+  pointer-events: none;
+}

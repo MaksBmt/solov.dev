@@ -1,0 +1,56 @@
+<app-lab-demo-layout
+  experimentSlug="animated-headlines"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)">
+
+  <div
+    scene
+    #sceneHost
+    class="animated-headlines js-lab-scene"
+    data-debug-vars="--headline-duration --headline-enter-y"
+  >
+    <div class="animated-headlines__stage">
+      <p class="animated-headlines__eyebrow">stagger · cycle · kinetic type</p>
+
+      <div class="animated-headlines__viewport" [attr.data-accent]="activeAccent">
+        @if (prevIndex >= 0) {
+          <div class="animated-headlines__line animated-headlines__line--exit" aria-hidden="true">
+            @for (char of prevChars; track $index) {
+              <span
+                class="animated-headlines__char animated-headlines__char--enter"
+                [class.animated-headlines__char--exit]="phase === 'exit'"
+                [style.transition-delay.ms]="exitDelay($index)"
+              >{{ char }}</span>
+            }
+          </div>
+        }
+
+        <div
+          class="animated-headlines__line"
+          [class.is-hidden]="phase === 'exit'"
+        >
+          @for (char of chars; track $index) {
+            <span
+              class="animated-headlines__char"
+              [class.animated-headlines__char--enter]="phase === 'enter'"
+              [style.transition-delay.ms]="$index * staggerMs"
+            >{{ char }}</span>
+          }
+        </div>
+      </div>
+
+      <ul class="animated-headlines__queue">
+        @for (headline of headlines; track headline.id) {
+          <li
+            class="animated-headlines__queue-item"
+            [class.is-active]="headline.id === activeIndex"
+          >
+            {{ headline.text }}
+          </li>
+        }
+      </ul>
+    </div>
+
+    <p class="animated-headlines__hint">// заголовки сменяют друг друга с каскадом букв</p>
+  </div>
+</app-lab-demo-layout>
