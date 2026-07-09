@@ -1,0 +1,110 @@
+.modal-scene {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+}
+
+.modal-scene__trigger {
+  padding: 14px 28px;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(245, 158, 11, 0.05));
+  color: #fef3c7;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(245, 158, 11, 0.25);
+  }
+}
+
+.modal-scene--open .modal-scene__trigger {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.modal-scene__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(var(--blur-amount, 14px));
+  clip-path: circle(var(--reveal-r, 0%) at var(--reveal-x, 50%) var(--reveal-y, 50%));
+  cursor: pointer;
+}
+
+.modal-scene__card {
+  position: relative;
+  z-index: 2;
+  width: min(360px, 90%);
+  padding: 28px 24px;
+  border-radius: 20px;
+  background: rgba(14, 15, 19, 0.92);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.5),
+    0 0 48px rgba(245, 158, 11, 0.12);
+  transform: scale(var(--modal-scale, 0));
+  will-change: transform;
+}
+
+.modal-scene__glow {
+  position: absolute;
+  inset: -1px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.3), transparent 60%);
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.modal-scene__title {
+  position: relative;
+  margin: 0 0 10px;
+  font-size: 1.15rem;
+  color: #fef3c7;
+}
+
+.modal-scene__text {
+  position: relative;
+  margin: 0 0 20px;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: #a1a1aa;
+}
+
+.modal-scene__close {
+  position: relative;
+  padding: 10px 20px;
+  border: 1px solid rgba(244, 244, 245, 0.12);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #e4e4e7;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fef3c7;
+  }
+}
+
+.modal-scene__hint {
+  position: absolute;
+  bottom: 14px;
+  left: 0;
+  right: 0;
+  margin: 0;
+  text-align: center;
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: #a1a1aa;
+  opacity: 0.75;
+  pointer-events: none;
+}

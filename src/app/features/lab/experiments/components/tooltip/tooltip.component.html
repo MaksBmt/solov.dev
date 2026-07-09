@@ -1,0 +1,38 @@
+<app-lab-demo-layout
+  experimentSlug="tooltip"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)"
+  (onDrawDebug)="drawDebug($event)">
+
+  <div
+    scene
+    #sceneHost
+    class="tooltip-scene js-lab-scene"
+    data-debug-vars="--tip-x --tip-y --beam-opacity"
+  >
+    <div class="tooltip-scene__grid">
+      @for (item of triggers; track item.label; let i = $index) {
+        <button
+          type="button"
+          class="tooltip-scene__trigger js-tip-trigger"
+          (pointerenter)="onEnter(i)"
+          (pointerleave)="onLeave()"
+        >
+          <span class="tooltip-scene__icon" aria-hidden="true">{{ item.icon }}</span>
+          <span class="tooltip-scene__label">{{ item.label }}</span>
+        </button>
+      }
+    </div>
+
+    @if (activeIndex !== null) {
+      <svg class="tooltip-scene__beam" aria-hidden="true">
+        <line class="js-tip-beam" x1="0" y1="0" x2="0" y2="0" />
+      </svg>
+      <div class="tooltip-scene__tip js-tip-box" role="tooltip">
+        {{ activeTip }}
+      </div>
+    }
+
+    <p class="tooltip-scene__hint">// hover icons and move cursor</p>
+  </div>
+</app-lab-demo-layout>

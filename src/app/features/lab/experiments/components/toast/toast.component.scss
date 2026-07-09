@@ -1,0 +1,109 @@
+.toast-scene {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+}
+
+.toast-scene__push {
+  padding: 14px 28px;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(245, 158, 11, 0.05));
+  color: #fef3c7;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.toast-scene__stack {
+  position: absolute;
+  bottom: 48px;
+  right: 28px;
+  width: min(300px, calc(100% - 56px));
+  height: 280px;
+  pointer-events: none;
+}
+
+.toast-scene__item {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(14, 15, 19, 0.95);
+  border: 1px solid rgba(244, 244, 245, 0.1);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+  pointer-events: auto;
+  transform: translateY(calc(-1 * var(--toast-y, 0px)));
+  will-change: transform;
+  transition: opacity 0.3s ease, transform 0.32s ease;
+}
+
+.toast-scene__item--success {
+  border-left: 3px solid #22c55e;
+}
+
+.toast-scene__item--info {
+  border-left: 3px solid #3b82f6;
+}
+
+.toast-scene__item--warning {
+  border-left: 3px solid #f59e0b;
+}
+
+.toast-scene__item--dismissing {
+  opacity: 0;
+  transform: translateY(calc(-1 * var(--toast-y, 0px))) translateX(120%);
+}
+
+.toast-scene__msg {
+  font-size: 0.82rem;
+  color: #e4e4e7;
+  line-height: 1.4;
+}
+
+.toast-scene__close {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #a1a1aa;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fef3c7;
+  }
+}
+
+.toast-scene__hint {
+  position: absolute;
+  bottom: 14px;
+  left: 0;
+  right: 0;
+  margin: 0;
+  text-align: center;
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: #a1a1aa;
+  opacity: 0.75;
+  pointer-events: none;
+}

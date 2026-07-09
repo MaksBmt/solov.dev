@@ -1,0 +1,33 @@
+<app-lab-demo-layout
+  experimentSlug="modal"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)"
+  (onDrawDebug)="drawDebug($event)">
+
+  <div
+    scene
+    #sceneHost
+    class="modal-scene js-lab-scene"
+    [class.modal-scene--open]="isOpen"
+    data-debug-vars="--reveal-r --modal-scale --blur-amount"
+  >
+    <button type="button" class="modal-scene__trigger" (click)="openModal($event)">
+      Open portal
+    </button>
+
+    @if (isOpen) {
+      <div class="modal-scene__backdrop" (click)="closeModal()"></div>
+      <div class="modal-scene__card js-modal-card" role="dialog" aria-modal="true">
+        <div class="modal-scene__glow" aria-hidden="true"></div>
+        <h3 class="modal-scene__title">Portal Modal</h3>
+        <p class="modal-scene__text">
+          Backdrop раскрывается radial clip-path от точки клика,
+          карточка влетает с пружинным scale.
+        </p>
+        <button type="button" class="modal-scene__close" (click)="closeModal()">Close</button>
+      </div>
+    }
+
+    <p class="modal-scene__hint">// click «Open portal»</p>
+  </div>
+</app-lab-demo-layout>

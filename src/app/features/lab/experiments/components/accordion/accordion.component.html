@@ -1,0 +1,44 @@
+<app-lab-demo-layout
+  experimentSlug="accordion"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)"
+  (onDrawDebug)="drawDebug($event)">
+
+  <div
+    scene
+    #sceneHost
+    class="accordion js-lab-scene"
+    data-debug-vars="--panel-height --spring-stiffness --active-index --glow-intensity"
+  >
+    <div class="accordion__list">
+      @for (panel of panels; track panel.title; let i = $index) {
+        <button
+          type="button"
+          class="accordion__trigger js-acc-item"
+          [class.accordion__trigger--active]="activeIndex === i"
+          (click)="togglePanel(i)"
+          [attr.aria-expanded]="activeIndex === i"
+        >
+          <span class="accordion__title">{{ panel.title }}</span>
+          <span class="accordion__chevron" aria-hidden="true">{{ activeIndex === i ? '−' : '+' }}</span>
+        </button>
+      }
+
+      <div class="accordion__glow" [class.accordion__glow--visible]="activeIndex >= 0" aria-hidden="true"></div>
+
+      <div class="accordion__body-wrap js-acc-body-wrap">
+        @for (panel of panels; track panel.title; let i = $index) {
+          <div
+            class="accordion__body js-acc-body-inner"
+            [class.accordion__body--active]="activeIndex === i"
+            [attr.aria-hidden]="activeIndex !== i"
+          >
+            <p>{{ panel.body }}</p>
+          </div>
+        }
+      </div>
+    </div>
+
+    <p class="accordion__hint">// click panel headers</p>
+  </div>
+</app-lab-demo-layout>

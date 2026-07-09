@@ -8,7 +8,7 @@ import { LabDemoLayoutComponent } from '../../../shell/lab-demo-layout/lab-demo-
  * Кольцо пунктов вращается к активному элементу
  * с плавной интерполяцией угла в requestAnimationFrame.
  */
-const ROTATION_SPEED = 0.12;
+const ROTATION_SPEED = 0.28;
 const ACTIVE_SCALE = 1.2;
 const RING_RADIUS = 130;
 

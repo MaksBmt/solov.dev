@@ -56,6 +56,20 @@ const loaders: Record<string, () => Promise<any>> = {
     import('../experiments/navigation/circular-navigation/circular-navigation.component').then((m) => m.CircularNavigationComponent),
   'elastic-navigation': () =>
     import('../experiments/navigation/elastic-navigation/elastic-navigation.component').then((m) => m.ElasticNavigationComponent),
+  accordion: () =>
+    import('../experiments/components/accordion/accordion.component').then((m) => m.AccordionComponent),
+  modal: () =>
+    import('../experiments/components/modal/modal.component').then((m) => m.ModalComponent),
+  tabs: () =>
+    import('../experiments/components/tabs/tabs.component').then((m) => m.TabsComponent),
+  tooltip: () =>
+    import('../experiments/components/tooltip/tooltip.component').then((m) => m.TooltipComponent),
+  dropdown: () =>
+    import('../experiments/components/dropdown/dropdown.component').then((m) => m.DropdownComponent),
+  toast: () =>
+    import('../experiments/components/toast/toast.component').then((m) => m.ToastComponent),
+  'context-menu': () =>
+    import('../experiments/components/context-menu/context-menu.component').then((m) => m.ContextMenuComponent),
 };
 
 function getExperimentLoader(slug: string) {

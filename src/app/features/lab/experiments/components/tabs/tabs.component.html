@@ -1,0 +1,48 @@
+<app-lab-demo-layout
+  experimentSlug="tabs"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)"
+  (onDrawDebug)="drawDebug($event)">
+
+  <div
+    scene
+    #sceneHost
+    class="tabs-scene js-lab-scene"
+    data-debug-vars="--blob-x --blob-w --active-index --wipe-duration"
+  >
+    <div class="tabs-scene__panel">
+      <div class="tabs-scene__bar js-tabs-bar" role="tablist">
+        <div class="tabs-scene__blob js-tabs-blob" aria-hidden="true"></div>
+        @for (tab of tabs; track tab.label; let i = $index) {
+          <button
+            type="button"
+            class="tabs-scene__tab js-tabs-tab"
+            role="tab"
+            [class.tabs-scene__tab--active]="activeIndex === i"
+            [attr.aria-selected]="activeIndex === i"
+            (click)="selectTab(i)"
+          >
+            {{ tab.label }}
+          </button>
+        }
+      </div>
+
+      <div class="tabs-scene__content">
+        @for (tab of tabs; track tab.label; let i = $index) {
+          <div
+            class="tabs-scene__pane"
+            role="tabpanel"
+            [class.tabs-scene__pane--active]="activeIndex === i"
+            [class.tabs-scene__pane--enter]="activeIndex === i"
+            [class.tabs-scene__pane--exit]="prevIndex === i && activeIndex !== i"
+          >
+            <h3>{{ tab.title }}</h3>
+            <p>{{ tab.body }}</p>
+          </div>
+        }
+      </div>
+    </div>
+
+    <p class="tabs-scene__hint">// click tabs</p>
+  </div>
+</app-lab-demo-layout>

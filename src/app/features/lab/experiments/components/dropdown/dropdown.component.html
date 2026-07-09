@@ -1,0 +1,37 @@
+<app-lab-demo-layout
+  experimentSlug="dropdown"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)"
+  (onDrawDebug)="drawDebug($event)">
+
+  <div
+    scene
+    #sceneHost
+    class="dropdown-scene js-lab-scene"
+    [class.dropdown-scene--open]="isOpen"
+    data-debug-vars="--stagger-ms --dropdown-duration --bounce"
+  >
+    <div class="dropdown-scene__wrap">
+      <button type="button" class="dropdown-scene__trigger" (click)="toggle()">
+        Actions
+        <span class="dropdown-scene__chevron" aria-hidden="true">{{ isOpen ? '▲' : '▼' }}</span>
+      </button>
+
+      <ul class="dropdown-scene__menu" [attr.aria-hidden]="!isOpen">
+        @for (item of items; track item.label; let i = $index) {
+          <li
+            class="dropdown-scene__item js-dropdown-item"
+            [style.--item-delay]="getItemDelay(i)"
+          >
+            <button type="button" class="dropdown-scene__option">
+              <span aria-hidden="true">{{ item.icon }}</span>
+              {{ item.label }}
+            </button>
+          </li>
+        }
+      </ul>
+    </div>
+
+    <p class="dropdown-scene__hint">// click «Actions»</p>
+  </div>
+</app-lab-demo-layout>

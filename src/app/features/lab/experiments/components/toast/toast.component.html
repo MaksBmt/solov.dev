@@ -1,0 +1,35 @@
+<app-lab-demo-layout
+  experimentSlug="toast"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)"
+  (onDrawDebug)="drawDebug($event)">
+
+  <div
+    scene
+    #sceneHost
+    class="toast-scene js-lab-scene"
+    data-debug-vars="--toast-count --spring-stiffness"
+  >
+    <button type="button" class="toast-scene__push" (click)="pushToast()">
+      Push toast
+    </button>
+
+    <div class="toast-scene__stack" aria-live="polite">
+      @for (toast of toasts; track toast.id) {
+        <div
+          class="toast-scene__item js-toast"
+          [attr.data-toast-id]="toast.id"
+          [class.toast-scene__item--success]="toast.type === 'success'"
+          [class.toast-scene__item--info]="toast.type === 'info'"
+          [class.toast-scene__item--warning]="toast.type === 'warning'"
+          [class.toast-scene__item--dismissing]="toast.dismissing"
+        >
+          <span class="toast-scene__msg">{{ toast.message }}</span>
+          <button type="button" class="toast-scene__close" (click)="dismiss(toast.id)" aria-label="Dismiss">×</button>
+        </div>
+      }
+    </div>
+
+    <p class="toast-scene__hint">// push toast · click × to dismiss</p>
+  </div>
+</app-lab-demo-layout>

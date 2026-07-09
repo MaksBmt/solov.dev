@@ -1,0 +1,54 @@
+<app-lab-demo-layout
+  experimentSlug="context-menu"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)"
+  (onDrawDebug)="drawDebug($event)">
+
+  <div
+    scene
+    #sceneHost
+    class="context-scene js-lab-scene"
+    [class.context-scene--open]="isOpen"
+    (contextmenu)="onContextMenu($event)"
+    (click)="closeMenu()"
+    data-debug-vars="--menu-x --menu-y --glass-blur"
+  >
+    <div class="context-scene__surface">
+      <span class="context-scene__icon" aria-hidden="true">▦</span>
+      <p class="context-scene__label">Right-click anywhere</p>
+      <p class="context-scene__sub">Frosted glass context menu</p>
+    </div>
+
+    @if (isOpen) {
+      <div
+        class="context-scene__spotlight"
+        [style.left.px]="clickX"
+        [style.top.px]="clickY"
+        aria-hidden="true"
+      ></div>
+
+      <div
+        class="context-scene__menu js-context-menu"
+        [style.left.px]="menuX"
+        [style.top.px]="menuY"
+        role="menu"
+        (click)="$event.stopPropagation()"
+      >
+        @for (item of items; track item.label; let i = $index) {
+          <button
+            type="button"
+            class="context-scene__item"
+            [class.context-scene__item--danger]="item.danger"
+            [style.--item-delay]="getItemDelay(i)"
+            role="menuitem"
+          >
+            <span aria-hidden="true">{{ item.icon }}</span>
+            {{ item.label }}
+          </button>
+        }
+      </div>
+    }
+
+    <p class="context-scene__hint">// right-click on surface</p>
+  </div>
+</app-lab-demo-layout>
