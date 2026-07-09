@@ -70,6 +70,16 @@ const loaders: Record<string, () => Promise<any>> = {
     import('../experiments/components/toast/toast.component').then((m) => m.ToastComponent),
   'context-menu': () =>
     import('../experiments/components/context-menu/context-menu.component').then((m) => m.ContextMenuComponent),
+  'dynamic-grid': () =>
+    import('../experiments/layout/dynamic-grid/dynamic-grid.component').then((m) => m.DynamicGridComponent),
+  'split-screen': () =>
+    import('../experiments/layout/split-screen/split-screen.component').then((m) => m.SplitScreenComponent),
+  'resizable-panels': () =>
+    import('../experiments/layout/resizable-panels/resizable-panels.component').then((m) => m.ResizablePanelsComponent),
+  'infinite-sections': () =>
+    import('../experiments/layout/infinite-sections/infinite-sections.component').then((m) => m.InfiniteSectionsComponent),
+  'responsive-tricks': () =>
+    import('../experiments/layout/responsive-tricks/responsive-tricks.component').then((m) => m.ResponsiveTricksComponent),
 };
 
 function getExperimentLoader(slug: string) {

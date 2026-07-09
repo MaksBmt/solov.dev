@@ -1,0 +1,29 @@
+<app-lab-demo-layout
+  experimentSlug="infinite-sections"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)"
+  (onDrawDebug)="drawDebug($event)">
+
+  <div
+    scene
+    #varsHost
+    class="infinite-sections js-lab-scene"
+    data-debug-vars="--scroll-offset --loop-count --parallax-strength"
+  >
+    <div class="infinite-sections__viewport" #scrollHost>
+      <div class="infinite-sections__track">
+        @for (section of sections; track $index) {
+          <div
+            class="infinite-sections__section js-loop-section infinite-sections__section--{{ section.tone }}"
+            [ngStyle]="getParallaxStyle($index)"
+          >
+            <span class="infinite-sections__label">Section {{ section.label }}</span>
+            <span class="infinite-sections__sub">Seamless loop · parallax layer</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    <p class="infinite-sections__hint">// scroll inside the frame</p>
+  </div>
+</app-lab-demo-layout>

@@ -1,0 +1,97 @@
+.split-screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+}
+
+.split-screen__frame {
+  position: relative;
+  width: min(480px, 100%);
+  height: min(280px, 65%);
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(244, 244, 245, 0.1);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+}
+
+.split-screen__pane {
+  position: absolute;
+  inset: 0;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  h3 {
+    margin: 8px 0 6px;
+    font-size: 1.2rem;
+    color: #fef3c7;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: #a1a1aa;
+    max-width: 200px;
+  }
+
+  &--left {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(14, 15, 19, 0.9));
+    clip-path: inset(0 calc(100% - var(--split-ratio, 0.5) * 100%) 0 0);
+  }
+
+  &--right {
+    background: linear-gradient(225deg, rgba(139, 92, 246, 0.25), rgba(14, 15, 19, 0.9));
+    clip-path: inset(0 0 0 calc(var(--split-ratio, 0.5) * 100%));
+  }
+}
+
+.split-screen__tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #f59e0b;
+}
+
+.split-screen__divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--split-ratio, 0.5) * 100%);
+  width: 12px;
+  margin-left: -6px;
+  cursor: col-resize;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: none;
+  will-change: left;
+}
+
+.split-screen__grip {
+  width: 4px;
+  height: 48px;
+  border-radius: 4px;
+  background: rgba(245, 158, 11, 0.8);
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.5);
+}
+
+.split-screen__hint {
+  position: absolute;
+  bottom: 14px;
+  left: 0;
+  right: 0;
+  margin: 0;
+  text-align: center;
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: #a1a1aa;
+  opacity: 0.75;
+  pointer-events: none;
+}

@@ -1,0 +1,37 @@
+<app-lab-demo-layout
+  experimentSlug="resizable-panels"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)"
+  (onDrawDebug)="drawDebug($event)">
+
+  <div
+    scene
+    #sceneHost
+    class="resizable-panels js-lab-scene"
+    data-debug-vars="--panel-a --panel-b --panel-c"
+  >
+    <div class="resizable-panels__frame js-panels-frame">
+      <div class="resizable-panels__panel js-panel resizable-panels__panel--a">
+        <span>Explorer</span>
+      </div>
+      <div
+        class="resizable-panels__handle"
+        role="separator"
+        (pointerdown)="onHandleDown(1, $event)"
+      ></div>
+      <div class="resizable-panels__panel js-panel resizable-panels__panel--b">
+        <span>Editor</span>
+      </div>
+      <div
+        class="resizable-panels__handle"
+        role="separator"
+        (pointerdown)="onHandleDown(2, $event)"
+      ></div>
+      <div class="resizable-panels__panel js-panel resizable-panels__panel--c">
+        <span>Preview</span>
+      </div>
+    </div>
+
+    <p class="resizable-panels__hint">// drag │ handles · Reset for spring snap-back</p>
+  </div>
+</app-lab-demo-layout>

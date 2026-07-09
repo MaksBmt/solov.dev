@@ -1,0 +1,33 @@
+<app-lab-demo-layout
+  experimentSlug="dynamic-grid"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)"
+  (onDrawDebug)="drawDebug($event)">
+
+  <div
+    scene
+    #sceneHost
+    class="dynamic-grid js-lab-scene"
+    [class.dynamic-grid--expanded]="isExpanded()"
+    data-debug-vars="--active-cell --grid-gap --morph-duration"
+  >
+    <div class="dynamic-grid__wrap">
+      @for (cell of cells; track cell.id) {
+        <button
+          type="button"
+          class="dynamic-grid__cell js-grid-cell dynamic-grid__cell--{{ cell.tone }}"
+          [class.dynamic-grid__cell--active]="isActive(cell.id)"
+          [class.dynamic-grid__cell--covered]="isCovered(cell.id)"
+          [style.grid-column]="getGridColumn(cell.id)"
+          [style.grid-row]="getGridRow(cell.id)"
+          (click)="selectCell(cell.id)"
+        >
+          <span class="dynamic-grid__glow" aria-hidden="true"></span>
+          <span class="dynamic-grid__label">{{ cell.label }}</span>
+        </button>
+      }
+    </div>
+
+    <p class="dynamic-grid__hint">// click a cell · 2×2 expand · click again to reset</p>
+  </div>
+</app-lab-demo-layout>

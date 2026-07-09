@@ -1,0 +1,55 @@
+<app-lab-demo-layout
+  experimentSlug="responsive-tricks"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)"
+  (onDrawDebug)="drawDebug($event)">
+
+  <div
+    scene
+    #sceneHost
+    class="responsive-tricks js-lab-scene"
+    data-debug-vars="--container-width --card-gap --transition-ms"
+  >
+    <div class="responsive-tricks__stage" #stageHost>
+      <div class="responsive-tricks__container js-rq-container">
+        <div class="responsive-tricks__grid">
+          @for (card of cards; track card.title) {
+            <div class="responsive-tricks__card js-rq-card">
+              <span class="responsive-tricks__icon" aria-hidden="true">{{ card.icon }}</span>
+              <span class="responsive-tricks__title">{{ card.title }}</span>
+            </div>
+          }
+        </div>
+
+        <div
+          class="responsive-tricks__resize-handle"
+          role="slider"
+          aria-orientation="horizontal"
+          aria-label="Container width"
+          [attr.aria-valuemin]="35"
+          [attr.aria-valuemax]="100"
+          [attr.aria-valuenow]="containerWidth"
+          (pointerdown)="onWidthHandleDown($event)"
+        >
+          <span class="responsive-tricks__grip" aria-hidden="true"></span>
+        </div>
+      </div>
+
+      <label class="responsive-tricks__controls">
+        <span class="responsive-tricks__controls-label">Container width</span>
+        <input
+          type="range"
+          class="responsive-tricks__range"
+          min="35"
+          max="100"
+          step="1"
+          [value]="containerWidth"
+          (input)="onWidthInput($event)"
+        />
+        <span class="responsive-tricks__controls-value">{{ containerWidth }}%</span>
+      </label>
+    </div>
+
+    <p class="responsive-tricks__hint">// drag slider below · or │ handle on right edge</p>
+  </div>
+</app-lab-demo-layout>

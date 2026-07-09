@@ -1,0 +1,37 @@
+<app-lab-demo-layout
+  experimentSlug="split-screen"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)"
+  (onDrawDebug)="drawDebug($event)">
+
+  <div
+    scene
+    #sceneHost
+    class="split-screen js-lab-scene"
+    data-debug-vars="--split-ratio --split-target"
+  >
+    <div class="split-screen__frame" #frameHost>
+      <div class="split-screen__pane split-screen__pane--left">
+        <span class="split-screen__tag">Design</span>
+        <h3>Left pane</h3>
+        <p>Clip-path wipe следует за разделителем</p>
+      </div>
+      <div class="split-screen__pane split-screen__pane--right">
+        <span class="split-screen__tag">Code</span>
+        <h3>Right pane</h3>
+        <p>Spring physics на отпускании divider</p>
+      </div>
+      <div
+        class="split-screen__divider"
+        role="separator"
+        aria-orientation="vertical"
+        [attr.aria-valuenow]="(splitRatio * 100).toFixed(0)"
+        (pointerdown)="onDividerDown($event)"
+      >
+        <span class="split-screen__grip" aria-hidden="true"></span>
+      </div>
+    </div>
+
+    <p class="split-screen__hint">// drag divider · release for spring snap</p>
+  </div>
+</app-lab-demo-layout>
