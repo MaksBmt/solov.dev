@@ -30,6 +30,20 @@ const loaders: Record<string, () => Promise<any>> = {
     import('../experiments/scroll/horizontal-scroll/horizontal-scroll.component').then((m) => m.HorizontalScrollComponent),
   'pinned-elements': () =>
     import('../experiments/scroll/pinned-elements/pinned-elements.component').then((m) => m.PinnedElementsComponent),
+  'tilt-card': () =>
+    import('../experiments/hover/tilt-card/tilt-card.component').then((m) => m.TiltCardComponent),
+  'lift-card': () =>
+    import('../experiments/hover/lift-card/lift-card.component').then((m) => m.LiftCardComponent),
+  'glow-border': () =>
+    import('../experiments/hover/glow-border/glow-border.component').then((m) => m.GlowBorderComponent),
+  'underline-reveal': () =>
+    import('../experiments/hover/underline-reveal/underline-reveal.component').then((m) => m.UnderlineRevealComponent),
+  'image-reveal': () =>
+    import('../experiments/hover/image-reveal/image-reveal.component').then((m) => m.ImageRevealComponent),
+  'shine-sweep': () =>
+    import('../experiments/hover/shine-sweep/shine-sweep.component').then((m) => m.ShineSweepComponent),
+  'flip-card': () =>
+    import('../experiments/hover/flip-card/flip-card.component').then((m) => m.FlipCardComponent),
 };
 
 function getExperimentLoader(slug: string) {

@@ -1,0 +1,30 @@
+<app-lab-demo-layout
+  experimentSlug="glow-border"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)"
+  (onDrawDebug)="drawDebug($event)">
+
+  <div
+    scene
+    #sceneHost
+    class="glow-border js-lab-scene"
+    data-debug-vars="--border-width --spin-duration --glow-opacity"
+  >
+    <div class="glow-border__grid">
+      @for (card of [
+        { title: 'Conic spin', text: 'Градиент вращается по периметру', tone: 'amber' },
+        { title: 'Masked core', text: 'Фон карточки остаётся чистым', tone: 'violet' },
+        { title: 'Outer glow', text: 'Мягкое свечение снаружи', tone: 'emerald' }
+      ]; track card.title) {
+        <article class="glow-border__card js-glow-card glow-border__card--{{ card.tone }}">
+          <div class="glow-border__inner">
+            <h3 class="glow-border__title">{{ card.title }}</h3>
+            <p class="glow-border__text">{{ card.text }}</p>
+          </div>
+        </article>
+      }
+    </div>
+
+    <p class="glow-border__hint">// hover to ignite the border</p>
+  </div>
+</app-lab-demo-layout>

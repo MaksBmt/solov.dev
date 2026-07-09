@@ -1,0 +1,28 @@
+<app-lab-demo-layout
+  experimentSlug="tilt-card"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)"
+  (onDrawDebug)="drawDebug($event)">
+
+  <div scene #sceneHost class="tilt-card js-lab-scene">
+    <div class="tilt-card__grid">
+      @for (card of cards; track card.label) {
+        <article
+          class="tilt-card__item js-tilt-card tilt-card__item--{{ card.tone }}"
+          [attr.data-preset]="card.preset"
+          [attr.data-debug-vars]="card.label === '01' ? '--rx --ry' : null"
+        >
+          <div class="tilt-card__head">
+            <span class="tilt-card__label">{{ card.label }}</span>
+            <span class="tilt-card__badge">{{ card.badge }}</span>
+          </div>
+          <h3 class="tilt-card__title">{{ card.title }}</h3>
+          <p class="tilt-card__subtitle">{{ card.subtitle }}</p>
+          <p class="tilt-card__action">{{ card.hint }}</p>
+        </article>
+      }
+    </div>
+
+    <p class="tilt-card__hint">// сравните три карточки — у каждой свой характер движения</p>
+  </div>
+</app-lab-demo-layout>

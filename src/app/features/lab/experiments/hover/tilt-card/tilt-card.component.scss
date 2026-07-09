@@ -1,0 +1,133 @@
+.tilt-card {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.tilt-card__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  width: min(100%, 720px);
+}
+
+.tilt-card__item {
+  min-height: 200px;
+  padding: 22px 20px;
+  border-radius: 16px;
+  border: 1px solid rgba(244, 244, 245, 0.1);
+  transform-style: preserve-3d;
+  transform-origin: center center;
+  will-change: transform;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  cursor: default;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.28);
+  transition: box-shadow 0.25s ease;
+}
+
+.tilt-card__item--emerald:hover {
+  box-shadow:
+    0 24px 48px rgba(0, 0, 0, 0.42),
+    0 0 28px rgba(52, 211, 153, 0.18);
+}
+
+.tilt-card__item--amber:hover {
+  box-shadow:
+    0 22px 40px rgba(0, 0, 0, 0.38),
+    0 0 22px rgba(245, 158, 11, 0.16);
+}
+
+.tilt-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.tilt-card__badge {
+  font-family: monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+  color: rgba(244, 244, 245, 0.42);
+  white-space: nowrap;
+}
+
+.tilt-card__item--amber {
+  background:
+    radial-gradient(circle at 88% 12%, rgba(245, 158, 11, 0.2), transparent 44%),
+    linear-gradient(145deg, rgba(24, 24, 27, 0.96), rgba(14, 15, 19, 0.98));
+}
+
+.tilt-card__item--violet {
+  background:
+    radial-gradient(circle at 86% 14%, rgba(167, 139, 250, 0.22), transparent 42%),
+    linear-gradient(145deg, rgba(24, 24, 27, 0.96), rgba(14, 15, 19, 0.98));
+}
+
+.tilt-card__item--emerald {
+  background:
+    radial-gradient(circle at 90% 10%, rgba(52, 211, 153, 0.2), transparent 44%),
+    linear-gradient(145deg, rgba(24, 24, 27, 0.96), rgba(14, 15, 19, 0.98));
+}
+
+.tilt-card__label {
+  font-family: monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  color: rgba(245, 158, 11, 0.85);
+}
+
+.tilt-card__title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #f4f4f5;
+}
+
+.tilt-card__subtitle {
+  margin: 0;
+  font-size: 0.84rem;
+  line-height: 1.45;
+  color: #a1a1aa;
+}
+
+.tilt-card__action {
+  margin: auto 0 0;
+  padding-top: 10px;
+  border-top: 1px solid rgba(244, 244, 245, 0.08);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: rgba(244, 244, 245, 0.72);
+}
+
+.tilt-card__hint {
+  position: absolute;
+  bottom: 14px;
+  left: 0;
+  right: 0;
+  margin: 0;
+  text-align: center;
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: #a1a1aa;
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+@media (max-width: 720px) {
+  .tilt-card__grid {
+    grid-template-columns: 1fr;
+    max-width: 320px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tilt-card__item {
+    transform: none !important;
+  }
+}

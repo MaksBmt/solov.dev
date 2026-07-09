@@ -1,0 +1,33 @@
+<app-lab-demo-layout
+  experimentSlug="flip-card"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)">
+
+  <div
+    scene
+    #sceneHost
+    class="flip-card js-lab-scene"
+    data-debug-vars="--flip-duration --perspective --flip-deg"
+  >
+    <div class="flip-card__grid">
+      @for (card of cards; track card.front) {
+        <article class="flip-card__item js-flip-card">
+          <div class="flip-card__inner">
+            <div class="flip-card__face flip-card__face--front">
+              <span class="flip-card__tag">front</span>
+              <h3 class="flip-card__title">{{ card.front }}</h3>
+              <p class="flip-card__text">{{ card.detail }}</p>
+            </div>
+            <div class="flip-card__face flip-card__face--back">
+              <span class="flip-card__tag">back</span>
+              <h3 class="flip-card__title">{{ card.back }}</h3>
+              <p class="flip-card__text">Hover to flip</p>
+            </div>
+          </div>
+        </article>
+      }
+    </div>
+
+    <p class="flip-card__hint">// hover cards to flip</p>
+  </div>
+</app-lab-demo-layout>

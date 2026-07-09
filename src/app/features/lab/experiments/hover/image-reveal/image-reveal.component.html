@@ -1,0 +1,29 @@
+<app-lab-demo-layout
+  experimentSlug="image-reveal"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)">
+
+  <div
+    scene
+    #sceneHost
+    class="image-reveal js-lab-scene"
+    data-debug-vars="--image-scale --overlay-shift --overlay-opacity"
+  >
+    <div class="image-reveal__grid">
+      @for (card of cards; track card.label) {
+        <article class="image-reveal__card js-image-card">
+          <div class="image-reveal__media" [style.--card-hue]="card.hue">
+            <div class="image-reveal__pattern" aria-hidden="true"></div>
+          </div>
+          <div class="image-reveal__overlay">
+            <span class="image-reveal__label">{{ card.label }}</span>
+            <h3 class="image-reveal__title">{{ card.title }}</h3>
+            <p class="image-reveal__text">Hover to reveal caption</p>
+          </div>
+        </article>
+      }
+    </div>
+
+    <p class="image-reveal__hint">// hover gallery cards</p>
+  </div>
+</app-lab-demo-layout>

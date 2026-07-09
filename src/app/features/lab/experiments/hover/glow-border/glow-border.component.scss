@@ -1,0 +1,128 @@
+.glow-border {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+}
+
+.glow-border__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  width: min(100%, 720px);
+}
+
+.glow-border__card {
+  position: relative;
+  border-radius: var(--corner-radius, 18px);
+  padding: var(--border-width, 2px);
+  background: rgba(39, 39, 42, 0.6);
+  transition: box-shadow 0.3s ease;
+}
+
+.glow-border__card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: conic-gradient(
+    from 0deg,
+    rgba(245, 158, 11, 0.1),
+    rgba(245, 158, 11, 0.95),
+    rgba(251, 191, 36, 0.4),
+    rgba(245, 158, 11, 0.1)
+  );
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.glow-border__card:hover::before {
+  opacity: 1;
+  animation: glow-border-spin var(--spin-duration, 3.5s) linear infinite;
+}
+
+.glow-border__card:hover {
+  box-shadow:
+    0 0 24px rgba(245, 158, 11, var(--glow-opacity, 0.55)),
+    0 0 48px rgba(245, 158, 11, calc(var(--glow-opacity, 0.55) * 0.45));
+}
+
+.glow-border__inner {
+  position: relative;
+  z-index: 1;
+  min-height: 148px;
+  padding: 22px 20px;
+  border-radius: calc(var(--corner-radius, 18px) - var(--border-width, 2px));
+  background: rgba(14, 15, 19, 0.96);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.glow-border__card--amber .glow-border__inner {
+  background:
+    radial-gradient(circle at 90% 10%, rgba(245, 158, 11, 0.12), transparent 45%),
+    rgba(14, 15, 19, 0.96);
+}
+
+.glow-border__card--violet .glow-border__inner {
+  background:
+    radial-gradient(circle at 88% 12%, rgba(167, 139, 250, 0.14), transparent 44%),
+    rgba(14, 15, 19, 0.96);
+}
+
+.glow-border__card--emerald .glow-border__inner {
+  background:
+    radial-gradient(circle at 86% 14%, rgba(52, 211, 153, 0.14), transparent 44%),
+    rgba(14, 15, 19, 0.96);
+}
+
+.glow-border__title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #f4f4f5;
+}
+
+.glow-border__text {
+  margin: 0;
+  font-size: 0.84rem;
+  color: #a1a1aa;
+  line-height: 1.45;
+}
+
+.glow-border__hint {
+  position: absolute;
+  bottom: 14px;
+  left: 0;
+  right: 0;
+  margin: 0;
+  text-align: center;
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: #a1a1aa;
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+@keyframes glow-border-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 720px) {
+  .glow-border__grid {
+    grid-template-columns: 1fr;
+    max-width: 320px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glow-border__card:hover::before {
+    animation: none;
+    opacity: 0.85;
+  }
+}

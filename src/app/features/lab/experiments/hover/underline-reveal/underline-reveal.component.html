@@ -1,0 +1,33 @@
+<app-lab-demo-layout
+  experimentSlug="underline-reveal"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)">
+
+  <div
+    scene
+    #sceneHost
+    class="underline-reveal js-lab-scene"
+    data-debug-vars="--thickness --underline-duration --origin-x"
+  >
+    <div class="underline-reveal__demos">
+      @for (demo of demos; track demo.origin) {
+        <div class="underline-reveal__row">
+          <span class="underline-reveal__caption">{{ demo.caption }}</span>
+          <a
+            [class]="'underline-reveal__link ' + linkOriginClass(demo.origin)"
+            href="#"
+          >
+            {{ demo.label }}
+          </a>
+        </div>
+      }
+    </div>
+
+    <p class="underline-reveal__note">
+      Три строки — три направления роста линии. Наведите на каждую и сравните.
+      Слайдер <span class="underline-reveal__kbd">Origin</span>: 0 — три разных направления, 1–3 — одно для всех.
+    </p>
+
+    <p class="underline-reveal__hint">// hover each row</p>
+  </div>
+</app-lab-demo-layout>

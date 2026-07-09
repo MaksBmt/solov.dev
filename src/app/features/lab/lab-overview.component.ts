@@ -38,8 +38,13 @@ import { getSitePage } from '../../core/config/site-pages.config';
 export class LabOverviewComponent {
   private readonly pageMeta = inject(PageMetaService);
 
-  readonly readyCategories = categories.filter((c) => c.status === 'ready');
-  readonly soonCategories = categories.filter((c) => c.status !== 'ready');
+  get readyCategories() {
+    return categories.filter((c) => c.status === 'ready');
+  }
+
+  get soonCategories() {
+    return categories.filter((c) => c.status !== 'ready');
+  }
 
   constructor() {
     const page = getSitePage('lab');

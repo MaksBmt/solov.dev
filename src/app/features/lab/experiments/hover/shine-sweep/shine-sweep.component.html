@@ -1,0 +1,28 @@
+<app-lab-demo-layout
+  experimentSlug="shine-sweep"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)">
+
+  <div
+    scene
+    #sceneHost
+    class="shine-sweep js-lab-scene"
+    data-debug-vars="--shine-width --shine-angle --shine-duration"
+  >
+    <div class="shine-sweep__row">
+      <button appButton class="shine-sweep__btn js-shine-btn" type="button">
+        <span class="shine-sweep__label">Explore</span>
+      </button>
+
+      <button appButton [primary]="true" class="shine-sweep__btn shine-sweep__btn--primary js-shine-btn" type="button">
+        <span class="shine-sweep__label">Get started</span>
+      </button>
+
+      <button appButton class="shine-sweep__btn js-shine-btn" type="button">
+        <span class="shine-sweep__label">View code</span>
+      </button>
+    </div>
+
+    <p class="shine-sweep__hint">// hover buttons for shine sweep</p>
+  </div>
+</app-lab-demo-layout>

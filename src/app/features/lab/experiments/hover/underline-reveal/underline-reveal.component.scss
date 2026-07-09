@@ -1,0 +1,124 @@
+.underline-reveal {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  padding: 24px;
+}
+
+.underline-reveal__demos {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  width: min(100%, 520px);
+}
+
+.underline-reveal__row {
+  display: grid;
+  grid-template-columns: 108px 1fr;
+  align-items: end;
+  gap: 16px;
+}
+
+.underline-reveal__caption {
+  font-family: monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: rgba(245, 158, 11, 0.85);
+  padding-bottom: calc(var(--underline-offset, 6px) + var(--thickness, 2px) + 2px);
+}
+
+.underline-reveal__link {
+  position: relative;
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  padding-bottom: calc(var(--underline-offset, 6px) + var(--thickness, 2px));
+  font-size: 1.02rem;
+  font-weight: 500;
+  line-height: 1.3;
+  color: #e4e4e7;
+  text-decoration: none;
+  transition: color var(--underline-duration, 320ms) ease;
+}
+
+.underline-reveal__link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--thickness, 2px);
+  background: linear-gradient(90deg, rgba(245, 158, 11, 0.35), rgba(245, 158, 11, 0.95));
+  transform: scaleX(0);
+  transition: transform var(--underline-duration, 320ms) ease;
+}
+
+.underline-reveal__link--from-left::after {
+  transform-origin: left center;
+}
+
+.underline-reveal__link--from-center::after {
+  transform-origin: center center;
+}
+
+.underline-reveal__link--from-right::after {
+  transform-origin: right center;
+}
+
+.underline-reveal__link:hover {
+  color: #fbbf24;
+}
+
+.underline-reveal__link:hover::after {
+  transform: scaleX(1);
+}
+
+.underline-reveal__note {
+  margin: 0;
+  max-width: 460px;
+  text-align: center;
+  font-size: 0.86rem;
+  color: #a1a1aa;
+  line-height: 1.5;
+}
+
+.underline-reveal__kbd {
+  font-family: monospace;
+  font-size: 0.78rem;
+  color: rgba(245, 158, 11, 0.9);
+}
+
+.underline-reveal__hint {
+  position: absolute;
+  bottom: 14px;
+  left: 0;
+  right: 0;
+  margin: 0;
+  text-align: center;
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: #a1a1aa;
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+@media (max-width: 560px) {
+  .underline-reveal__row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .underline-reveal__caption {
+    padding-bottom: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .underline-reveal__link::after {
+    transition: none;
+  }
+}

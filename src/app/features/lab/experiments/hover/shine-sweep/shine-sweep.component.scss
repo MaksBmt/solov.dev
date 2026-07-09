@@ -1,0 +1,84 @@
+.shine-sweep {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.shine-sweep__row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  max-width: 640px;
+}
+
+.shine-sweep__btn {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.shine-sweep__btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: linear-gradient(
+    var(--shine-angle, 25deg),
+    transparent 0%,
+    transparent var(--shine-stop-a, 38%),
+    rgba(255, 255, 255, calc(var(--shine-intensity, 0.7) * 0.2)) var(--shine-stop-b, 44%),
+    rgba(255, 255, 255, var(--shine-intensity, 0.7)) 50%,
+    rgba(255, 255, 255, calc(var(--shine-intensity, 0.7) * 0.2)) var(--shine-stop-c, 56%),
+    transparent var(--shine-stop-d, 62%),
+    transparent 100%
+  );
+  background-size: 220% 100%;
+  background-repeat: no-repeat;
+  background-position: 130% 0;
+  pointer-events: none;
+}
+
+.shine-sweep__btn:hover::before {
+  animation: shine-sweep-pass var(--shine-duration, 700ms) ease;
+}
+
+.shine-sweep__label {
+  position: relative;
+  z-index: 1;
+}
+
+.shine-sweep__hint {
+  position: absolute;
+  bottom: 14px;
+  left: 0;
+  right: 0;
+  margin: 0;
+  text-align: center;
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: #a1a1aa;
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+@keyframes shine-sweep-pass {
+  from {
+    background-position: 130% 0;
+  }
+
+  to {
+    background-position: -30% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shine-sweep__btn:hover::before {
+    animation: none;
+    background-position: 50% 0;
+    opacity: 0.45;
+  }
+}

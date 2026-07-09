@@ -1,0 +1,29 @@
+<app-lab-demo-layout
+  experimentSlug="lift-card"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)"
+  (onDrawDebug)="drawDebug($event)">
+
+  <div
+    scene
+    #sceneHost
+    class="lift-card js-lab-scene"
+    data-debug-vars="--lift-y --hover-scale --shadow-blur"
+  >
+    <div class="lift-card__grid">
+      @for (card of [
+        { title: 'Soft lift', text: 'translateY + box-shadow', tone: 'amber' },
+        { title: 'Scale hint', text: 'Лёгкое увеличение масштаба', tone: 'violet' },
+        { title: 'Pure CSS', text: 'Переходы на :hover', tone: 'cyan' },
+        { title: 'Tunable', text: 'Параметры из Debug', tone: 'rose' }
+      ]; track card.title) {
+        <article class="lift-card__item js-lift-card lift-card__item--{{ card.tone }}">
+          <h3 class="lift-card__title">{{ card.title }}</h3>
+          <p class="lift-card__text">{{ card.text }}</p>
+        </article>
+      }
+    </div>
+
+    <p class="lift-card__hint">// hover any card</p>
+  </div>
+</app-lab-demo-layout>

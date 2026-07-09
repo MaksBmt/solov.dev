@@ -1,0 +1,114 @@
+.image-reveal {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.image-reveal__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  width: min(100%, 720px);
+}
+
+.image-reveal__card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(244, 244, 245, 0.1);
+  background: #0e0f13;
+  min-height: 220px;
+}
+
+.image-reveal__media {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.image-reveal__pattern {
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(circle at 30% 25%, hsl(var(--card-hue, 38) 85% 58% / 0.55), transparent 42%),
+    radial-gradient(circle at 75% 70%, hsl(calc(var(--card-hue, 38) + 35) 80% 50% / 0.4), transparent 48%),
+    linear-gradient(160deg, rgba(24, 24, 27, 0.4), rgba(14, 15, 19, 0.9));
+  transform: scale(1);
+  transition: transform var(--reveal-duration, 420ms) ease;
+}
+
+.image-reveal__card:hover .image-reveal__pattern {
+  transform: scale(var(--image-scale, 1.08));
+}
+
+.image-reveal__overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 18px 16px 16px;
+  background: linear-gradient(180deg, transparent, rgba(14, 15, 19, 0.92));
+  transform: translateY(var(--overlay-shift, 10px));
+  opacity: var(--overlay-opacity, 0.35);
+  transition:
+    transform var(--reveal-duration, 420ms) ease,
+    opacity var(--reveal-duration, 420ms) ease;
+}
+
+.image-reveal__card:hover .image-reveal__overlay {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.image-reveal__label {
+  display: block;
+  margin-bottom: 6px;
+  font-family: monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  color: rgba(245, 158, 11, 0.85);
+}
+
+.image-reveal__title {
+  margin: 0 0 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #f4f4f5;
+}
+
+.image-reveal__text {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #a1a1aa;
+}
+
+.image-reveal__hint {
+  position: absolute;
+  bottom: 14px;
+  left: 0;
+  right: 0;
+  margin: 0;
+  text-align: center;
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: #a1a1aa;
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+@media (max-width: 720px) {
+  .image-reveal__grid {
+    grid-template-columns: 1fr;
+    max-width: 300px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image-reveal__pattern,
+  .image-reveal__overlay {
+    transition: none;
+  }
+}
