@@ -1,0 +1,36 @@
+<app-lab-demo-layout
+  experimentSlug="animated-burger"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)"
+  (onDrawDebug)="drawDebug($event)">
+
+  <div
+    scene
+    #sceneHost
+    class="animated-burger js-lab-scene"
+    [class.animated-burger--open]="isOpen"
+    data-debug-vars="--line-width --line-gap --burger-duration --open-rotation"
+  >
+    <div class="animated-burger__panel">
+      <button
+        type="button"
+        class="animated-burger__btn js-burger-btn"
+        [attr.aria-expanded]="isOpen"
+        aria-label="Toggle menu"
+        (click)="toggle()"
+      >
+        <span class="animated-burger__line animated-burger__line--top" aria-hidden="true"></span>
+        <span class="animated-burger__line animated-burger__line--mid" aria-hidden="true"></span>
+        <span class="animated-burger__line animated-burger__line--bot" aria-hidden="true"></span>
+      </button>
+
+      <nav class="animated-burger__nav" [class.animated-burger__nav--visible]="isOpen" aria-label="Mobile menu">
+        @for (link of ['Overview', 'Projects', 'Lab', 'Contact']; track link) {
+          <a class="animated-burger__link" href="#" (click)="$event.preventDefault()">{{ link }}</a>
+        }
+      </nav>
+    </div>
+
+    <p class="animated-burger__hint">// click burger to morph</p>
+  </div>
+</app-lab-demo-layout>

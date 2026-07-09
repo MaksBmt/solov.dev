@@ -44,6 +44,18 @@ const loaders: Record<string, () => Promise<any>> = {
     import('../experiments/hover/shine-sweep/shine-sweep.component').then((m) => m.ShineSweepComponent),
   'flip-card': () =>
     import('../experiments/hover/flip-card/flip-card.component').then((m) => m.FlipCardComponent),
+  'morph-menu': () =>
+    import('../experiments/navigation/morph-menu/morph-menu.component').then((m) => m.MorphMenuComponent),
+  'animated-burger': () =>
+    import('../experiments/navigation/animated-burger/animated-burger.component').then((m) => m.AnimatedBurgerComponent),
+  'floating-dock': () =>
+    import('../experiments/navigation/floating-dock/floating-dock.component').then((m) => m.FloatingDockComponent),
+  'radial-menu': () =>
+    import('../experiments/navigation/radial-menu/radial-menu.component').then((m) => m.RadialMenuComponent),
+  'circular-navigation': () =>
+    import('../experiments/navigation/circular-navigation/circular-navigation.component').then((m) => m.CircularNavigationComponent),
+  'elastic-navigation': () =>
+    import('../experiments/navigation/elastic-navigation/elastic-navigation.component').then((m) => m.ElasticNavigationComponent),
 };
 
 function getExperimentLoader(slug: string) {

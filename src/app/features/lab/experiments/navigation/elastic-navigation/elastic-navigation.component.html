@@ -1,0 +1,37 @@
+<app-lab-demo-layout
+  experimentSlug="elastic-navigation"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)"
+  (onDrawDebug)="drawDebug($event)">
+
+  <div
+    scene
+    #sceneHost
+    class="elastic-navigation js-lab-scene"
+    data-debug-vars="--indicator-x --indicator-w --spring-stiffness --damping"
+  >
+    <nav class="elastic-navigation__nav js-elastic-nav" aria-label="Elastic tabs">
+      <div class="elastic-navigation__indicator js-elastic-indicator" aria-hidden="true"></div>
+
+      @for (tab of tabs; track tab.label; let i = $index) {
+        <button
+          type="button"
+          class="elastic-navigation__tab js-elastic-tab"
+          [class.elastic-navigation__tab--active]="activeIndex === i"
+          (click)="selectTab(i)"
+        >
+          {{ tab.label }}
+        </button>
+      }
+    </nav>
+
+    <div class="elastic-navigation__content">
+      <p class="elastic-navigation__panel-title">{{ tabs[activeIndex].label }}</p>
+      <p class="elastic-navigation__panel-text">
+        Пружинный индикатор с overshoot — переключайте табы и смотрите, как полоска «перелетает» цель.
+      </p>
+    </div>
+
+    <p class="elastic-navigation__hint">// click tabs to feel the spring</p>
+  </div>
+</app-lab-demo-layout>

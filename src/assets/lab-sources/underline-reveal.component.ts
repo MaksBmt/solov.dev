@@ -5,23 +5,16 @@ import { LabDemoLayoutComponent } from '../../../shell/lab-demo-layout/lab-demo-
 /**
  * Underline Reveal — THE.LAB / Hover.
  *
- * Подчёркивание ссылок через scaleX на ::after.
- * У каждой ссылки свой transform-origin; Debug-слайдер
- * временно выравнивает все линии к одной точке.
+ * Три демо-строки с разным transform-origin у ::after.
+ * Debug Origin: 0 = три разных направления, 1–3 = одно для всех.
  */
 const THICKNESS = 2;
 const OFFSET = 6;
 const DURATION = 320;
-const ORIGIN_MODE = 1;
+/** 0 = у каждой строки своё · 1 = left · 2 = center · 3 = right */
+const ORIGIN_MODE = 0;
 
-const ORIGINS = ['0%', '50%', '100%'] as const;
-
-interface UnderlineLink {
-  label: string;
-  href: string;
-  origin: (typeof ORIGINS)[number];
-  badge: string;
-}
+type OriginSide = 'left' | 'center' | 'right';
 
 @Component({
   selector: 'app-underline-reveal',
@@ -40,15 +33,25 @@ export class UnderlineRevealComponent implements AfterViewInit {
   duration = DURATION;
   originMode = ORIGIN_MODE;
 
-  /** null = у каждой ссылки свой origin из пресета */
-  private globalOrigin: (typeof ORIGINS)[number] | null = null;
+  /** null = у каждой строки своё направление */
+  forcedOrigin: OriginSide | null = null;
 
-  readonly links: UnderlineLink[] = [
-    { label: 'Overview', href: '#', origin: '0%', badge: 'left' },
-    { label: 'Experiments', href: '#', origin: '50%', badge: 'center' },
-    { label: 'Debug panel', href: '#', origin: '100%', badge: 'right' },
-    { label: 'View code', href: '#', origin: '0%', badge: 'left' },
-    { label: 'Passport', href: '#', origin: '50%', badge: 'center' },
+  readonly demos: { caption: string; origin: OriginSide; label: string }[] = [
+    {
+      caption: 'Слева →',
+      origin: 'left',
+      label: 'Линия выезжает слева направо',
+    },
+    {
+      caption: 'Из центра ↔',
+      origin: 'center',
+      label: 'Линия расходится из середины',
+    },
+    {
+      caption: '← Справа',
+      origin: 'right',
+      label: 'Линия выезжает справа налево',
+    },
   ];
 
   ngAfterViewInit() {
@@ -61,23 +64,30 @@ export class UnderlineRevealComponent implements AfterViewInit {
     this.offset = OFFSET;
     this.duration = DURATION;
     this.originMode = ORIGIN_MODE;
-    this.globalOrigin = null;
+    this.forcedOrigin = null;
     this.applyVars();
   }
 
-  onParamChange(detail: { id: string; value: number }) {
+  onParamChange(detail: { id: string; value: number; silent?: boolean }) {
     if (detail.id === 'thickness') this.thickness = detail.value;
     else if (detail.id === 'offset') this.offset = detail.value;
     else if (detail.id === 'duration') this.duration = detail.value;
     else if (detail.id === 'originMode') {
       this.originMode = Math.round(detail.value);
-      this.globalOrigin = ORIGINS[Math.max(0, Math.min(2, this.originMode))] ?? '50%';
+      this.forcedOrigin = this.resolveForcedOrigin(this.originMode);
     }
     this.applyVars();
   }
 
-  linkOrigin(link: UnderlineLink): string {
-    return this.globalOrigin ?? link.origin;
+  private resolveForcedOrigin(mode: number): OriginSide | null {
+    if (mode <= 0) return null;
+    const map: OriginSide[] = ['left', 'center', 'right'];
+    return map[Math.min(mode - 1, 2)] ?? null;
+  }
+
+  linkOriginClass(origin: OriginSide): string {
+    const side = this.forcedOrigin ?? origin;
+    return `underline-reveal__link--from-${side}`;
   }
 
   private applyVars() {
@@ -87,6 +97,14 @@ export class UnderlineRevealComponent implements AfterViewInit {
     el.style.setProperty('--thickness', `${this.thickness}px`);
     el.style.setProperty('--underline-offset', `${this.offset}px`);
     el.style.setProperty('--underline-duration', `${this.duration}ms`);
-    el.style.setProperty('--origin-x', this.globalOrigin ?? '50%');
+
+    const originX = this.forcedOrigin === 'left'
+      ? '0%'
+      : this.forcedOrigin === 'right'
+        ? '100%'
+        : this.forcedOrigin === 'center'
+          ? '50%'
+          : 'mixed';
+    el.style.setProperty('--origin-x', originX);
   }
 }

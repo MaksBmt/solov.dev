@@ -1,0 +1,35 @@
+<app-lab-demo-layout
+  experimentSlug="morph-menu"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)"
+  (onDrawDebug)="drawDebug($event)">
+
+  <div
+    scene
+    #sceneHost
+    class="morph-menu js-lab-scene"
+    data-debug-vars="--blob-x --blob-y --blob-w --blob-h --morph-radius"
+  >
+    <nav class="morph-menu__bar js-morph-bar" aria-label="Morph navigation">
+      <div class="morph-menu__track" aria-hidden="true"></div>
+      <div class="morph-menu__blob js-morph-blob" aria-hidden="true"></div>
+
+      @for (item of items; track item.label; let i = $index) {
+        <button
+          type="button"
+          class="morph-menu__item js-morph-item"
+          [class.morph-menu__item--active]="activeIndex === i"
+          [class.morph-menu__item--hovered]="hoverIndex === i"
+          (click)="selectItem(i)"
+          (pointerenter)="onItemEnter(i)"
+          (pointerleave)="onItemLeave()"
+        >
+          <span class="morph-menu__icon" aria-hidden="true">{{ item.icon }}</span>
+          <span class="morph-menu__label">{{ item.label }}</span>
+        </button>
+      }
+    </nav>
+
+    <p class="morph-menu__hint">// hover or click menu items</p>
+  </div>
+</app-lab-demo-layout>

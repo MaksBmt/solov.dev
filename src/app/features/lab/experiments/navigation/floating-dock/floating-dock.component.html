@@ -1,0 +1,30 @@
+<app-lab-demo-layout
+  experimentSlug="floating-dock"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)"
+  (onDrawDebug)="drawDebug($event)">
+
+  <div
+    scene
+    #sceneHost
+    class="floating-dock js-lab-scene"
+    data-debug-vars="--item-scale --icon-scale --magnet-radius"
+  >
+    <div class="floating-dock__dock" role="toolbar" aria-label="Floating dock">
+      @for (item of items; track item.label; let i = $index) {
+        <button
+          type="button"
+          class="floating-dock__item js-dock-item floating-dock__item--{{ item.color }}"
+          [class.floating-dock__item--active]="activeIndex === i"
+          [attr.aria-label]="item.label"
+          (click)="selectItem(i)"
+        >
+          <span class="floating-dock__icon" aria-hidden="true">{{ item.icon }}</span>
+          <span class="floating-dock__tooltip">{{ item.label }}</span>
+        </button>
+      }
+    </div>
+
+    <p class="floating-dock__hint">// move cursor over dock icons</p>
+  </div>
+</app-lab-demo-layout>

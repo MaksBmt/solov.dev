@@ -1,0 +1,97 @@
+.elastic-navigation {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  padding: 28px;
+}
+
+.elastic-navigation__nav {
+  position: relative;
+  display: flex;
+  gap: 4px;
+  padding: 6px;
+  border-radius: 16px;
+  background: rgba(14, 15, 19, 0.88);
+  border: 1px solid rgba(244, 244, 245, 0.08);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+}
+
+.elastic-navigation__indicator {
+  position: absolute;
+  left: 0;
+  top: 6px;
+  width: var(--indicator-w, 80px);
+  height: calc(100% - 12px);
+  transform: translateX(var(--indicator-x, 0));
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.35), rgba(251, 191, 36, 0.1));
+  box-shadow:
+    0 0 20px rgba(245, 158, 11, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  pointer-events: none;
+  will-change: transform, width;
+}
+
+.elastic-navigation__tab {
+  position: relative;
+  z-index: 1;
+  padding: 12px 22px;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  color: #a1a1aa;
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 250ms ease;
+  white-space: nowrap;
+}
+
+.elastic-navigation__tab--active {
+  color: #fef3c7;
+}
+
+.elastic-navigation__tab:hover {
+  color: #e4e4e7;
+}
+
+.elastic-navigation__content {
+  width: min(100%, 420px);
+  padding: 24px;
+  border-radius: 16px;
+  background: rgba(20, 20, 26, 0.6);
+  border: 1px solid rgba(244, 244, 245, 0.06);
+  text-align: center;
+}
+
+.elastic-navigation__panel-title {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #f4f4f5;
+}
+
+.elastic-navigation__panel-text {
+  margin: 0;
+  font-size: 0.84rem;
+  color: #a1a1aa;
+  line-height: 1.5;
+}
+
+.elastic-navigation__hint {
+  position: absolute;
+  bottom: 14px;
+  left: 0;
+  right: 0;
+  margin: 0;
+  text-align: center;
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: #a1a1aa;
+  opacity: 0.75;
+  pointer-events: none;
+}

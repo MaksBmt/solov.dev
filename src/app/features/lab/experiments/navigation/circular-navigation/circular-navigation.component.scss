@@ -1,0 +1,111 @@
+.circular-navigation {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+}
+
+.circular-navigation__stage {
+  position: relative;
+  width: 340px;
+  height: 340px;
+}
+
+.circular-navigation__ring {
+  position: absolute;
+  inset: 0;
+  transition: none;
+  will-change: transform;
+}
+
+.circular-navigation__item {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  margin: -26px 0 0 -26px;
+  padding: 0;
+  border: 1px solid rgba(244, 244, 245, 0.1);
+  border-radius: 50%;
+  background: rgba(20, 20, 26, 0.92);
+  color: #a1a1aa;
+  font-size: 1rem;
+  cursor: pointer;
+  transform:
+    translate(var(--ring-x, 0), var(--ring-y, 0))
+    rotate(calc(-1 * var(--ring-angle, 0deg)))
+    scale(var(--item-scale, 1));
+  transition:
+    background 250ms ease,
+    color 250ms ease,
+    box-shadow 250ms ease;
+}
+
+.circular-navigation__item--active {
+  background: linear-gradient(145deg, rgba(245, 158, 11, 0.3), rgba(14, 15, 19, 0.9));
+  color: #fef3c7;
+  border-color: rgba(245, 158, 11, 0.4);
+  box-shadow: 0 0 24px rgba(245, 158, 11, 0.3);
+}
+
+.circular-navigation__icon {
+  pointer-events: none;
+}
+
+.circular-navigation__center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 120px;
+  height: 120px;
+  margin: -60px 0 0 -60px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(245, 158, 11, 0.15), rgba(14, 15, 19, 0.95));
+  border: 1px solid rgba(244, 244, 245, 0.08);
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+}
+
+.circular-navigation__active-icon {
+  font-size: 1.6rem;
+  color: #fbbf24;
+}
+
+.circular-navigation__active-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #e4e4e7;
+  letter-spacing: 0.04em;
+}
+
+.circular-navigation__hint {
+  position: absolute;
+  bottom: 14px;
+  left: 0;
+  right: 0;
+  margin: 0;
+  text-align: center;
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: #a1a1aa;
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .circular-navigation__item {
+    transition: none;
+  }
+}

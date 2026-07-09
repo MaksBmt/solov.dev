@@ -6,11 +6,10 @@ import { ButtonComponent } from '../../../../../shared/components/button/button.
 /**
  * Shine Sweep — THE.LAB / Hover.
  *
- * Диагональный блик на кнопках через ::before
- * и CSS-переменные из debug-панели.
+ * Диагональный блик: градиент на всю кнопку, проход через background-position.
  */
 const SHINE_WIDTH = 38;
-const SHINE_ANGLE = 35;
+const SHINE_ANGLE = 25;
 const DURATION = 700;
 const SHINE_INTENSITY = 0.7;
 
@@ -53,9 +52,16 @@ export class ShineSweepComponent implements AfterViewInit {
     const el = this.sceneHostRef?.nativeElement;
     if (!el) return;
 
+    const spread = this.shineWidth * 0.32;
+    const core = spread * 0.45;
+
     el.style.setProperty('--shine-width', `${this.shineWidth}%`);
     el.style.setProperty('--shine-angle', `${this.angle}deg`);
     el.style.setProperty('--shine-duration', `${this.duration}ms`);
     el.style.setProperty('--shine-intensity', String(this.intensity.toFixed(2)));
+    el.style.setProperty('--shine-stop-a', `${50 - spread}%`);
+    el.style.setProperty('--shine-stop-b', `${50 - core}%`);
+    el.style.setProperty('--shine-stop-c', `${50 + core}%`);
+    el.style.setProperty('--shine-stop-d', `${50 + spread}%`);
   }
 }

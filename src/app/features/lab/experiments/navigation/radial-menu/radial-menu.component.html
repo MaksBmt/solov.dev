@@ -1,0 +1,40 @@
+<app-lab-demo-layout
+  experimentSlug="radial-menu"
+  (onReset)="reset()"
+  (onParamChange)="onParamChange($event)"
+  (onDrawDebug)="drawDebug($event)">
+
+  <div
+    scene
+    #sceneHost
+    class="radial-menu js-lab-scene"
+    [class.radial-menu--open]="isOpen"
+    data-debug-vars="--radial-radius --radial-duration --spread-angle"
+  >
+    <div class="radial-menu__stage">
+      @for (item of items; track item.label; let i = $index) {
+        <button
+          type="button"
+          class="radial-menu__item js-radial-item"
+          [style]="getItemStyle(i)"
+          [attr.aria-label]="item.label"
+        >
+          <span class="radial-menu__icon" aria-hidden="true">{{ item.icon }}</span>
+          <span class="radial-menu__label">{{ item.label }}</span>
+        </button>
+      }
+
+      <button
+        type="button"
+        class="radial-menu__hub js-radial-hub"
+        [attr.aria-expanded]="isOpen"
+        aria-label="Toggle radial menu"
+        (click)="toggle()"
+      >
+        <span class="radial-menu__hub-icon" aria-hidden="true">{{ isOpen ? '×' : '◎' }}</span>
+      </button>
+    </div>
+
+    <p class="radial-menu__hint">// click center to fan out</p>
+  </div>
+</app-lab-demo-layout>
