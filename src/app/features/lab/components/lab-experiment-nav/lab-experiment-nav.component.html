@@ -10,7 +10,7 @@
       <span class="lab-experiment-nav__counter">{{ n.counter }}</span>
     </header>
 
-    <ul class="lab-experiment-nav__list">
+    <ul #navList class="lab-experiment-nav__list">
       @for (item of n.siblings; track item.slug) {
         <li class="lab-experiment-nav__item">
           @if (item.slug === currentSlug()) {

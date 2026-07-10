@@ -53,6 +53,9 @@
   padding: 4px 2px 8px;
   list-style: none;
   overflow-x: auto;
+  overflow-anchor: none;
+  -webkit-overflow-scrolling: touch;
+  scroll-padding-inline: 16px;
   scrollbar-width: thin;
   scrollbar-color: rgba(245, 158, 11, 0.35) transparent;
 

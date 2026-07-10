@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { LabDemoLayoutComponent } from '../../../shell/lab-demo-layout/lab-demo-layout.component';
+import { bindScenePointer, ScenePointerBinding } from '../../../utils/scene-pointer';
 
 /**
  * Letter Physics — THE.LAB / Typography.
@@ -62,8 +63,7 @@ export class LetterPhysicsComponent implements AfterViewInit, OnDestroy {
   private rafId: number | null = null;
   private resizeObserver: ResizeObserver | null = null;
   private reducedMotion = false;
-  private readonly boundOnPointerMove = (e: PointerEvent) => this.onPointerMove(e);
-  private readonly boundOnPointerLeave = () => this.onPointerLeave();
+  private pointerBinding: ScenePointerBinding | null = null;
 
   ngAfterViewInit() {
     if (!isPlatformBrowser(this.platformId)) return;
@@ -73,8 +73,10 @@ export class LetterPhysicsComponent implements AfterViewInit, OnDestroy {
     if (!this.sceneEl || !this.fieldEl) return;
 
     this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    this.sceneEl.addEventListener('pointermove', this.boundOnPointerMove, { passive: true });
-    this.sceneEl.addEventListener('pointerleave', this.boundOnPointerLeave);
+    this.pointerBinding = bindScenePointer(this.sceneEl, {
+      onMove: (e) => this.onPointerMove(e),
+      onLeave: () => this.onPointerLeave(),
+    });
 
     this.resizeObserver = new ResizeObserver(() => this.layoutLetters());
     this.resizeObserver.observe(this.fieldEl);
@@ -96,8 +98,7 @@ export class LetterPhysicsComponent implements AfterViewInit, OnDestroy {
     if (!isPlatformBrowser(this.platformId)) return;
     if (this.rafId !== null) cancelAnimationFrame(this.rafId);
     this.resizeObserver?.disconnect();
-    this.sceneEl?.removeEventListener('pointermove', this.boundOnPointerMove);
-    this.sceneEl?.removeEventListener('pointerleave', this.boundOnPointerLeave);
+    this.pointerBinding?.unbind();
   }
 
   onPointerMove(event: PointerEvent) {

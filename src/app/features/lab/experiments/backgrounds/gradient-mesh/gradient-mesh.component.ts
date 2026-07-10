@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { LabDemoLayoutComponent } from '../../../shell/lab-demo-layout/lab-demo-layout.component';
+import { bindScenePointer, ScenePointerBinding } from '../../../utils/scene-pointer';
 
 /**
  * Gradient Mesh — THE.LAB / Backgrounds.
@@ -62,8 +63,7 @@ export class GradientMeshComponent implements AfterViewInit, OnDestroy {
   private pointer = { x: 0.5, y: 0.5, active: false };
   private rafId: number | null = null;
   private time = 0;
-  private readonly boundOnPointerMove = (e: PointerEvent) => this.onPointerMove(e);
-  private readonly boundOnPointerLeave = () => this.onPointerLeave();
+  private pointerBinding: ScenePointerBinding | null = null;
 
   ngAfterViewInit() {
     if (!isPlatformBrowser(this.platformId)) return;
@@ -71,8 +71,10 @@ export class GradientMeshComponent implements AfterViewInit, OnDestroy {
     if (!this.sceneEl) return;
 
     this.blobEls = Array.from(this.sceneEl.querySelectorAll<HTMLElement>('.js-mesh-blob'));
-    this.sceneEl.addEventListener('pointermove', this.boundOnPointerMove, { passive: true });
-    this.sceneEl.addEventListener('pointerleave', this.boundOnPointerLeave);
+    this.pointerBinding = bindScenePointer(this.sceneEl, {
+      onMove: (e) => this.onPointerMove(e),
+      onLeave: () => this.onPointerLeave(),
+    });
     this.applyVars();
 
     this.ngZone.runOutsideAngular(() => {
@@ -87,8 +89,7 @@ export class GradientMeshComponent implements AfterViewInit, OnDestroy {
   ngOnDestroy() {
     if (!isPlatformBrowser(this.platformId)) return;
     if (this.rafId !== null) cancelAnimationFrame(this.rafId);
-    this.sceneEl?.removeEventListener('pointermove', this.boundOnPointerMove);
-    this.sceneEl?.removeEventListener('pointerleave', this.boundOnPointerLeave);
+    this.pointerBinding?.unbind();
   }
 
   reset() {

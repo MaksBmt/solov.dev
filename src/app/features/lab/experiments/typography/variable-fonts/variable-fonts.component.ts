@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { LabDemoLayoutComponent } from '../../../shell/lab-demo-layout/lab-demo-layout.component';
+import { bindScenePointer, ScenePointerBinding } from '../../../utils/scene-pointer';
 
 /**
  * Variable Fonts — THE.LAB / Typography.
@@ -56,8 +57,7 @@ export class VariableFontsComponent implements AfterViewInit, OnDestroy {
   private current = { weight: 520, width: 100, slant: -4, gradX: 50, gradY: 50 };
   private rafId: number | null = null;
   private reducedMotion = false;
-  private readonly boundOnPointerMove = (e: PointerEvent) => this.onPointerMove(e);
-  private readonly boundOnPointerLeave = () => this.onPointerLeave();
+  private pointerBinding: ScenePointerBinding | null = null;
 
   ngAfterViewInit() {
     if (!isPlatformBrowser(this.platformId)) return;
@@ -67,8 +67,10 @@ export class VariableFontsComponent implements AfterViewInit, OnDestroy {
     if (!this.sceneEl || !this.typeEl) return;
 
     this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    this.sceneEl.addEventListener('pointermove', this.boundOnPointerMove, { passive: true });
-    this.sceneEl.addEventListener('pointerleave', this.boundOnPointerLeave);
+    this.pointerBinding = bindScenePointer(this.sceneEl, {
+      onMove: (e) => this.onPointerMove(e),
+      onLeave: () => this.onPointerLeave(),
+    });
     this.reset(false);
 
     this.ngZone.runOutsideAngular(() => {
@@ -83,8 +85,7 @@ export class VariableFontsComponent implements AfterViewInit, OnDestroy {
   ngOnDestroy() {
     if (!isPlatformBrowser(this.platformId)) return;
     if (this.rafId !== null) cancelAnimationFrame(this.rafId);
-    this.sceneEl?.removeEventListener('pointermove', this.boundOnPointerMove);
-    this.sceneEl?.removeEventListener('pointerleave', this.boundOnPointerLeave);
+    this.pointerBinding?.unbind();
   }
 
   onPointerMove(event: PointerEvent) {

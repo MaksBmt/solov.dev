@@ -69,6 +69,7 @@
   backdrop-filter: blur(var(--glass-blur, 16px)) saturate(1.4);
   -webkit-backdrop-filter: blur(var(--glass-blur, 16px)) saturate(1.4);
   filter: url(#glass-disp);
+  pointer-events: none;
 }
 
 .glass-refraction__panels {

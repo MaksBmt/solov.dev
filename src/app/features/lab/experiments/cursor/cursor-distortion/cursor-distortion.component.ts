@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { LabDemoLayoutComponent } from '../../../shell/lab-demo-layout/lab-demo-layout.component';
+import { bindScenePointer, ScenePointerBinding } from '../../../utils/scene-pointer';
 
 /**
  * Cursor Distortion — THE.LAB / Cursor.
@@ -64,8 +65,7 @@ export class CursorDistortionComponent implements AfterViewInit, OnDestroy {
   private mapDirty = true;
   private lastMapDataUrl = '';
   private readonly boundTick = () => this.tick();
-  private readonly boundOnPointerMove = (e: PointerEvent) => this.onPointerMove(e);
-  private readonly boundOnPointerLeave = () => this.onPointerLeave();
+  private pointerBinding: ScenePointerBinding | null = null;
 
   ngAfterViewInit() {
     if (!isPlatformBrowser(this.platformId)) return;
@@ -81,9 +81,7 @@ export class CursorDistortionComponent implements AfterViewInit, OnDestroy {
 
     if (!this.sceneEl) return;
 
-    this.sceneEl.removeEventListener('pointermove', this.boundOnPointerMove);
-    this.sceneEl.removeEventListener('pointerdown', this.boundOnPointerMove);
-    this.sceneEl.removeEventListener('pointerleave', this.boundOnPointerLeave);
+    this.pointerBinding?.unbind();
   }
 
   private scheduleSceneInit(attempt = 0) {
@@ -120,9 +118,14 @@ export class CursorDistortionComponent implements AfterViewInit, OnDestroy {
     });
     this.resizeObserver.observe(this.sceneEl);
 
-    this.sceneEl.addEventListener('pointermove', this.boundOnPointerMove, { passive: true });
-    this.sceneEl.addEventListener('pointerdown', this.boundOnPointerMove, { passive: true });
-    this.sceneEl.addEventListener('pointerleave', this.boundOnPointerLeave);
+    this.pointerBinding = bindScenePointer(
+      this.sceneEl,
+      {
+        onMove: (e) => this.onPointerMove(e),
+        onLeave: () => this.onPointerLeave(),
+      },
+      { passive: true },
+    );
 
     this.ngZone.runOutsideAngular(() => {
       this.rafId = requestAnimationFrame(this.boundTick);

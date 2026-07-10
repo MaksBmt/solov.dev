@@ -39,6 +39,7 @@ import { ButtonComponent } from '../../../../shared/components/button/button.com
 import { MarkComponent } from '../../../../shared/components/mark/mark.component';
 import { LayoutComponent } from '../../../../shared/components/layout/layout.component';
 import { PageMetaService } from '../../../../core/services/page-meta.service';
+import { bindScenePointer, ScenePointerBinding } from '../../utils/scene-pointer';
 
 @Component({
   selector: 'app-lab-demo-layout',
@@ -102,8 +103,7 @@ export class LabDemoLayoutComponent implements OnInit, AfterViewInit, OnDestroy 
   private fpsWindowStart = 0;
   private readonly boundTick = () => this.tick();
   private pointer: any = null;
-  private scenePointerMoveHandler?: (e: PointerEvent) => void;
-  private scenePointerLeaveHandler?: () => void;
+  private scenePointerBinding: ScenePointerBinding | null = null;
 
   ngOnInit() {
     this.experiment = getExperiment(this.experimentSlug());
@@ -267,31 +267,23 @@ export class LabDemoLayoutComponent implements OnInit, AfterViewInit, OnDestroy 
     const sceneEl = this.getSceneElement();
     if (!sceneEl) return;
 
-    this.scenePointerMoveHandler = (e: PointerEvent) => {
-      const rect = sceneEl.getBoundingClientRect();
-      this.pointer = {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-      };
-    };
-    this.scenePointerLeaveHandler = () => {
-      this.pointer = null;
-    };
-
-    sceneEl.addEventListener('pointermove', this.scenePointerMoveHandler);
-    sceneEl.addEventListener('pointerleave', this.scenePointerLeaveHandler);
+    this.scenePointerBinding = bindScenePointer(sceneEl, {
+      onMove: (e) => {
+        const rect = sceneEl.getBoundingClientRect();
+        this.pointer = {
+          x: e.clientX - rect.left,
+          y: e.clientY - rect.top,
+        };
+      },
+      onLeave: () => {
+        this.pointer = null;
+      },
+    });
   }
 
   private unbindScenePointerTracking() {
-    const sceneEl = this.getSceneElement();
-    if (!sceneEl) return;
-
-    if (this.scenePointerMoveHandler) {
-      sceneEl.removeEventListener('pointermove', this.scenePointerMoveHandler);
-    }
-    if (this.scenePointerLeaveHandler) {
-      sceneEl.removeEventListener('pointerleave', this.scenePointerLeaveHandler);
-    }
+    this.scenePointerBinding?.unbind();
+    this.scenePointerBinding = null;
   }
 
   initDebugCanvas() {

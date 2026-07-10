@@ -21,6 +21,7 @@
 
 .demo-scene__area--immersive {
   cursor: none;
+  touch-action: none;
 }
 
 .demo-scene__debug {

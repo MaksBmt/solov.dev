@@ -21,6 +21,12 @@ export class MouseTrackerService {
           this.mouseX = event.clientX;
           this.mouseY = event.clientY;
         });
+        window.addEventListener('touchmove', (event) => {
+          if (event.touches.length > 0) {
+            this.mouseX = event.touches[0].clientX;
+            this.mouseY = event.touches[0].clientY;
+          }
+        }, { passive: true });
       });
     }
   }

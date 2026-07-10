@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { LabDemoLayoutComponent } from '../../../shell/lab-demo-layout/lab-demo-layout.component';
+import { bindScenePointer, ScenePointerBinding } from '../../../utils/scene-pointer';
 
 /**
  * Tilt Card — THE.LAB / Hover.
@@ -106,8 +107,7 @@ export class TiltCardComponent implements AfterViewInit, OnDestroy {
   private reducedMotion = false;
 
   private readonly boundTick = () => this.tick();
-  private readonly boundOnPointerMove = (e: PointerEvent) => this.onPointerMove(e);
-  private readonly boundOnPointerLeave = () => this.onPointerLeave();
+  private pointerBinding: ScenePointerBinding | null = null;
 
   ngAfterViewInit() {
     if (!isPlatformBrowser(this.platformId)) return;
@@ -118,8 +118,10 @@ export class TiltCardComponent implements AfterViewInit, OnDestroy {
 
     this.collectItems();
 
-    this.sceneEl.addEventListener('pointermove', this.boundOnPointerMove);
-    this.sceneEl.addEventListener('pointerleave', this.boundOnPointerLeave);
+    this.pointerBinding = bindScenePointer(this.sceneEl, {
+      onMove: (e) => this.onPointerMove(e),
+      onLeave: () => this.onPointerLeave(),
+    });
 
     this.items.forEach((item) => {
       item.element.addEventListener('pointerenter', () => {
@@ -141,8 +143,7 @@ export class TiltCardComponent implements AfterViewInit, OnDestroy {
     if (!isPlatformBrowser(this.platformId)) return;
 
     if (this.rafId !== null) cancelAnimationFrame(this.rafId);
-    this.sceneEl?.removeEventListener('pointermove', this.boundOnPointerMove);
-    this.sceneEl?.removeEventListener('pointerleave', this.boundOnPointerLeave);
+    this.pointerBinding?.unbind();
   }
 
   reset() {
