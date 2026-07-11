@@ -266,7 +266,7 @@ export class StackCardsComponent implements AfterViewInit, OnDestroy {
         card.style.filter = '';
       }
 
-      card.style.zIndex = String(100 + index);
+      card.style.zIndex = String(index + 1);
     });
 
     const maxScroll = this.maxSafeScroll ?? (this.scrollEl.scrollHeight - this.scrollEl.clientHeight);

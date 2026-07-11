@@ -1,0 +1,29 @@
+<div
+  class="featured-slider"
+  (pointerenter)="onPointerEnter()"
+  (pointerleave)="onPointerLeave()"
+  aria-label="Избранные эксперименты Lab"
+>
+  <div class="featured-slider__fade featured-slider__fade--left" aria-hidden="true"></div>
+  <div class="featured-slider__fade featured-slider__fade--right" aria-hidden="true"></div>
+
+  <div class="featured-slider__viewport">
+    <div
+      class="featured-slider__track"
+      [class.featured-slider__track--paused]="paused()"
+      [style.--slide-count]="experiments.length"
+    >
+      @for (experiment of trackExperiments; track $index) {
+        <a
+          class="featured-slider__card"
+          [routerLink]="['/lab', experiment.category, experiment.slug]"
+        >
+          <span class="featured-slider__glow" aria-hidden="true"></span>
+          <span class="featured-slider__category">{{ categoryTitle(experiment.category) }}</span>
+          <span class="featured-slider__title">{{ experiment.title }}</span>
+          <span class="featured-slider__cta" aria-hidden="true">→</span>
+        </a>
+      }
+    </div>
+  </div>
+</div>

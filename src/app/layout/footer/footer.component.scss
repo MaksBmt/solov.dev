@@ -14,6 +14,34 @@
   padding-top: 24px;
 }
 
+.footer--home {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  border-top: 1px solid rgba(245, 158, 11, 0.12);
+  padding-top: 20px;
+}
+
+.footer__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+}
+
+.footer__hint {
+  color: rgba(134, 134, 139, 0.75);
+  font-family: monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+  white-space: nowrap;
+}
+
+.footer__slider {
+  width: 100%;
+}
+
 .footer__start,
 .footer__end {
   display: flex;

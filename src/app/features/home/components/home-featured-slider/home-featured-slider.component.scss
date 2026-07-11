@@ -1,0 +1,201 @@
+@use "../../../../../scss/variable.scss" as *;
+
+.featured-slider {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  mask-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    #000 8%,
+    #000 92%,
+    transparent 100%
+  );
+}
+
+.featured-slider__fade {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: clamp(24px, 6vw, 72px);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.featured-slider__fade--left {
+  left: 0;
+  background: linear-gradient(90deg, rgba(10, 11, 14, 0.95), transparent);
+}
+
+.featured-slider__fade--right {
+  right: 0;
+  background: linear-gradient(270deg, rgba(10, 11, 14, 0.95), transparent);
+}
+
+.featured-slider__viewport {
+  overflow: hidden;
+  padding: 6px 0 2px;
+}
+
+.featured-slider__track {
+  display: flex;
+  gap: 14px;
+  width: max-content;
+  animation: featured-marquee calc(var(--slide-count, 10) * 5s) linear infinite;
+  will-change: transform;
+}
+
+.featured-slider__track--paused {
+  animation-play-state: paused;
+}
+
+.featured-slider__card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+  gap: 4px 12px;
+  flex: 0 0 auto;
+  min-width: min(72vw, 280px);
+  padding: 14px 18px;
+  border: 1px solid rgba(245, 158, 11, 0.22);
+  border-radius: 12px;
+  background:
+    linear-gradient(145deg, rgba(245, 158, 11, 0.08) 0%, transparent 52%),
+    rgba(18, 20, 26, 0.72);
+  backdrop-filter: blur(10px);
+  color: inherit;
+  text-decoration: none;
+  overflow: hidden;
+  transition:
+    border-color 0.35s ease,
+    box-shadow 0.35s ease,
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      120deg,
+      transparent 20%,
+      rgba(245, 158, 11, 0.55) 50%,
+      transparent 80%
+    );
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+  }
+
+  &:hover,
+  &:focus-visible {
+    border-color: rgba(245, 158, 11, 0.55);
+    box-shadow:
+      0 12px 28px rgba(0, 0, 0, 0.42),
+      0 0 24px rgba(245, 158, 11, 0.18);
+    transform: translateY(-4px) scale(1.02);
+
+    &::before {
+      opacity: 1;
+    }
+
+    .featured-slider__glow {
+      opacity: 1;
+    }
+
+    .featured-slider__title {
+      color: var(--accent-soft);
+    }
+
+    .featured-slider__cta {
+      transform: translateX(4px);
+      color: var(--accent-amber);
+      text-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
+    }
+  }
+}
+
+.featured-slider__glow {
+  position: absolute;
+  inset: -40%;
+  background: radial-gradient(circle at 50% 50%, rgba(245, 158, 11, 0.16), transparent 62%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+.featured-slider__category {
+  grid-column: 1 / -1;
+  color: var(--accent-amber);
+  font-family: monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.featured-slider__title {
+  color: var(--text-ivory);
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.3;
+  transition: color 0.3s ease;
+}
+
+.featured-slider__cta {
+  align-self: center;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.3s ease,
+    text-shadow 0.3s ease;
+}
+
+@keyframes featured-marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (min-width: $tablet) {
+  .featured-slider__card {
+    min-width: 300px;
+    padding: 16px 20px;
+  }
+
+  .featured-slider__title {
+    font-size: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .featured-slider__track {
+    animation: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .featured-slider__card {
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover,
+    &:focus-visible {
+      transform: none;
+    }
+  }
+
+  .featured-slider__cta {
+    transition: color 0.2s ease;
+  }
+}

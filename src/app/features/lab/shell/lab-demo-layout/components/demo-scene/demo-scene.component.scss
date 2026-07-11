@@ -9,6 +9,8 @@
 
 .demo-scene__area {
   position: relative;
+  z-index: 0;
+  isolation: isolate;
   min-height: 420px;
   height: clamp(420px, 62vh, 640px);
   border: 1px solid rgba(245, 158, 11, 0.18);

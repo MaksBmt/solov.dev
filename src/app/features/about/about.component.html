@@ -2,13 +2,65 @@
   <div header>
     <app-header></app-header>
   </div>
+
   <div main>
-    <section class="section-page">
-      <h1 appTitle>{{ title() }}</h1>
-      <p class="section-page__lead">{{ lead() }}</p>
-    </section>
+    <article class="page-content">
+      <app-breadcrumbs [items]="breadcrumbs"></app-breadcrumbs>
+
+      <header class="page-hero page-reveal" appRevealOnScroll>
+        <p class="page-hero__eyebrow page-reveal__line" style="--line-index: 0">
+          <span appMark>[</span>ОБО МНЕ<span appMark>]</span>
+        </p>
+        <h1 appTitle class="page-hero__title page-reveal__line" style="--line-index: 1">
+          Frontend-разработчик<br>с <span appHighlight>широкой базой</span>.
+        </h1>
+        <p class="page-hero__lead page-reveal__line" style="--line-index: 2">
+          Меня зовут Соловьев Максим — frontend-разработчик с большим опытом. Начинал
+          в эпоху, когда строгого деления по технологиям ещё не было: работали
+          «веб-мастерами», и приходилось разбираться во всём сразу — от вёрстки
+          до серверной части. Знаком с PHP и базами данных.
+        </p>
+        <p class="page-hero__lead page-reveal__line" style="--line-index: 3">
+          Сейчас основной фокус — вёрстка и нативный JavaScript. Имею опыт с Vue,
+          активно развиваюсь в Angular — в том числе на этом сайте.
+        </p>
+      </header>
+
+      @for (block of blocks; track block.eyebrow) {
+        <section class="page-section page-reveal" appRevealOnScroll>
+          <p class="page-section__eyebrow page-reveal__line" style="--line-index: 0">{{ block.eyebrow }}</p>
+          <h2 class="page-section__title page-reveal__line" style="--line-index: 1">{{ block.title }}</h2>
+
+          @if (block.tags) {
+            <app-tech-tags
+              class="page-section__tags page-reveal__line"
+              style="--line-index: 2"
+              [tags]="block.tags">
+            </app-tech-tags>
+          }
+
+          @for (paragraph of block.paragraphs; track paragraph; let pi = $index) {
+            <p
+              class="page-section__text page-reveal__line"
+              [style.--line-index]="(block.tags ? 3 : 2) + pi">
+              {{ paragraph }}
+            </p>
+          }
+
+          @if (block.link) {
+            <a
+              class="page-section__link page-reveal__line"
+              [style.--line-index]="(block.tags ? 3 : 2) + block.paragraphs.length"
+              [routerLink]="block.link.path">
+              <span appMark>[</span>{{ block.link.label }}<span appMark>]</span>
+            </a>
+          }
+        </section>
+      }
+    </article>
   </div>
+
   <div footer>
-    <app-footer type="section"></app-footer>
+    <app-footer type="home"></app-footer>
   </div>
 </app-layout>

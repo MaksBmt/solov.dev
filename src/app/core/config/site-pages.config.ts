@@ -5,6 +5,11 @@ export interface SitePageConfig extends PageMeta {
   label: string;
 }
 
+export interface BreadcrumbItem {
+  label: string;
+  url?: string;
+}
+
 export const SITE_PAGES: Record<string, SitePageConfig> = {
   home: {
     path: '',
@@ -14,9 +19,10 @@ export const SITE_PAGES: Record<string, SitePageConfig> = {
   },
   projects: {
     path: 'projects',
-    label: 'Projects',
-    title: 'Projects — Solov.dev',
-    description: 'Подборка проектов и кейсов: от прототипов до production-ready интерфейсов.',
+    label: 'О проекте',
+    title: 'О проекте — Solov.dev',
+    description:
+      'Интерактивное портфолио frontend-инженера на Angular: SSR, ленивая загрузка, Signals и лаборатория UI-экспериментов без библиотек.',
   },
   lab: {
     path: 'lab',
@@ -26,18 +32,31 @@ export const SITE_PAGES: Record<string, SitePageConfig> = {
   },
   about: {
     path: 'about',
-    label: 'About',
-    title: 'About — Solov.dev',
-    description: 'Опыт, подход к разработке и инженерные принципы.',
+    label: 'Обо мне',
+    title: 'Обо мне — Solov.dev',
+    description:
+      'Соловьев Максим — frontend-разработчик: вёрстка, нативный JavaScript, Vue, Angular. Опыт от HTML/CSS до сборки проектов на Webpack и Vite.',
   },
   contact: {
     path: 'contact',
-    label: 'Contact',
-    title: 'Contact — Solov.dev',
-    description: 'Связаться для сотрудничества, консультаций или обсуждения проекта.',
+    label: 'Контакт',
+    title: 'Контакт — Solov.dev',
+    description: 'Контакты: Telegram t.me/solov_one, email msolov.one@gmail.com.',
   },
 };
 
 export function getSitePage(key: string): SitePageConfig | null {
   return SITE_PAGES[key] ?? null;
+}
+
+export function getSitePageBreadcrumbs(pageKey: string): BreadcrumbItem[] {
+  const page = SITE_PAGES[pageKey];
+  if (!page) {
+    return [{ label: SITE_PAGES['home'].label, url: '/' }];
+  }
+
+  return [
+    { label: SITE_PAGES['home'].label, url: '/' },
+    { label: page.label },
+  ];
 }

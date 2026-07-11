@@ -28,7 +28,14 @@
   }
 }
 
+.layout__header {
+  position: relative;
+  z-index: var(--z-header);
+}
+
 .layout__main {
+  position: relative;
+  z-index: 0;
   width: 100%;
   flex: 1;
   display: flex;

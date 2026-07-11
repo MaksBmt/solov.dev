@@ -1,8 +1,18 @@
-<footer class="footer footer--section">
-  <div class="footer__start">
-    <span class="footer__indicator">01 / FEATURED PROJECTS</span>
-  </div>
-  <div class="footer__end">
-    <app-controls></app-controls>
-  </div>
-</footer>
+@if (variant() === 'home') {
+  <footer class="footer footer--home">
+    <div class="footer__header">
+      <span class="footer__indicator">LAB / FEATURED</span>
+      <span class="footer__hint">наведите, чтобы остановить</span>
+    </div>
+    <app-home-featured-slider class="footer__slider"></app-home-featured-slider>
+  </footer>
+} @else {
+  <footer class="footer footer--section">
+    <div class="footer__start">
+      <span class="footer__indicator">01 / FEATURED PROJECTS</span>
+    </div>
+    <div class="footer__end">
+      <app-controls></app-controls>
+    </div>
+  </footer>
+}

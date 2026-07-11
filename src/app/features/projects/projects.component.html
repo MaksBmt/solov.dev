@@ -2,13 +2,60 @@
   <div header>
     <app-header></app-header>
   </div>
+
   <div main>
-    <section class="section-page">
-      <h1 appTitle>{{ title() }}</h1>
-      <p class="section-page__lead">{{ lead() }}</p>
-    </section>
+    <article class="page-content">
+      <app-breadcrumbs [items]="breadcrumbs"></app-breadcrumbs>
+
+      <header class="page-hero page-reveal" appRevealOnScroll>
+        <p class="page-hero__eyebrow page-reveal__line" style="--line-index: 0">
+          <span appMark>[</span>О ПРОЕКТЕ<span appMark>]</span>
+        </p>
+        <h1 appTitle class="page-hero__title page-reveal__line" style="--line-index: 1">
+          Возможности <span appHighlight>разработчика</span>,<br>не каталог шаблонов.
+        </h1>
+        <p class="page-hero__lead page-reveal__line" style="--line-index: 2">
+          Solov.dev — интерактивное портфолио frontend-инженера. Сайт задуман как
+          доказательство компетенций: архитектура, анимации, производительность
+          и инженерная дисциплина — в одном живом продукте.
+        </p>
+      </header>
+
+      @for (block of blocks; track block.eyebrow) {
+        <section class="page-section page-reveal" appRevealOnScroll>
+          <p class="page-section__eyebrow page-reveal__line" style="--line-index: 0">{{ block.eyebrow }}</p>
+          <h2 class="page-section__title page-reveal__line" style="--line-index: 1">{{ block.title }}</h2>
+
+          @if (block.tags) {
+            <app-tech-tags
+              class="page-section__tags page-reveal__line"
+              style="--line-index: 2"
+              [tags]="block.tags">
+            </app-tech-tags>
+          }
+
+          @for (paragraph of block.paragraphs; track paragraph; let pi = $index) {
+            <p
+              class="page-section__text page-reveal__line"
+              [style.--line-index]="(block.tags ? 3 : 2) + pi">
+              {{ paragraph }}
+            </p>
+          }
+
+          @if (block.link) {
+            <a
+              class="page-section__link page-reveal__line"
+              [style.--line-index]="(block.tags ? 3 : 2) + block.paragraphs.length"
+              [routerLink]="block.link.path">
+              <span appMark>[</span>{{ block.link.label }}<span appMark>]</span>
+            </a>
+          }
+        </section>
+      }
+    </article>
   </div>
+
   <div footer>
-    <app-footer type="section"></app-footer>
+    <app-footer type="home"></app-footer>
   </div>
 </app-layout>

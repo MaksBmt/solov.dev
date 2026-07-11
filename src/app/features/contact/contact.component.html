@@ -2,13 +2,51 @@
   <div header>
     <app-header></app-header>
   </div>
+
   <div main>
-    <section class="section-page">
-      <h1 appTitle>{{ title() }}</h1>
-      <p class="section-page__lead">{{ lead() }}</p>
-    </section>
+    <article class="page-content">
+      <app-breadcrumbs [items]="breadcrumbs"></app-breadcrumbs>
+
+      <header class="page-hero page-reveal" appRevealOnScroll>
+        <p class="page-hero__eyebrow page-reveal__line" style="--line-index: 0">
+          <span appMark>[</span>КОНТАКТ<span appMark>]</span>
+        </p>
+        <h1 appTitle class="page-hero__title page-reveal__line" style="--line-index: 1">
+          Как связаться<br>со <span appHighlight>мной</span>.
+        </h1>
+        <p class="page-hero__lead page-reveal__line" style="--line-index: 2">
+          Если нужно связаться — ниже удобные и доступные способы.
+          Обычно отвечаю быстро.
+        </p>
+      </header>
+
+      @for (block of blocks; track block.eyebrow) {
+        <section class="page-section page-reveal" appRevealOnScroll>
+          <p class="page-section__eyebrow page-reveal__line" style="--line-index: 0">{{ block.eyebrow }}</p>
+          <h2 class="page-section__title page-reveal__line" style="--line-index: 1">{{ block.title }}</h2>
+
+          @for (paragraph of block.paragraphs; track paragraph; let pi = $index) {
+            <p
+              class="page-section__text page-reveal__line"
+              [style.--line-index]="2 + pi">
+              {{ paragraph }}
+            </p>
+          }
+
+          <a
+            class="page-section__link page-reveal__line"
+            [style.--line-index]="2 + block.paragraphs.length"
+            [href]="block.href"
+            [attr.target]="block.external ? '_blank' : null"
+            [attr.rel]="block.external ? 'noopener noreferrer' : null">
+            <span appMark>[</span>{{ block.linkLabel }}<span appMark>]</span>
+          </a>
+        </section>
+      }
+    </article>
   </div>
+
   <div footer>
-    <app-footer type="section"></app-footer>
+    <app-footer type="home"></app-footer>
   </div>
 </app-layout>

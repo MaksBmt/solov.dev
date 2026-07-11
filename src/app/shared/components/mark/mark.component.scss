@@ -5,4 +5,10 @@
 :host-context(.button) {
   color: var(--accent-soft);
   margin: 0 4px;
+  transition: color 0.3s ease;
+}
+
+:host-context(.button:hover),
+:host-context(.button:focus-visible) {
+  color: var(--accent-amber);
 }
