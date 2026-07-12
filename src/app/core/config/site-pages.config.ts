@@ -22,7 +22,7 @@ export const SITE_PAGES: Record<string, SitePageConfig> = {
     label: 'О проекте',
     title: 'О проекте — Solov.dev',
     description:
-      'Интерактивное портфолио frontend-инженера на Angular: SSR, ленивая загрузка, Signals и лаборатория UI-экспериментов без библиотек.',
+      'Интерактивное портфолио frontend-инженера с лабораторией UI-экспериментов THE.LAB: 50+ эффектов на чистом CSS и JavaScript внутри Angular-приложения с SSR.',
   },
   lab: {
     path: 'lab',

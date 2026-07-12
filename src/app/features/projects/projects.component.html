@@ -15,9 +15,9 @@
           Возможности <span appHighlight>разработчика</span>,<br>не каталог шаблонов.
         </h1>
         <p class="page-hero__lead page-reveal__line" style="--line-index: 2">
-          Solov.dev — интерактивное портфолио frontend-инженера. Сайт задуман как
-          доказательство компетенций: архитектура, анимации, производительность
-          и инженерная дисциплина — в одном живом продукте.
+          Интерактивное портфолио frontend-инженера Максима Соловьёва с лабораторией
+          UI-экспериментов THE.LAB — коллекцией интерактивных эффектов на чистом CSS
+          и нативном JavaScript, собранной внутри Angular-приложения с серверным рендерингом.
           Исходный код — в открытом репозитории на
           <a
             class="page-hero__link"
@@ -50,10 +50,16 @@
             </p>
           }
 
+          @if (block.code) {
+            <pre
+              class="page-section__code page-reveal__line"
+              [style.--line-index]="(block.tags ? 3 : 2) + block.paragraphs.length">{{ block.code }}</pre>
+          }
+
           @if (block.link) {
             <a
               class="page-section__link page-reveal__line"
-              [style.--line-index]="(block.tags ? 3 : 2) + block.paragraphs.length"
+              [style.--line-index]="(block.tags ? 3 : 2) + block.paragraphs.length + (block.code ? 1 : 0)"
               [routerLink]="block.link.path">
               <span appMark>[</span>{{ block.link.label }}<span appMark>]</span>
             </a>
