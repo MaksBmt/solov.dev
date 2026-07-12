@@ -3,7 +3,6 @@ import {
   AfterViewInit,
   OnDestroy,
   PLATFORM_ID,
-  NgZone,
   ViewChild,
   ElementRef,
   inject,
@@ -20,7 +19,6 @@ import { LabDemoLayoutComponent } from '../../../shell/lab-demo-layout/lab-demo-
 const CYCLE_MS = 2800;
 const STAGGER_MS = 38;
 const ENTER_Y = 110;
-const EXIT_Y = -90;
 const DURATION = 520;
 
 interface Headline {
@@ -38,7 +36,6 @@ interface Headline {
 })
 export class AnimatedHeadlinesComponent implements AfterViewInit, OnDestroy {
   private readonly platformId = inject(PLATFORM_ID);
-  private readonly ngZone = inject(NgZone);
 
   @ViewChild('sceneHost') sceneHostRef!: ElementRef<HTMLElement>;
 
@@ -57,7 +54,7 @@ export class AnimatedHeadlinesComponent implements AfterViewInit, OnDestroy {
   activeIndex = 0;
   prevIndex = -1;
   phase: 'enter' | 'exit' = 'enter';
-  chars: string[] = [];
+  chars: string[] = this.headlines[0].text.split('');
   prevChars: string[] = [];
 
   private sceneEl: HTMLElement | null = null;
@@ -70,12 +67,9 @@ export class AnimatedHeadlinesComponent implements AfterViewInit, OnDestroy {
 
     this.sceneEl = this.sceneHostRef?.nativeElement ?? null;
     this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    this.chars = this.headlines[0].text.split('');
     this.applyVars();
 
-    if (!this.reducedMotion) {
-      this.cycleTimerId = setInterval(() => this.nextHeadline(), this.cycleMs);
-    }
+    this.startCycleTimer();
   }
 
   ngOnDestroy() {
@@ -84,6 +78,8 @@ export class AnimatedHeadlinesComponent implements AfterViewInit, OnDestroy {
   }
 
   nextHeadline() {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     this.prevIndex = this.activeIndex;
     this.prevChars = this.headlines[this.activeIndex].text.split('');
     this.phase = 'enter';
@@ -119,18 +115,13 @@ export class AnimatedHeadlinesComponent implements AfterViewInit, OnDestroy {
     this.prevChars = [];
     this.applyVars();
 
-    if (!this.reducedMotion) {
-      this.cycleTimerId = setInterval(() => this.nextHeadline(), this.cycleMs);
-    }
+    this.startCycleTimer();
   }
 
   onParamChange(detail: { id: string; value: number }) {
     if (detail.id === 'cycleMs') {
       this.cycleMs = detail.value;
-      if (this.cycleTimerId !== null) clearInterval(this.cycleTimerId);
-      if (!this.reducedMotion) {
-        this.cycleTimerId = setInterval(() => this.nextHeadline(), this.cycleMs);
-      }
+      this.startCycleTimer();
     }
     if (detail.id === 'staggerMs') this.staggerMs = detail.value;
     if (detail.id === 'enterY') this.enterY = detail.value;
@@ -138,12 +129,11 @@ export class AnimatedHeadlinesComponent implements AfterViewInit, OnDestroy {
     this.applyVars();
   }
 
-  charDelay(index: number, mode: 'enter' | 'exit') {
-    const base = index * this.staggerMs;
-    return mode === 'exit' ? `${base * 0.7}ms` : `${base}ms`;
+  exitDelay(index: number) {
+    return Math.round(index * this.staggerMs * 0.7);
   }
 
-  activeAccent() {
+  get activeAccent() {
     return this.headlines[this.activeIndex]?.accent ?? 'amber';
   }
 
@@ -152,5 +142,12 @@ export class AnimatedHeadlinesComponent implements AfterViewInit, OnDestroy {
     this.sceneEl.style.setProperty('--headline-enter-y', `${this.enterY}%`);
     this.sceneEl.style.setProperty('--headline-exit-y', `${ENTER_Y * -0.8}%`);
     this.sceneEl.style.setProperty('--headline-duration', `${this.duration}ms`);
+  }
+
+  private startCycleTimer() {
+    if (!isPlatformBrowser(this.platformId) || this.reducedMotion) return;
+
+    if (this.cycleTimerId !== null) clearInterval(this.cycleTimerId);
+    this.cycleTimerId = setInterval(() => this.nextHeadline(), this.cycleMs);
   }
 }

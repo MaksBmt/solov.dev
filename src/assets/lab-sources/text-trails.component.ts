@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { LabDemoLayoutComponent } from '../../../shell/lab-demo-layout/lab-demo-layout.component';
+import { bindScenePointer, ScenePointerBinding } from '../../../utils/scene-pointer';
 
 /**
  * Text Trails — THE.LAB / Typography.
@@ -68,8 +69,9 @@ export class TextTrailsComponent implements AfterViewInit, OnDestroy {
   private resizeObserver: ResizeObserver | null = null;
   private reducedMotion = false;
   private initialized = false;
-  private readonly boundOnPointerMove = (e: PointerEvent) => this.onPointerMove(e);
-  private readonly boundOnPointerLeave = () => this.onPointerLeave();
+  private pointerBinding: ScenePointerBinding | null = null;
+  private initRafId: number | null = null;
+  private destroyed = false;
 
   ngAfterViewInit() {
     if (!isPlatformBrowser(this.platformId)) return;
@@ -77,16 +79,18 @@ export class TextTrailsComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.destroyed = true;
     if (!isPlatformBrowser(this.platformId)) return;
+    if (this.initRafId !== null) cancelAnimationFrame(this.initRafId);
     if (this.rafId !== null) cancelAnimationFrame(this.rafId);
     this.resizeObserver?.disconnect();
-    this.sceneEl?.removeEventListener('pointermove', this.boundOnPointerMove);
-    this.sceneEl?.removeEventListener('pointerleave', this.boundOnPointerLeave);
+    this.pointerBinding?.unbind();
   }
 
   private scheduleInit(attempt = 0) {
+    if (this.destroyed) return;
     if (this.initScene() || attempt >= 30) return;
-    requestAnimationFrame(() => this.scheduleInit(attempt + 1));
+    this.initRafId = requestAnimationFrame(() => this.scheduleInit(attempt + 1));
   }
 
   private initScene(): boolean {
@@ -108,8 +112,10 @@ export class TextTrailsComponent implements AfterViewInit, OnDestroy {
     this.resizeObserver.observe(this.sceneEl);
 
     this.ngZone.runOutsideAngular(() => {
-      this.sceneEl!.addEventListener('pointermove', this.boundOnPointerMove, { passive: true });
-      this.sceneEl!.addEventListener('pointerleave', this.boundOnPointerLeave);
+      this.pointerBinding = bindScenePointer(this.sceneEl!, {
+        onMove: (e) => this.onPointerMove(e),
+        onLeave: () => this.onPointerLeave(),
+      });
       const loop = () => {
         this.tick();
         this.rafId = requestAnimationFrame(loop);
@@ -123,8 +129,9 @@ export class TextTrailsComponent implements AfterViewInit, OnDestroy {
 
   onPointerMove(event: PointerEvent) {
     if (!this.sceneEl || this.reducedMotion) return;
-    const x = event.offsetX;
-    const y = event.offsetY;
+    const rect = this.sceneEl.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
     this.pointer = { x, y };
     if (!this.emitReady) {
       this.emit.x = x;

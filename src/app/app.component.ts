@@ -1,9 +1,8 @@
-import { Component, PLATFORM_ID, Renderer2, afterNextRender, inject } from '@angular/core';
+import { Component, PLATFORM_ID, Renderer2, inject } from '@angular/core';
 import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { CommonModule, isPlatformBrowser, DOCUMENT } from '@angular/common';
 import { filter } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FaviconAnimatorService } from './core/services/favicon-animator.service';
 
 @Component({
   selector: 'app-root',
@@ -16,13 +15,8 @@ export class AppComponent {
   private readonly document = inject(DOCUMENT);
   private readonly renderer = inject(Renderer2);
   private readonly router = inject(Router);
-  private readonly faviconAnimator = inject(FaviconAnimatorService);
 
   constructor() {
-    afterNextRender(() => {
-      this.faviconAnimator.init();
-    });
-
     this.router.events.pipe(
       filter((event): event is NavigationEnd => event instanceof NavigationEnd),
       takeUntilDestroyed()

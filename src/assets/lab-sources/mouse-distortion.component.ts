@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { LabDemoLayoutComponent } from '../../../shell/lab-demo-layout/lab-demo-layout.component';
+import { bindScenePointer, ScenePointerBinding } from '../../../utils/scene-pointer';
 
 /**
  * Mouse Distortion — THE.LAB / Typography.
@@ -62,8 +63,9 @@ export class MouseDistortionComponent implements AfterViewInit, OnDestroy {
   private mapDirty = true;
   private lastMapDataUrl = '';
   private readonly boundTick = () => this.tick();
-  private readonly boundOnPointerMove = (e: PointerEvent) => this.onPointerMove(e);
-  private readonly boundOnPointerLeave = () => this.onPointerLeave();
+  private pointerBinding: ScenePointerBinding | null = null;
+  private initRafId: number | null = null;
+  private destroyed = false;
 
   ngAfterViewInit() {
     if (!isPlatformBrowser(this.platformId)) return;
@@ -71,20 +73,19 @@ export class MouseDistortionComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.destroyed = true;
     if (!isPlatformBrowser(this.platformId)) return;
+    if (this.initRafId !== null) cancelAnimationFrame(this.initRafId);
     if (this.rafId !== null) cancelAnimationFrame(this.rafId);
     if (this.resizeRafId !== null) cancelAnimationFrame(this.resizeRafId);
     this.resizeObserver?.disconnect();
-    if (!this.sceneEl) return;
-    this.sceneEl.removeEventListener('pointermove', this.boundOnPointerMove);
-    this.sceneEl.removeEventListener('pointerdown', this.boundOnPointerMove);
-    this.sceneEl.removeEventListener('pointerleave', this.boundOnPointerLeave);
+    this.pointerBinding?.unbind();
   }
 
   private scheduleSceneInit(attempt = 0) {
-    if (!isPlatformBrowser(this.platformId)) return;
+    if (!isPlatformBrowser(this.platformId) || this.destroyed) return;
     if (this.initScene() || attempt >= SCENE_INIT_MAX_ATTEMPTS) return;
-    requestAnimationFrame(() => this.scheduleSceneInit(attempt + 1));
+    this.initRafId = requestAnimationFrame(() => this.scheduleSceneInit(attempt + 1));
   }
 
   private initScene(): boolean {
@@ -115,9 +116,10 @@ export class MouseDistortionComponent implements AfterViewInit, OnDestroy {
     });
     this.resizeObserver.observe(this.sceneEl);
 
-    this.sceneEl.addEventListener('pointermove', this.boundOnPointerMove, { passive: true });
-    this.sceneEl.addEventListener('pointerdown', this.boundOnPointerMove, { passive: true });
-    this.sceneEl.addEventListener('pointerleave', this.boundOnPointerLeave);
+    this.pointerBinding = bindScenePointer(this.sceneEl, {
+      onMove: (e) => this.onPointerMove(e),
+      onLeave: () => this.onPointerLeave(),
+    });
 
     this.ngZone.runOutsideAngular(() => {
       this.rafId = requestAnimationFrame(this.boundTick);

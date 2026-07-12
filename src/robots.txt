@@ -1,0 +1,17 @@
+# Статический robots.txt — отдаётся как файл, без нагрузки на сервер.
+# https://solov.dev
+
+Sitemap: https://solov.dev/sitemap.xml
+
+User-agent: *
+Allow: /
+Disallow: /assets/lab-sources/
+
+User-agent: Googlebot
+Allow: /
+Disallow: /assets/lab-sources/
+
+User-agent: Yandex
+Allow: /
+Disallow: /assets/lab-sources/
+Crawl-delay: 2

@@ -64,6 +64,8 @@ export class LiquidCursorComponent implements AfterViewInit, OnDestroy {
   private initialized = false;
   private readonly boundTick = () => this.tick();
   private pointerBinding: ScenePointerBinding | null = null;
+  private initRafId: number | null = null;
+  private destroyed = false;
 
   ngAfterViewInit() {
     if (!isPlatformBrowser(this.platformId)) return;
@@ -71,9 +73,10 @@ export class LiquidCursorComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.destroyed = true;
     if (!isPlatformBrowser(this.platformId)) return;
+    if (this.initRafId !== null) cancelAnimationFrame(this.initRafId);
     if (this.rafId !== null) cancelAnimationFrame(this.rafId);
-    if (!this.sceneEl) return;
 
     this.pointerBinding?.unbind();
     this.blobs.forEach((blob) => blob.element.remove());
@@ -81,9 +84,9 @@ export class LiquidCursorComponent implements AfterViewInit, OnDestroy {
   }
 
   private scheduleSceneInit(attempt = 0) {
-    if (!isPlatformBrowser(this.platformId)) return;
+    if (!isPlatformBrowser(this.platformId) || this.destroyed) return;
     if (this.initScene() || attempt >= SCENE_INIT_MAX_ATTEMPTS) return;
-    requestAnimationFrame(() => this.scheduleSceneInit(attempt + 1));
+    this.initRafId = requestAnimationFrame(() => this.scheduleSceneInit(attempt + 1));
   }
 
   private initScene(): boolean {

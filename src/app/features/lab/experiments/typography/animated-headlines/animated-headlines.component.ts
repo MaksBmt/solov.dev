@@ -69,9 +69,7 @@ export class AnimatedHeadlinesComponent implements AfterViewInit, OnDestroy {
     this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     this.applyVars();
 
-    if (!this.reducedMotion) {
-      this.cycleTimerId = setInterval(() => this.nextHeadline(), this.cycleMs);
-    }
+    this.startCycleTimer();
   }
 
   ngOnDestroy() {
@@ -80,6 +78,8 @@ export class AnimatedHeadlinesComponent implements AfterViewInit, OnDestroy {
   }
 
   nextHeadline() {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     this.prevIndex = this.activeIndex;
     this.prevChars = this.headlines[this.activeIndex].text.split('');
     this.phase = 'enter';
@@ -115,18 +115,13 @@ export class AnimatedHeadlinesComponent implements AfterViewInit, OnDestroy {
     this.prevChars = [];
     this.applyVars();
 
-    if (!this.reducedMotion) {
-      this.cycleTimerId = setInterval(() => this.nextHeadline(), this.cycleMs);
-    }
+    this.startCycleTimer();
   }
 
   onParamChange(detail: { id: string; value: number }) {
     if (detail.id === 'cycleMs') {
       this.cycleMs = detail.value;
-      if (this.cycleTimerId !== null) clearInterval(this.cycleTimerId);
-      if (!this.reducedMotion) {
-        this.cycleTimerId = setInterval(() => this.nextHeadline(), this.cycleMs);
-      }
+      this.startCycleTimer();
     }
     if (detail.id === 'staggerMs') this.staggerMs = detail.value;
     if (detail.id === 'enterY') this.enterY = detail.value;
@@ -147,5 +142,12 @@ export class AnimatedHeadlinesComponent implements AfterViewInit, OnDestroy {
     this.sceneEl.style.setProperty('--headline-enter-y', `${this.enterY}%`);
     this.sceneEl.style.setProperty('--headline-exit-y', `${ENTER_Y * -0.8}%`);
     this.sceneEl.style.setProperty('--headline-duration', `${this.duration}ms`);
+  }
+
+  private startCycleTimer() {
+    if (!isPlatformBrowser(this.platformId) || this.reducedMotion) return;
+
+    if (this.cycleTimerId !== null) clearInterval(this.cycleTimerId);
+    this.cycleTimerId = setInterval(() => this.nextHeadline(), this.cycleMs);
   }
 }

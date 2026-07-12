@@ -4,7 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "npm run sync:lab-sources && ng serve",
-    "build": "ng build",
+    "build": "npm run generate:sitemap && ng build",
+    "generate:sitemap": "node scripts/generate-sitemap.js",
     "sync:lab-sources": "node scripts/sync-lab-sources.js",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",

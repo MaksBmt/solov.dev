@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { LabDemoLayoutComponent } from '../../../shell/lab-demo-layout/lab-demo-layout.component';
+import { bindScenePointer, ScenePointerBinding } from '../../../utils/scene-pointer';
 
 /**
  * Noise — THE.LAB / Backgrounds.
@@ -53,8 +54,7 @@ export class NoiseComponent implements AfterViewInit, OnDestroy {
   private resizeObserver: ResizeObserver | null = null;
   private reducedMotion = false;
   private frame = 0;
-  private readonly boundOnPointerMove = (e: PointerEvent) => this.onPointerMove(e);
-  private readonly boundOnPointerLeave = () => this.onPointerLeave();
+  private pointerBinding: ScenePointerBinding | null = null;
 
   ngAfterViewInit() {
     if (!isPlatformBrowser(this.platformId)) return;
@@ -65,8 +65,7 @@ export class NoiseComponent implements AfterViewInit, OnDestroy {
     if (!isPlatformBrowser(this.platformId)) return;
     if (this.rafId !== null) cancelAnimationFrame(this.rafId);
     this.resizeObserver?.disconnect();
-    this.sceneEl?.removeEventListener('pointermove', this.boundOnPointerMove);
-    this.sceneEl?.removeEventListener('pointerleave', this.boundOnPointerLeave);
+    this.pointerBinding?.unbind();
   }
 
   reset() {
@@ -99,8 +98,10 @@ export class NoiseComponent implements AfterViewInit, OnDestroy {
     this.resizeObserver = new ResizeObserver(() => this.resizeCanvas());
     this.resizeObserver.observe(this.sceneEl);
 
-    this.sceneEl.addEventListener('pointermove', this.boundOnPointerMove, { passive: true });
-    this.sceneEl.addEventListener('pointerleave', this.boundOnPointerLeave);
+    this.pointerBinding = bindScenePointer(this.sceneEl, {
+      onMove: (e) => this.onPointerMove(e),
+      onLeave: () => this.onPointerLeave(),
+    });
 
     this.ngZone.runOutsideAngular(() => {
       const loop = () => {

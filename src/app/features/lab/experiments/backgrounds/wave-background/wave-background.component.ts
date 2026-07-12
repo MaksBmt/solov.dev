@@ -64,6 +64,7 @@ export class WaveBackgroundComponent implements AfterViewInit, OnDestroy {
   private height = 0;
   private lastRippleTime = 0;
   private pointerBinding: ScenePointerBinding | null = null;
+  private layerGradients: (CanvasGradient | null)[] = [];
 
   ngAfterViewInit() {
     if (!isPlatformBrowser(this.platformId)) return;
@@ -169,8 +170,6 @@ export class WaveBackgroundComponent implements AfterViewInit, OnDestroy {
     const baseY = this.height * 0.55;
 
     for (let layer = 0; layer < this.waveCount; layer += 1) {
-      const hue = 200 + layer * 18;
-      const alpha = 0.15 + layer * 0.08;
       const yOffset = layer * 18;
 
       this.ctx.beginPath();
@@ -184,9 +183,15 @@ export class WaveBackgroundComponent implements AfterViewInit, OnDestroy {
       this.ctx.lineTo(this.width, this.height);
       this.ctx.closePath();
 
-      const gradient = this.ctx.createLinearGradient(0, baseY - 60, 0, this.height);
-      gradient.addColorStop(0, `hsla(${hue}, 75%, 55%, ${alpha})`);
-      gradient.addColorStop(1, `hsla(${hue}, 60%, 35%, ${alpha * 0.3})`);
+      let gradient = this.layerGradients[layer];
+      if (!gradient) {
+        const hue = 200 + layer * 18;
+        const alpha = 0.15 + layer * 0.08;
+        gradient = this.ctx.createLinearGradient(0, baseY - 60, 0, this.height);
+        gradient.addColorStop(0, `hsla(${hue}, 75%, 55%, ${alpha})`);
+        gradient.addColorStop(1, `hsla(${hue}, 60%, 35%, ${alpha * 0.3})`);
+        this.layerGradients[layer] = gradient;
+      }
       this.ctx.fillStyle = gradient;
       this.ctx.fill();
     }
@@ -213,6 +218,7 @@ export class WaveBackgroundComponent implements AfterViewInit, OnDestroy {
     this.canvasEl.style.width = `${this.width}px`;
     this.canvasEl.style.height = `${this.height}px`;
     this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    this.layerGradients = [];
   }
 
   private applyVars() {

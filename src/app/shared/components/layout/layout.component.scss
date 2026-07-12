@@ -9,11 +9,15 @@
 
   &.layout--fullscreen {
     height: 100vh;
+    height: 100svh;
+    height: 100dvh;
     justify-content: space-between;
     padding: 40px 24px;
+    padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
 
     @media (min-width: $tablet) {
       padding: 50px 60px;
+      padding-bottom: calc(50px + env(safe-area-inset-bottom, 0px));
     }
   }
 

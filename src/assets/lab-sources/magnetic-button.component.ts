@@ -2,6 +2,7 @@ import { Component, AfterViewInit, OnDestroy, PLATFORM_ID, NgZone, ViewChild, El
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { LabDemoLayoutComponent } from '../../../shell/lab-demo-layout/lab-demo-layout.component';
 import { ButtonComponent } from '../../../../../shared/components/button/button.component';
+import { bindScenePointer, ScenePointerBinding } from '../../../utils/scene-pointer';
 
 /**
  * Magnetic Button — THE.LAB / Cursor.
@@ -52,8 +53,7 @@ export class MagneticButtonComponent implements AfterViewInit, OnDestroy {
   private rafId: number | null = null;
   private reducedMotion = false;
   private readonly boundTick = () => this.tick();
-  private readonly boundOnPointerMove = (e: PointerEvent) => this.onPointerMove(e);
-  private readonly boundOnPointerLeave = () => this.onPointerLeave();
+  private pointerBinding: ScenePointerBinding | null = null;
 
   ngAfterViewInit() {
     if (!isPlatformBrowser(this.platformId)) return;
@@ -80,9 +80,10 @@ export class MagneticButtonComponent implements AfterViewInit, OnDestroy {
 
     if (this.items.length === 0) return;
 
-    this.sceneEl.addEventListener('pointermove', this.boundOnPointerMove);
-    this.sceneEl.addEventListener('pointerdown', this.boundOnPointerMove);
-    this.sceneEl.addEventListener('pointerleave', this.boundOnPointerLeave);
+    this.pointerBinding = bindScenePointer(this.sceneEl, {
+      onMove: (e) => this.onPointerMove(e),
+      onLeave: () => this.onPointerLeave(),
+    });
 
     this.ngZone.runOutsideAngular(() => {
       this.rafId = requestAnimationFrame(this.boundTick);
@@ -95,9 +96,7 @@ export class MagneticButtonComponent implements AfterViewInit, OnDestroy {
     if (this.rafId !== null) cancelAnimationFrame(this.rafId);
     if (!this.sceneEl) return;
 
-    this.sceneEl.removeEventListener('pointermove', this.boundOnPointerMove);
-    this.sceneEl.removeEventListener('pointerdown', this.boundOnPointerMove);
-    this.sceneEl.removeEventListener('pointerleave', this.boundOnPointerLeave);
+    this.pointerBinding?.unbind();
   }
 
   onPointerMove(event: PointerEvent) {

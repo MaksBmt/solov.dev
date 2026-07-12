@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { LabDemoLayoutComponent } from '../../../shell/lab-demo-layout/lab-demo-layout.component';
+import { bindScenePointer, ScenePointerBinding } from '../../../utils/scene-pointer';
 
 /**
  * Particles — THE.LAB / Backgrounds.
@@ -32,6 +33,7 @@ interface Particle {
   vy: number;
   size: number;
   hue: number;
+  grad?: CanvasGradient;
 }
 
 @Component({
@@ -64,8 +66,7 @@ export class ParticlesComponent implements AfterViewInit, OnDestroy {
   private resizeObserver: ResizeObserver | null = null;
   private width = 0;
   private height = 0;
-  private readonly boundOnPointerMove = (e: PointerEvent) => this.onPointerMove(e);
-  private readonly boundOnPointerLeave = () => this.onPointerLeave();
+  private pointerBinding: ScenePointerBinding | null = null;
 
   ngAfterViewInit() {
     if (!isPlatformBrowser(this.platformId)) return;
@@ -76,8 +77,7 @@ export class ParticlesComponent implements AfterViewInit, OnDestroy {
     if (!isPlatformBrowser(this.platformId)) return;
     if (this.rafId !== null) cancelAnimationFrame(this.rafId);
     this.resizeObserver?.disconnect();
-    this.sceneEl?.removeEventListener('pointermove', this.boundOnPointerMove);
-    this.sceneEl?.removeEventListener('pointerleave', this.boundOnPointerLeave);
+    this.pointerBinding?.unbind();
   }
 
   reset() {
@@ -119,8 +119,10 @@ export class ParticlesComponent implements AfterViewInit, OnDestroy {
     });
     this.resizeObserver.observe(this.sceneEl);
 
-    this.sceneEl.addEventListener('pointermove', this.boundOnPointerMove, { passive: true });
-    this.sceneEl.addEventListener('pointerleave', this.boundOnPointerLeave);
+    this.pointerBinding = bindScenePointer(this.sceneEl, {
+      onMove: (e) => this.onPointerMove(e),
+      onLeave: () => this.onPointerLeave(),
+    });
 
     this.ngZone.runOutsideAngular(() => {
       const loop = () => {
@@ -134,15 +136,26 @@ export class ParticlesComponent implements AfterViewInit, OnDestroy {
   private spawnParticles() {
     this.particles = [];
     for (let i = 0; i < this.particleCount; i += 1) {
+      const size = 1.2 + Math.random() * 2.2;
+      const hue = 30 + Math.random() * 40;
       this.particles.push({
         x: Math.random() * this.width,
         y: Math.random() * this.height,
         vx: (Math.random() - 0.5) * this.driftSpeed,
         vy: (Math.random() - 0.5) * this.driftSpeed,
-        size: 1.2 + Math.random() * 2.2,
-        hue: 30 + Math.random() * 40,
+        size,
+        hue,
+        grad: this.makeParticleGradient(hue, size) ?? undefined,
       });
     }
+  }
+
+  private makeParticleGradient(hue: number, size: number): CanvasGradient | null {
+    if (!this.ctx) return null;
+    const gradient = this.ctx.createRadialGradient(0, 0, 0, 0, 0, size * 3);
+    gradient.addColorStop(0, `hsla(${hue}, 85%, 62%, 0.9)`);
+    gradient.addColorStop(1, `hsla(${hue}, 85%, 62%, 0)`);
+    return gradient;
   }
 
   private onPointerMove(event: PointerEvent) {
@@ -209,13 +222,15 @@ export class ParticlesComponent implements AfterViewInit, OnDestroy {
     }
 
     for (const p of this.particles) {
-      const gradient = this.ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 3);
-      gradient.addColorStop(0, `hsla(${p.hue}, 85%, 62%, 0.9)`);
-      gradient.addColorStop(1, `hsla(${p.hue}, 85%, 62%, 0)`);
-      this.ctx.fillStyle = gradient;
+      if (!p.grad) p.grad = this.makeParticleGradient(p.hue, p.size) ?? undefined;
+      if (!p.grad) continue;
+      this.ctx.save();
+      this.ctx.translate(p.x, p.y);
+      this.ctx.fillStyle = p.grad;
       this.ctx.beginPath();
-      this.ctx.arc(p.x, p.y, p.size * 2.5, 0, Math.PI * 2);
+      this.ctx.arc(0, 0, p.size * 2.5, 0, Math.PI * 2);
       this.ctx.fill();
+      this.ctx.restore();
     }
 
     this.applyVars();

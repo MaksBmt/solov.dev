@@ -70,6 +70,8 @@ export class TextTrailsComponent implements AfterViewInit, OnDestroy {
   private reducedMotion = false;
   private initialized = false;
   private pointerBinding: ScenePointerBinding | null = null;
+  private initRafId: number | null = null;
+  private destroyed = false;
 
   ngAfterViewInit() {
     if (!isPlatformBrowser(this.platformId)) return;
@@ -77,15 +79,18 @@ export class TextTrailsComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.destroyed = true;
     if (!isPlatformBrowser(this.platformId)) return;
+    if (this.initRafId !== null) cancelAnimationFrame(this.initRafId);
     if (this.rafId !== null) cancelAnimationFrame(this.rafId);
     this.resizeObserver?.disconnect();
     this.pointerBinding?.unbind();
   }
 
   private scheduleInit(attempt = 0) {
+    if (this.destroyed) return;
     if (this.initScene() || attempt >= 30) return;
-    requestAnimationFrame(() => this.scheduleInit(attempt + 1));
+    this.initRafId = requestAnimationFrame(() => this.scheduleInit(attempt + 1));
   }
 
   private initScene(): boolean {
