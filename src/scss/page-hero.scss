@@ -35,3 +35,14 @@
   line-height: 1.7;
   margin: 0;
 }
+
+.page-hero__link {
+  color: var(--accent-amber);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.75;
+  }
+}
