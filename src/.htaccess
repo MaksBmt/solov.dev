@@ -1,5 +1,0 @@
-# Google Search Console: не проксировать файл верификации в Node/SSR.
-<IfModule mod_rewrite.c>
-RewriteEngine On
-RewriteRule ^google0f34af79244b526c\.html$ - [L]
-</IfModule>
