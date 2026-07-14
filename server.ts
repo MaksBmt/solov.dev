@@ -17,6 +17,11 @@ export function app(): express.Express {
   server.set('view engine', 'html');
   server.set('views', browserDistFolder);
 
+  server.get('/google0f34af79244b526c.html', (_req, res) => {
+    res.type('text/html; charset=utf-8');
+    res.send('google-site-verification: google0f34af79244b526c.html');
+  });
+
   // Example Express Rest API endpoints
   // server.get('/api/**', (req, res) => { });
   // Serve static files from /browser
