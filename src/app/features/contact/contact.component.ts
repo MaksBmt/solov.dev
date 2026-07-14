@@ -46,8 +46,8 @@ export class ContactComponent {
       paragraphs: [
         'Telegram — самый оперативный способ написать.',
       ],
-      href: 'https://t.me/solov_one',
-      linkLabel: 't.me/solov_one',
+      href: 'https://telegram.me/solov_one',
+      linkLabel: 'telegram.me/solov_one',
       external: true,
     },
     {

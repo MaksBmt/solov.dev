@@ -147,5 +147,5 @@ npm run serve:ssr:solov-dev-angular
 
 ## Контакты
 
-- Telegram: [t.me/solov_one](https://t.me/solov_one)
+- Telegram: [telegram.me/solov_one](https://telegram.me/solov_one)
 - Email: msolov.one@gmail.com

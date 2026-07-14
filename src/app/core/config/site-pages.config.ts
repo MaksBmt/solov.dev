@@ -41,7 +41,7 @@ export const SITE_PAGES: Record<string, SitePageConfig> = {
     path: 'contact',
     label: 'Контакт',
     title: 'Контакт — Solov.dev',
-    description: 'Контакты: Telegram t.me/solov_one, email msolov.one@gmail.com.',
+    description: 'Контакты: Telegram telegram.me/solov_one, email msolov.one@gmail.com.',
   },
 };
 
