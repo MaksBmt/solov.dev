@@ -1,9 +1,9 @@
 <app-layout [page]="true">
-  <div header>
+  <ng-container header>
     <app-header></app-header>
-  </div>
+  </ng-container>
 
-  <div main>
+  <ng-container main>
     <section #labDemoSection class="lab-demo" [class.lab-demo--debug]="showDebug()" [attr.data-experiment]="experimentSlug()">
       <header appLabTopbar>
         <app-breadcrumbs [items]="[{ label: 'Home', url: '/' }, { label: 'THE.LAB', url: '/lab' }, { label: experiment?.title }]"></app-breadcrumbs>
@@ -62,5 +62,5 @@
         [codeLines]="codeLines">
       </app-code-view>
     </section>
-  </div>
+  </ng-container>
 </app-layout>

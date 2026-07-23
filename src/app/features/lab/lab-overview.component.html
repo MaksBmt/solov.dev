@@ -1,9 +1,9 @@
 <app-layout [page]="true">
-  <div header>
+  <ng-container header>
     <app-header></app-header>
-  </div>
+  </ng-container>
 
-  <div main>
+  <ng-container main>
     <section class="lab js-lab-overview">
       <app-breadcrumbs [items]="[{ label: 'Home', url: '/' }, { label: 'THE.LAB' }]"></app-breadcrumbs>
 
@@ -63,5 +63,5 @@
         }
       </ul>
     </section>
-  </div>
+  </ng-container>
 </app-layout>

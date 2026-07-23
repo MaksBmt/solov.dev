@@ -2,15 +2,15 @@
 <app-ambient-canvas></app-ambient-canvas>
 
 <app-layout [fullscreen]="true">
-  <div header>
+  <ng-container header>
     <app-header></app-header>
-  </div>
+  </ng-container>
 
-  <div main>
+  <ng-container main>
     <app-section-hero></app-section-hero>
-  </div>
+  </ng-container>
 
-  <div footer>
+  <ng-container footer>
     <app-footer type="home"></app-footer>
-  </div>
+  </ng-container>
 </app-layout>

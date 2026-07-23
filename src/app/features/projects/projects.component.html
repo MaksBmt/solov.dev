@@ -1,9 +1,9 @@
 <app-layout [page]="true">
-  <div header>
+  <ng-container header>
     <app-header></app-header>
-  </div>
+  </ng-container>
 
-  <div main>
+  <ng-container main>
     <article class="page-content">
       <app-breadcrumbs [items]="breadcrumbs"></app-breadcrumbs>
 
@@ -67,9 +67,9 @@
         </section>
       }
     </article>
-  </div>
+  </ng-container>
 
-  <div footer>
+  <ng-container footer>
     <app-footer type="home"></app-footer>
-  </div>
+  </ng-container>
 </app-layout>
